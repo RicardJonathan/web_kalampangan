@@ -1,0 +1,132 @@
+.login-input .form-group .form-control {
+    background: transparent;
+    border: 1px solid #7A88A1 !important; /* Border hitam */
+    border-radius: 8px;
+    border-bottom: 2px solid black; /* Border bawah lebih tebal */
+    padding: 4px;
+    padding-left: 10px;
+    color: #7A88A1;
+    transition: all 0.3s ease; /* Transisi halus saat focus */
+}
+
+.login-input .form-group .form-control:focus {
+    outline: none;
+    border-color: #000; /* Tetap hitam saat fokus */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Efek shadow hitam */
+    color: #000; /* Teks menjadi hitam saat fokus */
+}
+
+/* Container untuk logo */
+.container-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Logo */
+.logopky {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.nav-header .brand-logo {
+    display: flex; 
+    margin-left : 15px;
+    justify-content: left;
+    align-items: center; 
+    height: 100%; 
+}
+
+
+.logo-container {
+    display: flex; 
+    align-items: center; 
+    justify-content: left; 
+}
+
+
+.logo-pky img {
+    width: 30px; 
+    height: auto; 
+    margin-right: 8px;
+}
+
+
+.brand-title h4 {
+    margin: 0;
+    font-size: 16px; 
+    color: aliceblue;
+    font-weight: semibold; 
+}
+
+        /* Menghilangkan border dari tabel */
+        .table,
+        .table th,
+        .table td {
+            border: none !important; /* Hapus border dari tabel, header, dan kolom */
+        }
+        
+        /* Menambahkan padding untuk kenyamanan tampilan */
+        .table th, .table td {
+            padding: 12px 15px; /* Memberikan jarak antar teks dan batas tabel */
+            text-align: left; /* Mengatur teks agar rata kiri */
+        }
+        
+        /* Menghilangkan garis bawah pada setiap baris */
+        .table tbody tr {
+            border-bottom: none; /* Menghilangkan garis pemisah antar baris */
+        }
+        
+        /* Jika ada hover effect, tetap pertahankan */
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* Sedikit perubahan warna saat hover */
+        }
+        
+                /* Styling untuk tabel */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        /* Styling untuk baris header tabel */
+        .table th {
+            color: #F4F6FF; /* Warna teks putih */
+            padding: 12px 15px;
+            text-align: left; /* Teks di header rata kiri */
+            font-size: 16px;
+            background-color: #7571F9 !important;
+        }
+        
+        /* Styling untuk baris tabel */
+        .table td {
+            color: #3C3D37;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; /* Garis pemisah antar baris */
+            font-size: 14px;
+            background-color: #f9f9f9; /* Warna latar belakang yang konsisten untuk seluruh tabel */
+        }
+        
+        /* Hover effect untuk baris tabel */
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* Sedikit perubahan warna saat hover */
+        }
+        
+        /* Styling untuk footer tabel */
+        .table tfoot th {
+            background-color: white !important; /* Warna latar belakang footer */
+            color: #333;
+            font-weight: bold;
+        }
+        
+        /* Menambahkan efek border pada tabel */
+        .table-bordered {
+            border: 1px solid #ddd; /* Border untuk tabel */
+        }
+        
+        /* Responsif - menyesuaikan tabel pada layar kecil */
+        .table-responsive {
+            overflow-x: auto; /* Membuat tabel bisa digulir horizontal di layar kecil */
+        }

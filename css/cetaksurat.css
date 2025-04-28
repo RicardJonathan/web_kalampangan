@@ -1,0 +1,166 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+@page {
+    size: A4;
+    margin: 20mm;
+}
+
+.container {
+    width: 210mm;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header, .content {
+    width: 100%;
+}
+
+.card-table {
+    width: 100%;
+}
+
+.signature-section {
+    margin-top: 40px;
+}
+
+/* Optional: Adjust font size and spacing for print */
+@media print {
+    body {
+        font-size: 12pt;
+    }
+
+    .header-text h2 {
+        font-size: 18px;
+    }
+
+    .content {
+        margin-top: 20px;
+    }
+
+    .signature-section {
+        font-size: 14pt;
+    }
+}
+
+
+.container {
+    margin-top: 20px;
+}
+.header {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    position: relative;
+}
+
+.logo {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+.header-text {
+    flex: 1;
+    text-align: center;
+}
+
+.header img {
+    max-width: 100px;
+}
+
+.divider {
+    position: absolute; /* Mengatur posisi absolut agar bisa menempati seluruh lebar */
+    left: 0; /* Mengatur agar garis dimulai dari sisi kiri */
+    right: 0; /* Mengatur agar garis berakhir di sisi kanan */
+    border: 3px solid black; /* Border hitam */
+    margin: 10px 0; /* Margin atas dan bawah */
+    box-sizing: border-box; /* Mengatur ukuran box untuk border */
+}
+@media print {
+    .divider {
+        display: block; /* Pastikan elemen ditampilkan sebagai blok */
+        border: 3px solid black; /* Menyediakan border yang jelas saat dicetak */
+        margin: 10px 0; /* Jarak atas dan bawah */
+    }
+}
+
+.titik1, .titik2, .titik3 {
+    width: 20px;
+    text-align: center;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.title, .titik, .isi {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.isi {
+    margin-left: 5px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.header-text p {
+    margin-bottom: 5px;
+}
+
+.custom-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.custom-table td {
+    border: 1px solid rgba(0, 0, 0, 0.5); /* Garis border lebih lembut */
+    padding: 8px; /* Padding dalam sel */
+}
+
+.custom-table td:first-child {
+    width: 40px; /* Lebar kolom Nomor */
+}
+
+.custom-table td:nth-child(2) {
+    width: 300px; /* Lebar kolom Tujuan */
+}
+
+.custom-table td:nth-child(3) {
+    text-align: justify; /* Rata kiri dan kanan untuk kolom Penjelasan */
+}
+.poin {
+    display: block; /* Menjadikan setiap span sebagai blok untuk memudahkan pemisahan */
+    margin-left: 18px; /* Jarak antar span */
+}
+
+.signature-section {
+    margin-top: 20px; /* Jarak atas untuk pemisah dari tabel */
+    font-size: 16px; /* Ukuran font untuk bagian tanda tangan */
+    line-height: 1.6; /* Jarak antar baris untuk bagian tanda tangan */
+    text-align: left; /* Rata kanan untuk teks tanda tangan */
+    float: right; /* Mengapungkan bagian tanda tangan ke kanan */
+    width: 300px; /* Atur lebar untuk memastikan bagian tanda tangan tidak terlalu lebar */
+}
+
+p {
+    width: 110px !important;
+}
