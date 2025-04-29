@@ -32,7 +32,7 @@ $koneksi->close();
     <link href="./css/style.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-      <!--**********************************
+    <!--**********************************
     Sidebar start
 ***********************************-->
 <div class="nk-sidebar">           
@@ -47,58 +47,13 @@ $koneksi->close();
 
             <li class="nav-label">Main Menu</li>
             <li>
-                <a href="pengajuan_surat_usaha.php" aria-expanded="false">
-                    <i class="fa-solid fa-file-signature menu-icon"></i><span class="nav-text">Pengajuan Surat Keterangan Usaha</span>
+                <a href="pengajuan_surat.php" aria-expanded="false">
+                    <i class="fa-solid fa-file-signature menu-icon"></i><span class="nav-text">Pengajuan Surat</span>
                 </a>
             </li>
             <li>
-                <a href="pengajuan_sktm.php" aria-expanded="false">
-                    <i class="fa-solid fa-file-invoice-dollar menu-icon"></i><span class="nav-text">Surat Keterangan Tidak Mampu</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_kematian.php" aria-expanded="false">
-                    <i class="fa-solid fa-file-medical menu-icon"></i><span class="nav-text">Surat Keterangan Kematian</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_kelahiran.php" aria-expanded="false">
-                    <i class="fa-solid fa-baby menu-icon"></i><span class="nav-text">Surat Keterangan Kelahiran</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_pindah.php" aria-expanded="false">
-                    <i class="fa-solid fa-truck-moving menu-icon"></i><span class="nav-text">Surat Keterangan Pindah</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_belum_menikah.php" aria-expanded="false">
-                    <i class="fa-solid fa-user-times menu-icon"></i><span class="nav-text">Surat Keterangan Belum Menikah</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_untuk_menikah.php" aria-expanded="false">
-                    <i class="fa-solid fa-ring menu-icon"></i><span class="nav-text">Surat Keterangan Untuk Menikah</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_pbb_baru.php" aria-expanded="false">
-                    <i class="fa-solid fa-home menu-icon"></i><span class="nav-text">Pengajuan PBB Baru</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_ahli_waris.php" aria-expanded="false">
-                    <i class="fa-solid fa-user-shield menu-icon"></i><span class="nav-text">Surat Keterangan Ahli Waris</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_berkelakuan_baik.php" aria-expanded="false">
-                    <i class="fa-solid fa-thumbs-up menu-icon"></i><span class="nav-text">Surat Keterangan Berkelakuan Baik</span>
-                </a>
-            </li>
-            <li>
-                <a href="pengajuan_suket_domisili.php" aria-expanded="false">
-                    <i class="fa-solid fa-map-marker-alt menu-icon"></i><span class="nav-text">Surat Keterangan Domisili</span>
+                <a href="arsip_surat.php" aria-expanded="false">
+                    <i class="fa-solid fa-archive menu-icon"></i><span class="nav-text">Arsip Surat</span>
                 </a>
             </li>
 
@@ -114,3 +69,4 @@ $koneksi->close();
 <!--**********************************
     Sidebar end
 ***********************************-->
+

@@ -165,7 +165,7 @@ $koneksi->close();
                             <img src="images/logopky.png" alt="">
                         </div>
                         <div class="brand-title">
-                            <h4>DPKUKMP <br> PALANGKA RAYA</h4>
+                            <h4>KELURAHAN KELAMPANGAN <br> PALANGKA RAYA</h4>
                         </div>
                     </div>
             </div>
