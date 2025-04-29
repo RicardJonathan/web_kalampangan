@@ -4,58 +4,63 @@ include 'config.php';
 
 // Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
-    header("Location: page-login.php"); // Arahkan ke halaman login jika belum login
+    header("Location: page-login.php"); 
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
-$user_id = $_SESSION['id']; // ID pengguna yang login
+// Ambil ID user yang login
+$user_id = $_SESSION['id'];
 
-$sql_user = "SELECT * FROM user WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
+// Cek apakah user ada di tabel user
+$sql_user = "SELECT * FROM user WHERE id = '$user_id'";
 $result_user = $koneksi->query($sql_user);
 
 if ($result_user->num_rows == 0) {
-    // Jika tidak ada di tabel admin, arahkan ke halaman error
-    header("Location: page-error-403.php"); // Arahkan ke halaman error
+    header("Location: page-error-403.php");
     exit();
 }
 
-
+// Ambil detail user
+$user = $result_user->fetch_assoc();
+$nama_pengaju = $user['nama']; // Pastikan di tabel user ada kolom 'nama'
+$email_pengaju = $user['email']; // Pastikan di tabel user ada kolom 'email'
+$no_telepon = $user['no_telepon']; // Pastikan di tabel user ada kolom 'telepon'
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ambil data dari form
-    $tgl_ajuan = $_POST['tgl_ajuan'];
-    $jenis_surat = $_POST['jenis_surat'];
-    $nama_pengaju = $_POST['nama_pengaju'];
-    $email_pengaju  = $_POST($_POST[' 	email_pengaju']);
-    $no_telepon = $_POST['no_telepon'];
+    $jenis_surat = $_POST['jenis_surat']; 
     $alamat = $_POST['alamat'];
+    $tgl_pengajuan = date('Y-m-d'); // Atau bisa ambil dari input form kalau mau manual
+    $keterangan = $_POST['keterangan'];
+
+    // Ambil file foto
+    $foto_ktp = $_FILES['foto_ktp']['name'];
+    $foto_kk = $_FILES['foto_kk']['name'];
+    $foto_formulir = $_FILES['foto_formulir']['name'];
+
+    // Upload file ke folder (misal folder uploads/)
+    $target_dir = "uploads/";
+    move_uploaded_file($_FILES['foto_ktp']['tmp_name'], $target_dir.$foto_ktp);
+    move_uploaded_file($_FILES['foto_kk']['tmp_name'], $target_dir.$foto_kk);
+    move_uploaded_file($_FILES['foto_formulir']['tmp_name'], $target_dir.$foto_formulir);
+
     $status = 'Menunggu';
-    $keterangan  = $_POST['keterangan'];
-    $tgl_pengajua = $_POST['tgl_pengajuan'];
 
-  
-        // Mulai transaksi
-        mysqli_begin_transaction($koneksi);
-        try {
-            // Tambahkan data cuti
-            $insert_cuti = "INSERT INTO cuti (user_id, nomor_cuti, tgl_ajuan, jenis_cuti, alasan_cuti, lama_cuti, tanggal_mulai, tanggal_akhir, catatan, alamat_cuti, status) 
-                            VALUES ('$user_id', '', '$tgl_ajuan', '$jenis_cuti', '$alasan_cuti', '$lama_cuti', '$tanggal_mulai', '$tanggal_akhir', '$catatan', '$alamat_cuti', '$status')";
-            mysqli_query($koneksi, $insert_cuti) or throw new Exception("Gagal menambahkan data cuti.");
+    // Insert ke database
+    $query = "INSERT INTO pengajuan_surat 
+        (jenis_surat, user_id, nama_pengaju, email_pengaju, no_telepon, alamat, tgl_pengajuan, status, keterangan, foto_ktp, foto_kk, foto_formulir)
+        VALUES 
+        ('$jenis_surat', '$user_id', '$nama_pengaju', '$email_pengaju', '$no_telepon', '$alamat', '$tgl_pengajuan', '$status', '$keterangan', '$foto_ktp', '$foto_kk', '$foto_formulir')";
 
-            
-
-            // Commit transaksi
-            mysqli_commit($koneksi);
-            header("Location: pengajuan_cuti.php");
-            exit();
-        } catch (Exception $e) {
-            mysqli_rollback($koneksi);
-            $cuti_error = $e->getMessage();
-        }
+    if (mysqli_query($koneksi, $query)) {
+        header("Location: pengajuan_surat_usaha.php");
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($koneksi);
     }
-
+}
 ?>
+
 
 
 
@@ -67,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
+    <title>KELURAHAN KELAMPANGAN</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- Custom Stylesheet -->
@@ -120,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <img src="images/logopky.png" alt="">
                         </div>
                         <div class="brand-title">
-                            <h4>DPKUKMP <br> PALANGKA RAYA</h4>
+                            <h4>KELURAHAN KELAMPANGAN <br> PALANGKA RAYA</h4>
                         </div>
                     </div>
             </div>
@@ -184,86 +189,118 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Cuti</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
                     </ol>
                 </div>
             </div>
             <!-- row -->
 
-<div class="container-fluid">
+            <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <h4 class="card-title">Tambah Pengajuan Cuti</h4>
+                <h4 class="card-title">Tambah Pengajuan Surat</h4>
                 <div class="card-table">
-                    <div class="alert alert-success">
-                        <strong>Sisa Kuota Cuti:</strong> <?php echo $kuota_cuti; ?> hari
-                    </div>
-                    <div class="form-validation">
-                        <form class="form-valide" action="tambah_pengajuan.php" method="post">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="tgl_ajuan">Tanggal Pengajuan 
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="date" class="form-control" id="tgl_ajuan" name="tgl_ajuan" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="jenis_cuti">Jenis Cuti
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <select class="form-control" id="jenis_cuti" name="jenis_cuti" required>
-                                            <option value="">Pilih Jenis Cuti</option>
-                                            <option value="Cuti Tahunan">Cuti Tahunan</option>
-                                            <option value="Cuti Besar">Cuti Besar</option>
-                                            <option value="Cuti Sakit">Cuti Sakit</option>
-                                            <option value="Cuti Melahirkan">Cuti Melahirkan</option>
-                                            <option value="Cuti Karena Alasan Penting">Cuti Karena Alasan Penting</option>
-                                            <option value="Cuti di Luar Tanggungan Negara">Cuti di Luar Tanggungan Negara</option>
-                                        </select>
+                    
+                       
+        <form action="tambah_pengajuan.php" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="jenis_surat">Jenis Surat</label>
+                <select name="jenis_surat" id="jenis_surat" class="form-control" required>
+                    <option value="">-- Pilih Jenis Surat --</option>
+                    <option value="SURAT KETERANGAN USAHA (SKU)">SURAT KETERANGAN USAHA (SKU)</option>
+                    <option value="SURAT KETERANGAN TIDAK MAMPU (SKTM)">SURAT KETERANGAN TIDAK MAMPU (SKTM)</option>
+                    <option value="SURAT KETERANGAN KEMATIAN">SURAT KETERANGAN KEMATIAN</option>
+                    <option value="SURAT KETERANGAN KELAHIRAN">SURAT KETERANGAN KELAHIRAN</option>
+                    <option value="SURAT KETERANGAN PINDAH">SURAT KETERANGAN PINDAH</option>
+                    <option value="SURAT KETERANGAN BELUM MENIKAH">SURAT KETERANGAN BELUM MENIKAH</option>
+                    <option value="SURAT KETERANGAN UNTUK MENIKAH">SURAT KETERANGAN UNTUK MENIKAH</option>
+                    <option value="PENGAJUAN PBB BARU">PENGAJUAN PBB BARU</option>
+                    <option value="SURAT KETERANGAN AHLI WARIS">SURAT KETERANGAN AHLI WARIS</option>
+                    <option value="SURAT KETERANGAN BERKELAKUAN BAIK">SURAT KETERANGAN BERKELAKUAN BAIK</option>
+                    <option value="SURAT KETERANGAN DOMISILI">SURAT KETERANGAN DOMISILI</option>
+                </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-form-label" for="alasan_cuti">Alasan Cuti
+                                        <label class="col-form-label" for="nama_pengaju">Nama Pengaju
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <textarea class="form-control" id="alasan_cuti" name="alasan_cuti" rows="3" placeholder="Masukkan alasan cuti.." required></textarea>
+                                        <input type="text" class="form-control" id="nama_pengaju" name="nama_pengaju" placeholder="Masukkan nama pengaju.." required>
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="col-form-label" for="lama_cuti">Lama Cuti (Hari)
+                                        <label class="col-form-label" for="email_pengaju">Email Pengaju
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="number" class="form-control" id="lama_cuti" name="lama_cuti" placeholder="Masukkan lama cuti.." required>
+                                        <input type="email" class="form-control" id="email_pengaju" name="email_pengaju" placeholder="Masukkan email pengaju.." required>
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="col-form-label" for="tanggal_mulai">Tanggal Mulai
+                                        <label class="col-form-label" for="no_telepon">No. Telepon Pengaju
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" required>
+                                        <input type="tel" class="form-control" id="no_telepon" name="no_telepon" placeholder="Masukkan nomor telepon pengaju.." required>
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="col-form-label" for="tanggal_akhir">Tanggal Akhir
+                                        <label class="col-form-label" for="alamat">Alamat Pengaju
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" readonly>
+                                        <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Masukkan alamat pengaju.." required>
                                     </div>
+
                                     <div class="form-group">
-                                        <label class="col-form-label" for="catatan">Catatan
-                                        </label>
-                                        <textarea class="form-control" id="catatan" name="catatan" rows="3" placeholder="Tambahkan catatan (jika ada).."></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="alamat_cuti">Alamat Selama Cuti
+                                        <label class="col-form-label" for="tgl_pengajuan">Tanggal Pengajuan
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control" id="alamat_cuti" name="alamat_cuti" placeholder="Masukkan alamat selama cuti.." required>
+                                        <input type="date" class="form-control" id="tgl_pengajuan" name="tgl_pengajuan" required>
                                     </div>
-                                    <!-- Tombol Simpan dan Batal -->
-                                    <div class="form-group text-right">
-                                        <a href="pengajuan_cuti.php" class="btn btn-secondary">Batal</a>
+
+                              
+
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="keterangan">Keterangan
+                                        </label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" placeholder="Masukkan keterangan jika ada.."></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="foto_ktp">Foto KTP
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="file" class="form-control" id="foto_ktp" name="foto_ktp" accept="image/*" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="foto_kk">Foto KK
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="file" class="form-control" id="foto_kk" name="foto_kk" accept="image/*" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="foto_formulir">Foto Formulir
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="file" class="form-control" id="foto_formulir" name="foto_formulir" accept="image/*" required>
+                                    </div>
+
+                                  <!-- Tombol Simpan dan Batal -->
+                                  <div class="form-group text-right">
+                                        <a href="pengajuan_surat.php" class="btn btn-secondary">Batal</a>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                                 </div>
                             </div>
                         </form>
@@ -290,7 +327,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
+            <p class="mb-0">© <span id="current-year"></span> Kelurahan Kelampangan Palangka Raya. All rights reserved.</p>
             </div>
         </div>
         <!--**********************************

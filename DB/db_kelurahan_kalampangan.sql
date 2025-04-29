@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2025 at 04:20 AM
+-- Generation Time: Apr 29, 2025 at 06:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -48,6 +48,19 @@ INSERT INTO `admin` (`id`, `nama`, `nip`, `jabatan`, `pangkat`, `golongan`, `use
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `kegiatan`
+--
+
+CREATE TABLE `kegiatan` (
+  `id` int(11) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `lurah`
 --
 
@@ -87,6 +100,32 @@ CREATE TABLE `pengajuan_surat` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pengumuman`
+--
+
+CREATE TABLE `pengumuman` (
+  `id` int(11) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `struktur`
+--
+
+CREATE TABLE `struktur` (
+  `id` int(11) NOT NULL,
+  `foto` varchar(255) DEFAULT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `posisi` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -118,6 +157,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `kegiatan`
+--
+ALTER TABLE `kegiatan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `lurah`
 --
 ALTER TABLE `lurah`
@@ -130,6 +175,18 @@ ALTER TABLE `lurah`
 ALTER TABLE `pengajuan_surat`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `pengumuman`
+--
+ALTER TABLE `pengumuman`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `struktur`
+--
+ALTER TABLE `struktur`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `user`
@@ -148,6 +205,12 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `kegiatan`
+--
+ALTER TABLE `kegiatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `lurah`
 --
 ALTER TABLE `lurah`
@@ -157,6 +220,18 @@ ALTER TABLE `lurah`
 -- AUTO_INCREMENT for table `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pengumuman`
+--
+ALTER TABLE `pengumuman`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `struktur`
+--
+ALTER TABLE `struktur`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
