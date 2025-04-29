@@ -36,7 +36,6 @@ $query = "SELECT
               pengajuan_surat.foto_ktp, 
               pengajuan_surat.foto_kk, 
               pengajuan_surat.foto_formulir, 
-              user.nip, 
               user.nama
           FROM pengajuan_surat
           INNER JOIN user ON pengajuan_surat.user_id = user.id
@@ -233,341 +232,180 @@ $result = $stmt->get_result();
         ***********************************-->
 
         <!--**********************************
-            Sidebar start
-        ***********************************-->
-        <?php include 'sidebarUser.php'; ?>
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
+       <!--**********************************
+    Sidebar start
+***********************************-->
+<?php include 'sidebarUser.php'; ?>
+<!--**********************************
+    Sidebar end
+***********************************-->
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
 
-            <div class="row page-titles mx-0">
-                <div class="col p-md-0">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Cuti</a></li>
-                    </ol>
-                </div>
-            </div>
-            <!-- row -->
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-
-                            <h4 class="card-title">Data Surat Cuti</h4>
-                                <div class="d-flex justify-content-end mb-3">
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered zero-configuration">
-                                        <thead>
-                                        <tr>
-                <th>No.</th>
-                <th>Tanggal Ajuan</th>
-                <th>KTP</th>
-                <th>KK</th>
-                <th>Formulir</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            // Menginisialisasi nomor urut
-                                            $nomor = 1;
-
-                                          
-                                                    ?>
-                                                    <tr>
-                                                        <td><?php echo $nomor++ . '.'; ?></td> <!-- Nomor urut otomatis -->
-                                                        <td><?php 
-                                                            $tanggal_ajuan = strtotime($row['tgl_ajuan']);
-                                                            
-                                                            $bulan = array(
-                                                                1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                                                            );
-                                                            
-                                                            $hari = date('d', $tanggal_ajuan);  // Mengambil hari
-                                                            $bulan_indo = $bulan[date('n', $tanggal_ajuan)];  // Mengambil bulan dalam bahasa Indonesia
-                                                            $tahun = date('Y', $tanggal_ajuan);  // Mengambil tahun
-                                                            
-                                                            echo $hari . ' ' . $bulan_indo . ' ' . $tahun;
-                                                        ?></td>
-                                                        <td><?php echo $row['nomor_cuti']; ?></td>
-                                                        <td><?php echo $row['jenis_cuti']; ?></td>
-                                                        <td><?php echo $row['lama_cuti']; ?> (hari)</td>
-                                                        <td><?php echo $row['alasan_cuti']; ?></td>
-                                                        <td>
-                                                            <!-- Menentukan status dan menampilkan ikon sesuai dengan status -->
-                                                            <?php if ($row['status'] == 'Menunggu'): ?>
-                                                                <span class="badge badge-primary">
-                                                                <i class="fas fa-spinner fa-spin"></i> Menunggu Persetujuan
-                                                                </span>
-                                                            <?php elseif ($row['status'] == 'Diajukan'): ?>
-                                                                <span class="badge badge-primary">
-                                                                    <i class="fas fa-paper-plane"></i> Diajukan
-                                                                </span>
-                                                            <?php elseif ($row['status'] == 'Diterima'): ?>
-                                                                <span class="text-success">
-                                                                    <i class="fa-solid fa-check-circle"></i> Pengajuan Diterima
-                                                                </span>
-                                                            <?php elseif ($row['status'] == 'Ditolak'): ?>
-                                                                <span class="text-danger">
-                                                                    <i class="fa-solid fa-times-circle"></i> Pengajuan Ditolak
-                                                                </span>
-                                                            <?php else: ?>
-                                                                <span class="text-secondary">
-                                                                    <i class="fa-solid fa-question-circle"></i> Status Tidak Dikenal
-                                                                </span>
-                                                            <?php endif; ?>
-                                                        </td>
-
-
-                                                        <td class="actions-cell">
-    <div class="btn-group" role="group" aria-label="Aksi">
-    <?php if ($row['status'] == 'Diterima'): ?>
-            <!-- Tombol Detail -->
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?php echo $row['cuti_id']; ?>">
-                <i class="fas fa-info-circle"></i> Detail
-            </button>
-
-            <!-- Tombol Cetak -->
-            <a href="cetak_surat_cuti.php?id=<?php echo $row['cuti_id']; ?>" class="btn btn-success btn-sm">
-                <i class="fas fa-print"></i> Cetak
-            </a>
-        <?php endif; ?>
+    <div class="row page-titles mx-0">
+        <div class="col p-md-0">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
+            </ol>
+        </div>
     </div>
-</td>
 
-                                                    </tr>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Data Surat</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered zero-configuration">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Jenis Surat</th>
+                                        <th>User ID</th>
+                                        <th>Nama Pengaju</th>
+                                        <th>Email Pengaju</th>
+                                        <th>No Telepon</th>
+                                        <th>Alamat</th>
+                                        <th>Tanggal Pengajuan</th>
+                                        <th>Keterangan</th>
+                                        <th>Foto KTP</th>
+                                        <th>Foto KK</th>
+                                        <th>Foto Formulir</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+$no = 1;
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $no++ . "</td>";
+        echo "<td>" . htmlspecialchars($row['jenis_surat']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['user_id']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['nama_pengaju']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['email_pengaju']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['no_telepon']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
+        echo "<td>" . date('d F Y', strtotime($row['tgl_pengajuan'])) . "</td>";
 
-                                                    <div class="modal fade" id="detailModal<?php echo $row['cuti_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel<?php echo $row['cuti_id']; ?>" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="detailModalLabel<?php echo $row['cuti_id']; ?>">Detail Pengajuan Cuti</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="mb-3">
-                                                                            <strong>Tanggal Pengajuan:</strong>
-                                                                            <p class="mb-0"> <?php 
-                                                                                    $tanggal_akhir = strtotime($row['tgl_ajuan']);
-                                                                                    
-                                                                                    $bulan = array(
-                                                                                        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                                                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                                                                                    );
-                                                                                    
-                                                                                    $hari = date('d', $tanggal_akhir);  // Mengambil hari
-                                                                                    $bulan_indo = $bulan[date('n', $tanggal_akhir)];  // Mengambil bulan dalam bahasa Indonesia
-                                                                                    $tahun = date('Y', $tanggal_akhir);  // Mengambil tahun
-                                                                                    
-                                                                                    echo $hari . ' ' . $bulan_indo . ' ' . $tahun;
-                                                                                ?></p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Nomor Cuti:</strong>
-                                                                            <p class="mb-0"><?php echo $row['nomor_cuti']; ?></p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Jenis Cuti:</strong>
-                                                                            <p class="mb-0"><?php echo $row['jenis_cuti']; ?></p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Lama Cuti:</strong>
-                                                                            <p class="mb-0"><?php echo $row['lama_cuti']; ?> (hari)</p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Alasan Cuti:</strong>
-                                                                            <p class="mb-0"><?php echo $row['alasan_cuti']; ?></p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Tanggal Mulai:</strong>
-                                                                            <p class="mb-0"> <?php 
-                                                                                    $tanggal_akhir = strtotime($row['tanggal_mulai']);
-                                                                                    
-                                                                                    $bulan = array(
-                                                                                        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                                                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                                                                                    );
-                                                                                    
-                                                                                    $hari = date('d', $tanggal_akhir);  // Mengambil hari
-                                                                                    $bulan_indo = $bulan[date('n', $tanggal_akhir)];  // Mengambil bulan dalam bahasa Indonesia
-                                                                                    $tahun = date('Y', $tanggal_akhir);  // Mengambil tahun
-                                                                                    
-                                                                                    echo $hari . ' ' . $bulan_indo . ' ' . $tahun;
-                                                                                ?></p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Tanggal Akhir:</strong>
-                                                                            <p class="mb-0">
-                                                                                <?php 
-                                                                                    // Mengonversi tanggal menjadi format tanggal PHP
-                                                                                    $tanggal_akhir = strtotime($row['tanggal_akhir']);
-                                                                                    
-                                                                                    // Array untuk nama bulan dalam bahasa Indonesia
-                                                                                    $bulan = array(
-                                                                                        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                                                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                                                                                    );
-                                                                                    
-                                                                                    // Format tanggal: 19 November 2024
-                                                                                    $hari = date('d', $tanggal_akhir);  // Mengambil hari
-                                                                                    $bulan_indo = $bulan[date('n', $tanggal_akhir)];  // Mengambil bulan dalam bahasa Indonesia
-                                                                                    $tahun = date('Y', $tanggal_akhir);  // Mengambil tahun
-                                                                                    
-                                                                                    // Menampilkan tanggal dalam format yang diinginkan
-                                                                                    echo $hari . ' ' . $bulan_indo . ' ' . $tahun;
-                                                                                ?>
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Catatan:</strong>
-                                                                            <p class="mb-0"><?php echo $row['catatan']; ?></p>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <strong>Alamat Cuti:</strong>
-                                                                            <p class="mb-0"><?php echo $row['alamat_cuti']; ?></p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+        // Status
+        echo "<td>";
+        if ($row['status'] == 'Menunggu') {
+            echo '<span class="badge badge-primary"><i class="fas fa-spinner fa-spin"></i> Menunggu Persetujuan</span>';
+        } elseif ($row['status'] == 'Diajukan') {
+            echo '<span class="badge badge-info"><i class="fas fa-paper-plane"></i> Diajukan</span>';
+        } elseif ($row['status'] == 'Diterima') {
+            echo '<span class="text-success"><i class="fa-solid fa-check-circle"></i> Diterima</span>';
+        } elseif ($row['status'] == 'Ditolak') {
+            echo '<span class="text-danger"><i class="fa-solid fa-times-circle"></i> Ditolak</span>';
+        } else {
+            echo '<span class="text-secondary"><i class="fa-solid fa-question-circle"></i> Tidak Diketahui</span>';
+        }
+        echo "</td>";
 
+        // Keterangan
+        echo "<td>" . htmlspecialchars($row['keterangan']) . "</td>";
 
-                                                    <?php 
-                                                }
-                                            } else {
-                                                ?>
-                                                <tr>
-                                                    <td colspan="10" class="text-center">Data pengajuan cuti masih kosong</td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Tanggal Ajuan</th>
-                                                <th>Nomor Cuti</th>
-                                                <th>Jenis Cuti</th>
-                                                <th>Lama Cuti</th>
-                                                <th>Alasan Cuti</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
+        // Foto KTP
+        echo "<td>";
+        echo !empty($row['foto_ktp']) ? "<a href='../uploads/{$row['foto_ktp']}' target='_blank'>Lihat</a>" : "Tidak tersedia";
+        echo "</td>";
+
+        // Foto KK
+        echo "<td>";
+        echo !empty($row['foto_kk']) ? "<a href='../uploads/{$row['foto_kk']}' target='_blank'>Lihat</a>" : "Tidak tersedia";
+        echo "</td>";
+
+        // Foto Formulir
+        echo "<td>";
+        echo !empty($row['foto_formulir']) ? "<a href='../uploads/{$row['foto_formulir']}' target='_blank'>Lihat</a>" : "Tidak tersedia";
+        echo "</td>";
+
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='13' class='text-center'>Data pengajuan surat masih kosong.</td></tr>";
+}
+?>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Jenis Surat</th>
+                                        <th>User ID</th>
+                                        <th>Nama Pengaju</th>
+                                        <th>Email Pengaju</th>
+                                        <th>No Telepon</th>
+                                        <th>Alamat</th>
+                                        <th>Tanggal Pengajuan</th>
+                                        <th>Keterangan</th>
+                                        <th>Foto KTP</th>
+                                        <th>Foto KK</th>
+                                        <th>Foto Formulir</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- #/ container -->
         </div>
-        <!--**********************************
-            Content body end
-        ***********************************-->
-        
-        
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
-            </div>
-        </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
     </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
 
-    <!--**********************************
-        Scripts
-    ***********************************-->
-    <script>
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
-    <script>
-    function confirmDelete(id) {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Data ini akan dihapus secara permanen!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = `hapus_pengajuan.php?id=${id}`;
-        }
-    });
-}
+</div>
+<!--**********************************
+    Content body end
+***********************************-->
 
-function ajukanCuti(cuti_id) {
-    // Menggunakan SweetAlert untuk konfirmasi
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Anda akan mengajukan cuti ini!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, ajukan!',
-        cancelButtonText: 'Batal',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Menggunakan AJAX untuk mengubah status menjadi "Diajukan"
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "update_status_cuti.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        // Jika berhasil, tampilkan SweetAlert untuk berhasil dan reload halaman
-                        Swal.fire(
-                            'Berhasil!',
-                            'Cuti berhasil diajukan.',
-                            'success'
-                        ).then(() => {
-                            location.reload(); // Reload halaman untuk memperbarui status
-                        });
-                    } else {
-                        // Jika gagal, tampilkan SweetAlert error
-                        Swal.fire(
-                            'Gagal!',
-                            'Terjadi kesalahan. Cuti gagal diajukan.',
-                            'error'
-                        );
-                    }
+        
+<!--**********************************
+    Footer start
+***********************************-->
+<div class="footer">
+    <div class="copyright">
+        <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
+    </div>
+</div>
+<!--**********************************
+    Footer end
+***********************************-->
+</div>
+<!--**********************************
+    Main wrapper end
+***********************************-->
+
+<!--**********************************
+    Scripts
+***********************************-->
+
+<script>
+    $(document).ready(function() {
+        $('.zero-configuration').DataTable({
+            "paging": true,  // Aktifkan pagination
+            "lengthChange": true,  // Pengaturan jumlah item yang ditampilkan per halaman
+            "searching": true,  // Aktifkan fitur pencarian
+            "ordering": true,  // Aktifkan fitur pengurutan
+            "info": true,  // Menampilkan informasi halaman dan total data
+            "autoWidth": false, // Menyesuaikan lebar kolom dengan kontennya
+            "responsive": true, // Menyesuaikan tampilan di perangkat mobile
+            "language": {
+                "paginate": {
+                    "previous": "<", // Teks untuk tombol "sebelumnya"
+                    "next": ">"      // Teks untuk tombol "berikutnya"
                 }
-            };
-            xhr.send("cuti_id=" + cuti_id + "&status=Diajukan");
-        }
+            }
+        });
     });
-}
-
-
 </script>
+
 
 
 
