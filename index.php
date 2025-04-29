@@ -1,405 +1,547 @@
-<?php
-session_start();
-include 'config.php'; // Koneksi ke database
-
-// Cek jika pengguna belum login
-if (!isset($_SESSION['id'])) {
-    header("Location: page-login.php");
-    exit();
-}
-
-// Cek apakah pengguna yang login adalah admin
-$user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'";
-$result_admin = $koneksi->query($sql_admin);
-
-if ($result_admin->num_rows == 0) {
-    header("Location: page-error-400.php");
-    exit();
-}
-
-// Ambil tahun dari parameter GET, default tahun sekarang
-$tahun = isset($_GET['tahun']) ? $_GET['tahun'] : date('Y');
-
-// Query data pengajuan surat per bulan di tahun tersebut
-$sql_pengajuan_surat_bulanan = "
-    SELECT 
-        MONTH(tgl_ajuan) AS bulan,
-        COUNT(*) AS total
-    FROM pengajuan_surat
-    WHERE YEAR(tgl_ajuan) = '$tahun'
-    GROUP BY MONTH(tgl_ajuan)
-    ORDER BY bulan ASC";
-$result_pengajuan_surat_bulanan = $koneksi->query($sql_pengajuan_surat_bulanan);
-
-// Siapkan array default dengan 12 bulan (1-12)
-$dataPengajuanSuratBulanan = array_fill(1, 12, 0);
-if ($result_pengajuan_surat_bulanan->num_rows > 0) {
-    while ($row = $result_pengajuan_surat_bulanan->fetch_assoc()) {
-        $dataPengajuanSuratBulanan[(int)$row['bulan']] = $row['total'];
-    }
-}
-$jsonCutiBulanan = json_encode(array_values($dataPengajuanSuratBulanan));
-
-// Ambil daftar tahun dari tabel 
-$sql_tahun = "SELECT DISTINCT YEAR(tgl_ajuan) AS tahun FROM pengajuan_surat ORDER BY tahun ASC";
-$result_tahun = $koneksi->query($sql_tahun);
-$listTahun = [];
-if ($result_tahun->num_rows > 0) {
-    while ($row = $result_tahun->fetch_assoc()) {
-        $listTahun[] = $row['tahun'];
-    }
-}
-
-
-// Total pengajuan cuti
-$sql_pengajuan = "SELECT COUNT(*) as total_surat FROM pengajuan_surat";
-$result_pengajuan = $koneksi->query($sql_pengajuan);
-$totalPengajuanSurat = ($result_pengajuan->num_rows > 0) ? $result_pengajuan->fetch_assoc()['total_surat'] : 0;
-
-
-// Data statistik
-$username = $_SESSION['username'];
-
-// Total user
-$sql_user = "SELECT COUNT(*) as total_user FROM user";
-$result_user = $koneksi->query($sql_user);
-$totalUser = ($result_user->num_rows > 0) ? $result_user->fetch_assoc()['total_user'] : 0;
-
-// Total pengajuan surat
-$sql_surat = "SELECT COUNT(*) as total_surat FROM pengajuan_surat";
-$result_surat = $koneksi->query($sql_surat);
-$totalPengajuanSurat = ($result_surat->num_rows > 0) ? $result_surat->fetch_assoc()['total_surat'] : 0;
-
-// Surat menunggu
-$sql_menunggu = "SELECT COUNT(*) as total_menunggu FROM pengajuan_surat WHERE status = 'Diajukan'";
-$result_menunggu = $koneksi->query($sql_menunggu);
-$totalSuratMenunggu = ($result_menunggu->num_rows > 0) ? $result_menunggu->fetch_assoc()['total_menunggu'] : 0;
-
-// Surat diterima
-$sql_diterima = "SELECT COUNT(*) as total_diterima FROM cuti WHERE status = 'Diterima'";
-$result_diterima = $koneksi->query($sql_diterima);
-$totalSuratDiterima = ($result_diterima->num_rows > 0) ? $result_diterima->fetch_assoc()['total_diterima'] : 0;
-
-// Surat ditolak
-$sql_ditolak = "SELECT COUNT(*) as total_ditolak FROM cuti WHERE status = 'Ditolak'";
-$result_ditolak = $koneksi->query($sql_ditolak);
-$totalSuratDitolak = ($result_ditolak->num_rows > 0) ? $result_ditolak->fetch_assoc()['total_ditolak'] : 0;
-
-$koneksi->close();
-?>
-
-
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>KELURAHAN</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
-    <!-- Pignose Calender -->
-    <link href="./plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
-    <!-- Chartist -->
-    <link rel="stylesheet" href="./plugins/chartist/css/chartist.min.css">
-    <link rel="stylesheet" href="./plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
-    <!-- Custom Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link rel="icon shortcut" type="image/jpg" href="../web_kalampangan/images/logo/logo.png" style="width: 50px;">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="fonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="fonts/linericon/style.css">
+    <link rel="stylesheet" href="fonts/flaticon.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/baguetteBox.min.css">
+
+    <title>Kelurahan Kalampangan</title>
 
 </head>
 
+<style>
+    .credit-marquee {
+    /* background-color: #222; */
+    color: #fff;
+    padding: 10px 0;
+    font-size: 14px;
+    text-align: center;
+}
+.credit-marquee marquee {
+    white-space: nowrap;
+}
+
+</style>
+
 <body>
 
-    <!--*******************
-        Preloader start
-    ********************-->
-    <div id="preloader">
-        <div class="loader">
-            <svg class="circular" viewBox="25 25 50 50">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
-            </svg>
-        </div>
-    </div>
-    <!--*******************
-        Preloader end
-    ********************-->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <img src="../web_kalampangan/images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
+                Kelurahan Kalampangan
+            </a>
 
-    
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
-    <div id="main-wrapper">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <!--**********************************
-            Nav header start
-        ***********************************-->
-        <div class="nav-header">
-            <div class="brand-logo">
-                    <div class="logo-container">
-                        <div class="logo-pky">
-                            <img src="images/logopky.png" alt="">
-                        </div>
-                        <div class="brand-title">
-                            <h4>KELURAHAN  KELAMPANGAN<br> PALANGKA RAYA</h4>
-                        </div>
-                    </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.php">Beranda <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tentang.php">Tentang</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="pengajuan.php">Pengajuan</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="page-login.php">Login</a>
+                    </li>
+                </ul>
             </div>
         </div>
 
-        <!--**********************************
-            Nav header end
-        ***********************************-->
-        <!--**********************************
-            Header start
-        ***********************************-->
-        <div class="header">    
-            <div class="header-content clearfix">
-                
-                <div class="nav-control">
-                    <div class="hamburger">
-                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+    </nav>
+
+    <div id="sliderHome" class="carousel slide" data-ride="carousel">
+
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image:url(images/slider/gedung.jpeg);">
+                <div class="slider_item text-center">
+                    <div class="text">
+                        <div class="subheading">
+                            <span>Kota Palangka Raya</span>
+                        </div>
+                        <h1 class="mb-4">Kelurahan <span> Kalampangan</span></h1>
+                        <p><a href="tentang.php" class="btn btn-primary py-2 px-4">Tentang</a> <a href="pengajuan.php"
+                                class="btn btn-primary btn-outline-primary py-2 px-4">Pengajuan</a></p>
                     </div>
                 </div>
-                <div class="header-right">
-                    <ul class="clearfix">
-                        <li class="icons dropdown">
-                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
-                                <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
-                            </div>
-                            <div class="drop-down dropdown-profile dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li>
-                                            <a href="profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a>
-                                        </li>
-                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
+            </div </div>
+        </div>
+
+
+        <div class="welcome">
+            <div class="row">
+                <div class="welcome_konten justify-content-center align-items-center">
+                    <div class="home_heading text-center">
+                        <span class="subheading">Website</span>
+                    </div>
+                    <h3 class="heading justify-content-center align-items-center text-center">Website Kelurahan<span>
+                            Kalampangan</span></h3>
+                    <div class="welcome_text justify-content-center align-items-center text-center">
+                        <p>
+                        Website Kelurahan Kalampangan merupakan platform digital resmi yang dibangun untuk meningkatkan 
+                        pelayanan publik, transparansi, dan partisipasi masyarakat dalam pembangunan kelurahan. Melalui 
+                        website ini, warga dapat mengakses informasi terkait pelayanan, kegiatan kelurahan, struktur kelurahan, 
+                        serta galeri kegiatan kelurahan kelampangan. Selain itu, website ini juga 
+                        memfasilitasi permintaan surat menyurat, 
+                        sehingga mendorong tata kelola pemerintahan yang lebih akun tabel dan efisien. Dengan adanya 
+                        website Kelurahan Kalampangan, diharapkan komunikasi antara pemerintah kelurahan dan masyarakat 
+                        kalampangan menjadi lebih lancar, sekaligus mendukung percepatan transformasi digital dalam pelayanan publik.
+                        </p>     
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="berita_home">
+            <div class="container">
+                <div class="home_heading text-center">
+                    <span class="subheading">Pengumuman</span>
+                    <h2>Kelurahan Kelampangan</h2>
+                    <p>Pengumuman Kegiatan Kelurahan Kelampangan</p>
+                </div>
+
+                <div class="bh_konten">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="bh_item">
+                                <div class="bh_img">
+                                    <img src="images/berita/image_1.jpg" class="img-fluid" alt="">
+                                </div>
+
+                                <div class="bh_kategori">
+                                    <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
+                                </div>
+                                <div class="bh_judul">
+                                    <a href="" title="">
+                                        <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit</h5>
+                                    </a>
+                                </div>
+                                <div class="bh_meta">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
+                                            2020</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
                                     </ul>
                                 </div>
+                                <div class="bh_isi">
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.
+                                    </p>
+
+                                    <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                </div>
+
                             </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
+                        </div>
 
-        <!--**********************************
-            Sidebar start
-        ***********************************-->
-        <?php include 'sidebar.php'; ?>
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
+                        <div class="col-md-4">
+                            <div class="bh_item">
+                                <div class="bh_img">
+                                    <img src="images/berita/image_2.jpg" class="img-fluid" alt="">
+                                </div>
+                                <div class="bh_kategori">
+                                    <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
+                                </div>
+                                <div class="bh_judul">
+                                    <a href="" title="">
+                                        <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit</h5>
+                                    </a>
+                                </div>
+                                <div class="bh_meta">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
+                                            2020</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
+                                    </ul>
+                                </div>
+                                <div class="bh_isi">
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.
+                                    </p>
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
+                                    <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                </div>
 
-            <div class="container-fluid mt-3">
-            <div class="row">
-    <div class="col-lg-3 col-sm-6">
-        <div class="card" style="background-color: #FFEB3B; border: 1px solid #FFC107; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <h3 class="card-title" style="color: #212121; font-weight: normal;">Pengguna</h3>
-                <h2 style="color: #212121; font-weight: normal;"><?php echo $totalUser; ?> User</h2>
-                <span class="float-right display-5 opacity-5" style="color: #FF5722;"><i class="fa fa-users"></i></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6">
-        <div class="card" style="background-color: #80DEEA; border: 1px solid #26C6DA; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <h3 class="card-title" style="color: #004D40; font-weight: normal;">Pengajuan Surat</h3>
-                <h2 style="color: #004D40; font-weight: normal;"><?php echo $totalPengajuanSurat; ?> Pengajuan</h2>
-                <span class="float-right display-5 opacity-5" style="color: #009688;"><i class="fa-solid fa-pen-to-square"></i></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6">
-        <div class="card" style="background-color: #7E8EF1; border: 1px solid #F44336; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <h3 class="card-title" style="color: #091057; font-weight: normal;">Menunggu Persetujuan</h3>
-                <h2 style="color: #091057; font-weight: normal;"><?php echo $totalSuratMenunggu; ?> Pengajuan</h2>
-                <span class="float-right display-5 opacity-5" style="color: #091057;"><i class="fa fa-clock"></i></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6">
-        <div class="card" style="background-color: #C8E6C9; border: 1px solid #388E3C; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <h3 class="card-title" style="color: #1B5E20; font-weight: normal;">Pengajuan Diterima</h3>
-                <h2 style="color: #1B5E20; font-weight: normal;"><?php echo $totalSuratDiterima; ?> Pengajuan</h2>
-                <span class="float-right display-5 opacity-5" style="color: #388E3C;"><i class="fa fa-check-circle"></i></span>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-sm-6">
-        <div class="card" style="background-color: #FFEBEE; border: 1px solid #F44336; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <h3 class="card-title" style="color: #D32F2F; font-weight: normal;">Pengajuan Ditolak</h3>
-                <h2 style="color: #D32F2F; font-weight: normal;"><?php echo $totalSuratDitolak; ?> Pengajuan</h2>
-                <span class="float-right display-5 opacity-5" style="color: #F44336;"><i class="fa fa-times-circle"></i></span>
-            </div>
-        </div>
-    </div>
-</div>
+                            </div>
+                        </div>
 
+                        <div class="col-md-4">
+                            <div class="bh_item">
+                                <div class="bh_img">
+                                    <img src="images/berita/image_3.jpg" class="img-fluid" alt="">
+                                </div>
 
+                                <div class="bh_kategori">
+                                    <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
+                                </div>
+                                <div class="bh_judul">
+                                    <a href="" title="">
+                                        <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit</h5>
+                                    </a>
+                                </div>
+                                <div class="bh_meta">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
+                                            2020</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
+                                    </ul>
+                                </div>
+                                <div class="bh_isi">
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.
+                                    </p>
 
-
-
-
-        
-
-                <div class="row">
-    <div class="col-lg-12">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body pb-0">
-                        <div class="container mt-5">
-                            <h4 class="text-center">Grafik Pengajuan Cuti Per Bulan</h4>
-                            <!-- Dropdown Filter Tahun -->
-                            <div class="d-flex justify-content-center mb-6">
-    <label for="filterTahun" class="me-2 text-lg font-semibold text-gray-700">Pilih Tahun:</label>
-    <select id="filterTahun" class="form-select px-4 py-2 border rounded-lg shadow-md focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-300 ease-in-out">
-        <?php foreach ($listTahun as $tahunItem): ?>
-            <option value="<?= $tahunItem ?>" <?= $tahunItem == $tahun ? 'selected' : '' ?>>
-                <?= $tahunItem ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
-
-                            <canvas id="grafikCuti"></canvas>
+                                    <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-
-                
 
         
+        <div class="berita_home">
+            <div class="container">
+                <div class="home_heading text-center">
+                    <span class="subheading">Kegiatan</span>
+                    <h2>Kelurahan Kelampangan</h2>
+                    <p>Kegiatan Terbaru Kelurahan Kelampangan</p>
+                </div>
+
+                <div class="bh_konten">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="bh_item">
+                                <div class="bh_img">
+                                    <img src="images/berita/image_1.jpg" class="img-fluid" alt="">
+                                </div>
+
+                                <div class="bh_kategori">
+                                    <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
+                                </div>
+                                <div class="bh_judul">
+                                    <a href="" title="">
+                                        <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit</h5>
+                                    </a>
+                                </div>
+                                <div class="bh_meta">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
+                                            2020</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
+                                    </ul>
+                                </div>
+                                <div class="bh_isi">
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.
+                                    </p>
+
+                                    <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="bh_item">
+                                <div class="bh_img">
+                                    <img src="images/berita/image_2.jpg" class="img-fluid" alt="">
+                                </div>
+                                <div class="bh_kategori">
+                                    <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
+                                </div>
+                                <div class="bh_judul">
+                                    <a href="" title="">
+                                        <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit</h5>
+                                    </a>
+                                </div>
+                                <div class="bh_meta">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
+                                            2020</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
+                                    </ul>
+                                </div>
+                                <div class="bh_isi">
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.
+                                    </p>
+
+                                    <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="bh_item">
+                                <div class="bh_img">
+                                    <img src="images/berita/image_3.jpg" class="img-fluid" alt="">
+                                </div>
+
+                                <div class="bh_kategori">
+                                    <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
+                                </div>
+                                <div class="bh_judul">
+                                    <a href="" title="">
+                                        <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit</h5>
+                                    </a>
+                                </div>
+                                <div class="bh_meta">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
+                                            2020</li>
+                                        <li class="list-inline-item">|</li>
+                                        <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
+                                    </ul>
+                                </div>
+                                <div class="bh_isi">
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.
+                                    </p>
+
+                                    <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-            </div>
-            <!-- #/ container -->
-        </div>
-        <!--**********************************
-            Content body end
-        ***********************************-->
-        
-        
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
+                </div>
             </div>
         </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
-    </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
 
-    <!--**********************************
-        Scripts
-    ***********************************-->
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
-    <script>
-    document.getElementById('filterTahun').addEventListener('change', function () {
-        const selectedYear = this.value;
-        window.location.href = `index.php?tahun=${selectedYear}`;
-    });
 
-    // Data dari PHP
-    const dataCutiBulanan = <?php echo $jsonCutiBulanan; ?>;
+        <div class="pendeta_home">
+            <div class="container">
+                <div class="home_heading text-center">
+                    <span class="subheading">Struktur</span>
+                    <h2>Kelurahan Kelampangan</h2>
+                </div>
 
-    // Label bulan
-    const bulan = [
-        "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="staff">
+                            <div class="img-wrap d-flex align-items-stretch">
+                                <div class="img align-self-stretch"
+                                    style="background-image: url(images/staf/staff-1.jpg);"></div>
+                            </div>
+                            <div class="text d-flex align-items-center pt-3 text-center">
+                                <div>
+                                    <h3 class="mb-2">Lloyd Wilson</h3>
+                                    <span class="position mb-4">Lead Pastor</span>
 
-    // Konfigurasi Chart.js
-    const ctx = document.getElementById('grafikCuti').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: bulan,
-            datasets: [{
-                label: 'Jumlah Pengajuan Cuti',
-                data: dataCutiBulanan,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="staff">
+                            <div class="img-wrap d-flex align-items-stretch">
+                                <div class="img align-self-stretch"
+                                    style="background-image: url(images/staf/staff-2.jpg);"></div>
+                            </div>
+                            <div class="text d-flex align-items-center pt-3 text-center">
+                                <div>
+                                    <h3 class="mb-2">Rachel Parker</h3>
+                                    <span class="position mb-4">Lead Pastor</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="staff">
+                            <div class="img-wrap d-flex align-items-stretch">
+                                <div class="img align-self-stretch"
+                                    style="background-image: url(img/staf/staff-3.jpg);"></div>
+                            </div>
+                            <div class="text d-flex align-items-center pt-3 text-center">
+                                <div>
+                                    <h3 class="mb-2">Ian Smith</h3>
+                                    <span class="position mb-4">Lead Pastor</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        <div class="staff">
+                            <div class="img-wrap d-flex align-items-stretch">
+                                <div class="img align-self-stretch"
+                                    style="background-image: url(img/staf/staff-4.jpg);"></div>
+                            </div>
+                            <div class="text d-flex align-items-center pt-3 text-center">
+                                <div>
+                                    <h3 class="mb-2">Alicia Henderson</h3>
+                                    <span class="position mb-4">Lead Pastor</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Lokasi Google Maps -->
+        <div class="container mt-5">
+            <div class="card shadow-lg rounded-3">
+                <div class="card-body">
+                    <h5 class="card-title">Lokasi Kelurahan Kalampangan</h5>
+                    <p class="card-text">Berikut adalah lokasi kantor Kelurahan Kalampangan di Google Maps:</p>
+                    <div class="map-responsive"
+                        style="overflow:hidden; padding-bottom:56.25%; position:relative; height:0;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d563.2227066806089!2d114.01151814552112!3d-2.28046346951811!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de353089e89e807%3A0x150e730e4c7482ee!2sKantor%20Kelurahan%20Kalampangan!5e0!3m2!1sid!2sid!4v1745391028452!5m2!1sid!2sid"
+                            width="100%" height="100%" style="border:0; position:absolute; top:0; left:0;"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="ftco-footer ftco-bg-dark ftco-section mt-3">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-md">
+                        <div class="ftco-footer-widget mb-4">
+                            <h2 class="ftco-heading-2 logo"><span>Kelurahan</span> Kalampangan</h2>
+                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
+                                there live the blind texts.</p>
+                            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                                <!-- <li class="ftco-animate"><a href="#"><span class="mdi mdi-twitter"></span></a>
+                                </li> -->
+                                <li class="ftco-animate"><a href="https://www.facebook.com/share/1DbtGN4awP/"><span class="mdi mdi-facebook"></span></a>
+                                </li>
+                                <li class="ftco-animate"><a href="https://www.instagram.com/kelurahankalampangan80?igsh=MXZ4dzE1djdybmN0OQ=="><span
+                                            class="mdi mdi-instagram"></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="ftco-footer-widget mb-4 ml-md-5">
+                            <h2 class="ftco-heading-2">Quick Link</h2>
+                            <ul class="list-unstyled">
+                                <li><a href="index.php" class="py-1 d-block"><span
+                                            class="mdi mdi-view-dashboard mr-3"></span>Beranda</a></li>
+                                <li><a href="tentang.php" class="py-1 d-block"><span
+                                            class="mdi mdi-church mr-3"></span>Tentang</a></li>
+                                <li><a href="pengajuan.php" class="py-1 d-block"><span
+                                            class="mdi mdi-newspaper mr-3"></span>Pengajuan</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md">
+                        <div class="ftco-footer-widget mb-4">
+                            <h2 class="ftco-heading-2">Jam Operasional Kelurahan</h2>
+                            <div class="opening-hours">
+                                <p>Senin - Juma'at: <span class="mb-3">Jam 8:00 - 15:30</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="credit-marquee">
+                    <marquee behavior="scroll" direction="left">@kkn_mandiri_kalampangan | Website oleh Mahasiswa KKN-T Mandiri Kelompok 2 2025</marquee>
+                </div>
+            </div>
+        </footer>
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="js/jquery-3.4.1.slim.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/baguetteBox.min.js"></script>
+        <script>
+            baguetteBox.run('.tz-gallery');
+        </script>
+
+        <script>
+            // When the user scrolls down 20px from the top of the document, slide down the navbar
+            window.onscroll = function() {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    $('body').addClass("fixed-nav");
+                } else {
+                    $('body').removeClass("fixed-nav");
                 }
             }
-        }
-    });
-</script>
-
-
-
-    <!-- Chartjs -->
-    <script src="./plugins/chart.js/Chart.bundle.min.js"></script>
-    <!-- Circle progress -->
-    <script src="./plugins/circle-progress/circle-progress.min.js"></script>
-    <!-- Datamap -->
-    <script src="./plugins/d3v3/index.js"></script>
-    <script src="./plugins/topojson/topojson.min.js"></script>
-    <script src="./plugins/datamaps/datamaps.world.min.js"></script>
-    <!-- Morrisjs -->
-    <script src="./plugins/raphael/raphael.min.js"></script>
-    <script src="./plugins/morris/morris.min.js"></script>
-    <!-- Pignose Calender -->
-    <script src="./plugins/moment/moment.min.js"></script>
-    <script src="./plugins/pg-calendar/js/pignose.calendar.min.js"></script>
-    <!-- ChartistJS -->
-    <script src="./plugins/chartist/js/chartist.min.js"></script>
-    <script src="./plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
-
-
-
-    <script src="./js/dashboard/dashboard-1.js"></script>
-
+        </script>
 </body>
 
 </html>

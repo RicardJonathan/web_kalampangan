@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $username; // Simpan username admin
 
             // Arahkan ke halaman admin
-            header("Location: index.php");
+            header("Location: indexUser.php");
             exit();
         }
         $stmt->close();
@@ -133,7 +133,7 @@ $stmt->close();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
+    <title>Kelurahan Kelampangan</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> -->
@@ -142,7 +142,7 @@ $stmt->close();
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
-            background-image: url('images/bg.jpg') !important; /* Ganti dengan URL gambar */
+            background-image: url('images/slider/gedung.jpeg') !important; /* Ganti dengan URL gambar */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -219,7 +219,7 @@ $stmt->close();
                 <img src="images/logopky.png" alt="Logo" class="logopky">
             </div>
             <h4 class="text-center">
-                DINAS PERDAGANGAN KOPERASI USAHA KECIL MENENGAH DAN PERINDUSTRIAN KOTA PALANGKA RAYA
+                Kelurahan Kelampangan
             </h4>
             <form class="mt-5 login-input" method="POST">
                 <div class="form-group">
@@ -230,6 +230,10 @@ $stmt->close();
                 </div>
                 <div class="g-recaptcha mt-3" data-sitekey="6LfBOoMqAAAAAIGFl4kVxHSVBKm874nbDW-lyh2q"></div>
                 <button type="submit" class="btn login-form__btn  w-100 mt-4">Masuk</button>
+                <div class="login-link text-center mt-3">
+    Belum punya akun? <a href="register.php">Daftar di sini</a>
+</div>
+
             </form>
         </div>
     </div>
