@@ -2,58 +2,64 @@
 session_start();
 include 'config.php';
 
+// Pastikan user sudah login
 if (!isset($_SESSION['id'])) {
     header("Location: page-login.php");
     exit();
 }
 
 $user_id = $_SESSION['id'];
-$sql_user = "SELECT * FROM user WHERE id = ?";
-$stmt = $koneksi->prepare($sql_user);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result_user = $stmt->get_result();
 
-if ($result_user->num_rows == 0) {
-    header("Location: page-error-403.php");
+// Ambil data pengajuan surat dari database
+if (isset($_GET['id'])) {
+    $id_pengajuan = $_GET['id'];
+    $sql = "SELECT * FROM pengajuan_surat WHERE id = ?";
+    $stmt = $koneksi->prepare($sql);
+    $stmt->bind_param("i", $id_pengajuan);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+} else {
+    header("Location: pengajuan_surat.php");
     exit();
 }
 
-$user = $result_user->fetch_assoc();
-$nama_pengaju = $user['nama'];
-$email_pengaju = $user['email'];
-$no_telepon = $user['no_telepon'];
-
+// Jika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $jenis_surat = $_POST['jenis_surat'];
     $alamat = $_POST['alamat'];
-    $tgl_pengajuan = date('Y-m-d');
     $keterangan = $_POST['keterangan'];
 
-    $foto_ktp = $_FILES['foto_ktp']['name'];
-    $foto_kk = $_FILES['foto_kk']['name'];
-    $foto_formulir = $_FILES['foto_formulir']['name'];
+    $foto_ktp = $_FILES['foto_ktp']['name'] ? $_FILES['foto_ktp']['name'] : $row['foto_ktp'];
+    $foto_kk = $_FILES['foto_kk']['name'] ? $_FILES['foto_kk']['name'] : $row['foto_kk'];
+    $foto_formulir = $_FILES['foto_formulir']['name'] ? $_FILES['foto_formulir']['name'] : $row['foto_formulir'];
 
     $target_dir = "uploads/";
-    move_uploaded_file($_FILES['foto_ktp']['tmp_name'], $target_dir . $foto_ktp);
-    move_uploaded_file($_FILES['foto_kk']['tmp_name'], $target_dir . $foto_kk);
-    move_uploaded_file($_FILES['foto_formulir']['tmp_name'], $target_dir . $foto_formulir);
 
-    $status = 'Menunggu';
-
-    $query = "INSERT INTO pengajuan_surat 
-        (jenis_surat, user_id, nama_pengaju, email_pengaju, no_telepon, alamat, tgl_pengajuan, status, keterangan, foto_ktp, foto_kk, foto_formulir)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $koneksi->prepare($query);
-    $stmt->bind_param("sissssssssss", $jenis_surat, $user_id, $nama_pengaju, $email_pengaju, $no_telepon, $alamat, $tgl_pengajuan, $status, $keterangan, $foto_ktp, $foto_kk, $foto_formulir);
-
-    if ($stmt->execute()) {
-        $_SESSION['success_message'] = 'Pengajuan surat Anda telah berhasil diajukan.';
-    } else {
-        $_SESSION['error_message'] = 'Terjadi kesalahan saat mengajukan surat.';
+    if ($_FILES['foto_ktp']['name']) {
+        move_uploaded_file($_FILES['foto_ktp']['tmp_name'], $target_dir . $foto_ktp);
+    }
+    if ($_FILES['foto_kk']['name']) {
+        move_uploaded_file($_FILES['foto_kk']['tmp_name'], $target_dir . $foto_kk);
+    }
+    if ($_FILES['foto_formulir']['name']) {
+        move_uploaded_file($_FILES['foto_formulir']['tmp_name'], $target_dir . $foto_formulir);
     }
 
-    header("Location: tambah_pengajuan_surat.php");
+    // Update data pengajuan surat
+    $query = "UPDATE pengajuan_surat 
+              SET jenis_surat = ?, alamat = ?, keterangan = ?, foto_ktp = ?, foto_kk = ?, foto_formulir = ? 
+              WHERE id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("ssssssi", $jenis_surat, $alamat, $keterangan, $foto_ktp, $foto_kk, $foto_formulir, $id_pengajuan);
+
+    if ($stmt->execute()) {
+        $_SESSION['success_message'] = 'Pengajuan surat Anda berhasil diperbarui.';
+    } else {
+        $_SESSION['error_message'] = 'Terjadi kesalahan saat memperbarui pengajuan surat.';
+    }
+
+    header("Location: pengajuan_surat.php");
     exit();
 }
 ?>
@@ -138,50 +144,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="container-fluid">
                 <div class="card">
-                    <h4 class="card-title">Tambah Pengajuan Surat</h4>
+                    <h4 class="card-title">Edit Pengajuan Surat</h4>
                     <div class="card-table">
-                        <form id="form-pengajuan" action="tambah_pengajuan_surat.php" method="post" enctype="multipart/form-data">
+                        <form id="form-pengajuan" action="edit_pengajuan_surat.php?id=<?php echo $row['id']; ?>" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="jenis_surat">Jenis Surat</label>
                                 <select name="jenis_surat" class="form-control" required>
                                     <option value="">-- Pilih Jenis Surat --</option>
-                                    <option value="SURAT KETERANGAN USAHA (SKU)">SURAT KETERANGAN USAHA (SKU)</option>
-                                    <option value="SURAT KETERANGAN TIDAK MAMPU (SKTM)">SURAT KETERANGAN TIDAK MAMPU (SKTM)</option>
-                                    <option value="SURAT KETERANGAN KEMATIAN">SURAT KETERANGAN KEMATIAN</option>
-                                    <option value="SURAT KETERANGAN KELAHIRAN">SURAT KETERANGAN KELAHIRAN</option>
-                                    <option value="SURAT KETERANGAN PINDAH">SURAT KETERANGAN PINDAH</option>
-                                    <option value="SURAT KETERANGAN BELUM MENIKAH">SURAT KETERANGAN BELUM MENIKAH</option>
-                                    <option value="SURAT KETERANGAN UNTUK MENIKAH">SURAT KETERANGAN UNTUK MENIKAH</option>
-                                    <option value="PENGAJUAN PBB BARU">PENGAJUAN PBB BARU</option>
-                                    <option value="SURAT KETERANGAN AHLI WARIS">SURAT KETERANGAN AHLI WARIS</option>
-                                    <option value="SURAT KETERANGAN BERKELAKUAN BAIK">SURAT KETERANGAN BERKELAKUAN BAIK</option>
-                                    <option value="SURAT KETERANGAN DOMISILI">SURAT KETERANGAN DOMISILI</option>
+                                    <option value="SURAT KETERANGAN USAHA (SKU)" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN USAHA (SKU)') ? 'selected' : ''; ?>>SURAT KETERANGAN USAHA (SKU)</option>
+                                    <option value="SURAT KETERANGAN TIDAK MAMPU (SKTM)" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN TIDAK MAMPU (SKTM)') ? 'selected' : ''; ?>>SURAT KETERANGAN TIDAK MAMPU (SKTM)</option>
+                                    <option value="SURAT KETERANGAN KEMATIAN" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN KEMATIAN') ? 'selected' : ''; ?>>SURAT KETERANGAN KEMATIAN</option>
+                                    <option value="SURAT KETERANGAN KELAHIRAN" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN KELAHIRAN') ? 'selected' : ''; ?>>SURAT KETERANGAN KELAHIRAN</option>
+                                    <option value="SURAT KETERANGAN PINDAH" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN PINDAH') ? 'selected' : ''; ?>>SURAT KETERANGAN PINDAH</option>
+                                    <option value="SURAT KETERANGAN BELUM MENIKAH" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN BELUM MENIKAH') ? 'selected' : ''; ?>>SURAT KETERANGAN BELUM MENIKAH</option>
+                                    <option value="SURAT KETERANGAN UNTUK MENIKAH" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN UNTUK MENIKAH') ? 'selected' : ''; ?>>SURAT KETERANGAN UNTUK MENIKAH</option>
+                                    <option value="PENGAJUAN PBB BARU" <?php echo ($row['jenis_surat'] == 'PENGAJUAN PBB BARU') ? 'selected' : ''; ?>>PENGAJUAN PBB BARU</option>
+                                    <option value="SURAT KETERANGAN AHLI WARIS" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN AHLI WARIS') ? 'selected' : ''; ?>>SURAT KETERANGAN AHLI WARIS</option>
+                                    <option value="SURAT KETERANGAN BERKELAKUAN BAIK" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN BERKELAKUAN BAIK') ? 'selected' : ''; ?>>SURAT KETERANGAN BERKELAKUAN BAIK</option>
+                                    <option value="SURAT KETERANGAN DOMISILI" <?php echo ($row['jenis_surat'] == 'SURAT KETERANGAN DOMISILI') ? 'selected' : ''; ?>>SURAT KETERANGAN DOMISILI</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="alamat">Alamat Pengaju</label>
-                                <input type="text" class="form-control" name="alamat" required>
+                                <input type="text" class="form-control" name="alamat" value="<?php echo $row['alamat']; ?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="keterangan">Keterangan (Opsional)</label>
-                                <textarea class="form-control" name="keterangan" rows="3"></textarea>
+                                <textarea class="form-control" name="keterangan" rows="3"><?php echo $row['keterangan']; ?></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="foto_ktp">Foto KTP</label>
-                                <input type="file" class="form-control" name="foto_ktp" accept="image/*" required>
+                                <input type="file" class="form-control" name="foto_ktp" accept="image/*">
+                                <?php if ($row['foto_ktp']): ?>
+                                    <img src="uploads/<?php echo $row['foto_ktp']; ?>" width="100">
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label for="foto_kk">Foto KK</label>
-                                <input type="file" class="form-control" name="foto_kk" accept="image/*" required>
+                                <input type="file" class="form-control" name="foto_kk" accept="image/*">
+                                <?php if ($row['foto_kk']): ?>
+                                    <img src="uploads/<?php echo $row['foto_kk']; ?>" width="100">
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label for="foto_formulir">Foto Formulir</label>
-                                <input type="file" class="form-control" name="foto_formulir" accept="image/*" required>
-                            </div>
+                                <input type="file" class="form-control" name="foto_formulir" accept="image/*">
+                                <?php if ($row['foto_formulir']): ?>
+                                    <img src="uploads/<?php echo $row['foto_formulir']; ?>" width="100">
+                                <?php endif; ?>
                             <div class="form-group text-right">
-                                <a href="pengajuan_surat.php" class="btn btn-secondary">Batal</a>
-                                <button type="button" id="btn-submit" class="btn btn-primary">Simpan</button>
-                            </div>
+                 <!-- Update Button -->
+                <button type="submit" class="btn btn-primary">Update</button>
+                 <!-- Cancel Button -->
+                    <a href="pengajuan_surat.php" class="btn btn-secondary ml-2">Cancel</a>
+                     </div>
+
                         </form>
                     </div>
                 </div>
@@ -198,21 +215,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        document.getElementById("btn-submit").addEventListener("click", function() {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Pastikan data yang Anda isi sudah benar.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, ajukan!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("form-pengajuan").submit();
-                }
-            });
-        });
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -223,29 +225,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/styleSwitcher.js"></script>
     <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
     <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <?php if (isset($_SESSION['success_message'])): ?>
-    <script>
-        Swal.fire({
-            title: 'Berhasil!',
-            text: '<?php echo $_SESSION['success_message']; ?>',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    </script>
-    <?php unset($_SESSION['success_message']); endif; ?>
-
-    <?php if (isset($_SESSION['error_message'])): ?>
-    <script>
-        Swal.fire({
-            title: 'Gagal!',
-            text: '<?php echo $_SESSION['error_message']; ?>',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-    </script>
-    <?php unset($_SESSION['error_message']); endif; ?>
 </body>
 </html>
