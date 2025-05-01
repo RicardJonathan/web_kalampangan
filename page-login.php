@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $username; // Simpan username admin
 
             // Arahkan ke halaman admin
-            header("Location: indexUser.php");
+            header("Location: index_admin.php");
             exit();
         }
         $stmt->close();

@@ -24,6 +24,9 @@ $nama_pengaju = $user['nama'];
 $email_pengaju = $user['email'];
 $no_telepon = $user['no_telepon'];
 
+$success_message = '';
+$error_message = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $jenis_surat = $_POST['jenis_surat'];
     $alamat = $_POST['alamat'];
@@ -48,13 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sissssssssss", $jenis_surat, $user_id, $nama_pengaju, $email_pengaju, $no_telepon, $alamat, $tgl_pengajuan, $status, $keterangan, $foto_ktp, $foto_kk, $foto_formulir);
 
     if ($stmt->execute()) {
-        $_SESSION['success_message'] = 'Pengajuan surat Anda telah berhasil diajukan.';
+        $success_message = 'Pengajuan surat Anda telah berhasil diajukan.';
     } else {
-        $_SESSION['error_message'] = 'Terjadi kesalahan saat mengajukan surat.';
+        $error_message = 'Terjadi kesalahan saat mengajukan surat.';
     }
-
-    header("Location: tambah_pengajuan_surat.php");
-    exit();
 }
 ?>
 
@@ -68,61 +68,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <style>
-        .card-title {
-            padding-top: 20px;
-            padding-left: 30px;
-        }
-        .card-table {
-            padding-left: 40px;
-            padding-right: 40px;
-        }
+        .card-title { padding-top: 20px; padding-left: 30px; }
+        .card-table { padding-left: 40px; padding-right: 40px; }
     </style>
 </head>
 <body>
     <div id="main-wrapper">
-        <!-- Nav Header -->
-        <div class="nav-header">
-            <div class="brand-logo">
-                <div class="logo-container">
-                    <div class="logo-pky">
-                        <img src="images/logopky.png" alt="">
-                    </div>
-                    <div class="brand-title">
-                        <h4>KELURAHAN KELAMPANGAN <br> PALANGKA RAYA</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Header -->
-        <div class="header">
-            <div class="header-content clearfix">
-                <div class="nav-control">
-                    <div class="hamburger">
-                        <span class="toggle-icon"><i class="icon-menu"></i></span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <ul class="clearfix">
-                        <li class="icons dropdown">
-                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
-                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
-                                <span class="ml-1" style="font-size: 15px; color: #494949;"><?php echo $_SESSION['username']; ?></span>
-                            </div>
-                            <div class="drop-down dropdown-profile dropdown-menu">
-                                <div class="dropdown-content-body">
-                                    <ul>
-                                        <li><a href="profileUser.php"><i class="icon-user"></i> <span>Profile</span></a></li>
-                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
+        <!-- Header & Sidebar -->
         <?php include 'sidebarUser.php'; ?>
 
         <!-- Content -->
@@ -140,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="card">
                     <h4 class="card-title">Tambah Pengajuan Surat</h4>
                     <div class="card-table">
-                        <form id="form-pengajuan" action="tambah_pengajuan_surat.php" method="post" enctype="multipart/form-data">
+                        <form id="form-pengajuan" action="" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="jenis_surat">Jenis Surat</label>
                                 <select name="jenis_surat" class="form-control" required>
@@ -180,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="form-group text-right">
                                 <a href="pengajuan_surat.php" class="btn btn-secondary">Batal</a>
-                                <button type="button" id="btn-submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
                         </form>
                     </div>
@@ -196,25 +148,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        document.getElementById("btn-submit").addEventListener("click", function() {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Pastikan data yang Anda isi sudah benar.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, ajukan!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById("form-pengajuan").submit();
-                }
-            });
-        });
     </script>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>
@@ -226,26 +163,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <?php if (isset($_SESSION['success_message'])): ?>
+    <?php if (!empty($success_message)) : ?>
     <script>
         Swal.fire({
             title: 'Berhasil!',
-            text: '<?php echo $_SESSION['success_message']; ?>',
+            text: '<?php echo $success_message; ?>',
             icon: 'success',
             confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'pengajuan_surat.php';
+            }
         });
     </script>
-    <?php unset($_SESSION['success_message']); endif; ?>
+    <?php endif; ?>
 
-    <?php if (isset($_SESSION['error_message'])): ?>
+    <?php if (!empty($error_message)) : ?>
     <script>
         Swal.fire({
             title: 'Gagal!',
-            text: '<?php echo $_SESSION['error_message']; ?>',
+            text: '<?php echo $error_message; ?>',
             icon: 'error',
             confirmButtonText: 'OK'
         });
     </script>
-    <?php unset($_SESSION['error_message']); endif; ?>
+    <?php endif; ?>
 </body>
 </html>

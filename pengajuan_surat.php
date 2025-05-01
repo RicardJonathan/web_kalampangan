@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include 'config.php'; // Koneksi ke database
 
@@ -11,8 +12,11 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
 // Cek apakah user terdaftar di tabel user
-$sql_user = "SELECT * FROM user WHERE id = '$user_id'";
-$result_user = $koneksi->query($sql_user);
+$sql_user = "SELECT * FROM user WHERE id = ?";
+$stmt_user = $koneksi->prepare($sql_user);
+$stmt_user->bind_param("i", $user_id); // "i" untuk integer
+$stmt_user->execute();
+$result_user = $stmt_user->get_result();
 
 if ($result_user->num_rows == 0) {
     header("Location: page-error-403.php"); // Jika user tidak ditemukan
@@ -21,9 +25,16 @@ if ($result_user->num_rows == 0) {
 
 // Ambil data pengajuan surat sesuai user yang login
 $cari = isset($_GET['cari']) ? $_GET['cari'] : ''; // Ambil nilai pencarian dari input
-$sql_surat = "SELECT * FROM pengajuan_surat WHERE user_id = '$user_id' AND (nama_pengaju LIKE '%$cari%' OR jenis_surat LIKE '%$cari%') ORDER BY tgl_pengajuan DESC";
-$result_surat = $koneksi->query($sql_surat);
+
+// Menggunakan prepared statement untuk pencarian
+$sql_surat = "SELECT * FROM pengajuan_surat WHERE user_id = ? AND (nama_pengaju LIKE ? OR jenis_surat LIKE ?) ORDER BY tgl_pengajuan DESC";
+$stmt_surat = $koneksi->prepare($sql_surat);
+$searchTerm = "%" . $cari . "%"; // Menambahkan tanda % untuk pencarian LIKE
+$stmt_surat->bind_param("iss", $user_id, $searchTerm, $searchTerm); // "i" untuk integer, "s" untuk string
+$stmt_surat->execute();
+$result_surat = $stmt_surat->get_result();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -236,148 +247,159 @@ $result_surat = $koneksi->query($sql_surat);
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Data Pengajuan Surat</h4>
+                <h4 class="card-title">Data Pengajuan Surat</h4>
 
-                    <div class="d-flex justify-content-between mb-3">
-                        <!-- Move this button to the right side -->
-                        <form method="GET" action="" class="form-inline">
-                            <input type="text" name="cari" class="form-control mr-sm-2" placeholder="Cari berdasarkan nama atau jenis surat..." value="<?= isset($_GET['cari']) ? htmlspecialchars($_GET['cari']) : '' ?>">
-                            <button type="submit" class="btn btn-outline-primary">Cari</button>
-                        </form>
+<div class="d-flex justify-content-between mb-3">
+    <!-- Form Pencarian -->
+    <form method="GET" action="" class="form-inline">
+        <input type="text" name="cari" class="form-control mr-sm-2" placeholder="Cari berdasarkan nama atau jenis surat..." value="<?= isset($_GET['cari']) ? htmlspecialchars($_GET['cari']) : '' ?>">
+        <button type="submit" class="btn btn-outline-primary">Cari</button>
+    </form>
 
-                        <a href="tambah_pengajuan_surat.php" class="btn btn-primary d-flex align-items-center ml-auto" style="width: 140px;">
-                            <i class="fas fa-plus mr-2"></i>
-                            <span>Tambah Data</span>
-                        </a>
+    <!-- Tombol Tambah Data -->
+    <a href="tambah_pengajuan_surat.php" class="btn btn-primary d-flex align-items-center ml-auto" style="width: 140px;">
+        <i class="fas fa-plus mr-2"></i>
+        <span>Tambah Data</span>
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered zero-configuration">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Jenis Surat</th>
+                <th>User ID</th>
+                <th>Nama Pengaju</th>
+                <th>Email Pengaju</th>
+                <th>No Telepon</th>
+                <th>Alamat</th>
+                <th>Tanggal Pengajuan</th>
+                <th>KTP</th>
+                <th>KK</th>
+                <th>Formulir</th>
+                <th>Keterangan</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $nomor = 1;
+            if ($result_surat->num_rows > 0) {
+                while ($row = $result_surat->fetch_assoc()) {
+                    ?>
+                    <tr>
+                        <td><?= $nomor++ . '.'; ?></td>
+                        <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
+                        <td><?= htmlspecialchars($row['user_id']); ?></td>
+                        <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
+                        <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
+                        <td><?= htmlspecialchars($row['no_telepon']); ?></td>
+                        <td><?= htmlspecialchars($row['alamat']); ?></td>
+                        <td>
+                            <?php
+                            $tgl = strtotime($row['tgl_pengajuan']);
+                            $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                            echo date('d', $tgl) . ' ' . $bulan[date('n', $tgl)-1] . ' ' . date('Y', $tgl);
+                            ?>
+                        </td>
+                        <td><a href="preview_file.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                        <td><a href="preview_file.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                        <td><a href="preview_file.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                        <td><?= htmlspecialchars($row['keterangan']); ?></td>
+                        <td>
+                            <?php if ($row['status'] == 'Menunggu'): ?>
+                                <span class="badge badge-primary"><i class="fas fa-spinner fa-spin"></i> Menunggu Konfirmasi</span>
+                            <?php elseif ($row['status'] == 'Diajukan'): ?>
+                                <span class="badge badge-primary"><i class="fas fa-spinner fa-spin"></i> Menunggu Verifikasi Admin</span>
+                            <?php elseif ($row['status'] == 'Diterima'): ?>
+                                <span class="text-success"><i class="fa-solid fa-check-circle"></i> Diterima</span>
+                            <?php elseif (strpos($row['status'], 'Ditolak oleh') !== false): ?>
+                                <span class="text-danger"><i class="fa-solid fa-times-circle"></i> <?= htmlspecialchars($row['status']); ?></span>
+                            <?php elseif ($row['status'] == 'Diproses'): ?>
+                                <span class="badge badge-warning"><i class="fas fa-spinner fa-spin"></i> Verifikasi Kadis</span>
+                            <?php else: ?>
+                                <span class="text-secondary"><i class="fa-solid fa-question-circle"></i> Tidak Diketahui</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <!-- Edit Button: Only visible if the status is not 'Diajukan' -->
+                                <?php if ($row['status'] != 'Diajukan'): ?>
+                                    <a href="edit_pengajuan_surat.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                <?php endif; ?>
+
+                                <!-- Delete Button -->
+                                <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $row['id']; ?>)">
+                                    <i class="fas fa-trash-alt"></i> Hapus
+                                </button>
+
+                                <!-- Tombol Detail -->
+                                <button type="button" class="btn btn-info btn-sm"
+                                    data-toggle="modal"
+                                    data-target="#detailModal<?php echo $row['id']; ?>">
+                                    <i class="fas fa-info-circle"></i> Detail
+                                </button>
+
+                                <!-- Tombol Ajukan, hanya muncul jika status belum "Diajukan" -->
+                                <?php if ($row['status'] != 'Diajukan'): ?>
+                                    <button type="button" class="btn btn-warning btn-sm"
+                                        onclick="ajukanSurat(<?php echo $row['id']; ?>)">
+                                        <i class="fas fa-paper-plane"></i> Ajukan
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Modal Detail -->
+                    <div class="modal fade" id="detailModal<?= $row['id']; ?>" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detail Pengajuan Surat</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Jenis Surat:</strong> <?= htmlspecialchars($row['jenis_surat']); ?></p>
+                                    <p><strong>Nama Pengaju:</strong> <?= htmlspecialchars($row['nama_pengaju']); ?></p>
+                                    <p><strong>Email:</strong> <?= htmlspecialchars($row['email_pengaju']); ?></p>
+                                    <p><strong>Telepon:</strong> <?= htmlspecialchars($row['no_telepon']); ?></p>
+                                    <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']); ?></p>
+                                    <p><strong>KTP:</strong> 
+                                        <a href="preview_file.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Preview KTP</a>
+                                    </p>
+                                    <p><strong>KK:</strong> 
+                                        <a href="preview_file.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Preview KK</a>
+                                    </p>
+                                    <p><strong>Formulir:</strong> 
+                                        <a href="preview_file.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Preview Formulir</a>
+                                    </p>
+                                    <p><strong>Keterangan:</strong> <?= htmlspecialchars($row['keterangan']); ?></p>
+                                    <p><strong>Status:</strong> <?= htmlspecialchars($row['status']); ?></p>
+                                    <?php if (!empty($row['alasan_penolakan'])): ?>
+                                        <p><strong>Catatan Penolakan:</strong> <?= htmlspecialchars($row['alasan_penolakan']); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered zero-configuration">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Jenis Surat</th>
-                                    <th>User ID</th>
-                                    <th>Nama Pengaju</th>
-                                    <th>Email Pengaju</th>
-                                    <th>No Telepon</th>
-                                    <th>Alamat</th>
-                                    <th>Tanggal Pengajuan</th>
-                                    <th>KTP</th>
-                                    <th>KK</th>
-                                    <th>Formulir</th>
-                                    <th>Keterangan</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $nomor = 1;
-                                if ($result_surat->num_rows > 0) {
-                                    while ($row = $result_surat->fetch_assoc()) {
-                                        ?>
-                                        <tr>
-                                            <td><?= $nomor++ . '.'; ?></td>
-                                            <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
-                                            <td><?= htmlspecialchars($row['user_id']); ?></td>
-                                            <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
-                                            <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
-                                            <td><?= htmlspecialchars($row['no_telepon']); ?></td>
-                                            <td><?= htmlspecialchars($row['alamat']); ?></td>
-                                            <td>
-                                                <?php
-                                                $tgl = strtotime($row['tgl_pengajuan']);
-                                                $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-                                                echo date('d', $tgl) . ' ' . $bulan[date('n', $tgl)-1] . ' ' . date('Y', $tgl);
-                                                ?>
-                                            </td>
-                                            <td><a href="uploads/<?= $row['foto_ktp']; ?>" target="_blank">Lihat</a></td>
-                                            <td><a href="uploads/<?= $row['foto_kk']; ?>" target="_blank">Lihat</a></td>
-                                            <td><a href="uploads/<?= $row['foto_formulir']; ?>" target="_blank">Lihat</a></td>
-                                            <td><?= htmlspecialchars($row['keterangan']); ?></td>
-                                            <td>
-                                                <?php if ($row['status'] == 'Menunggu'): ?>
-                                                    <span class="badge badge-primary"><i class="fas fa-spinner fa-spin"></i> Menunggu Konfirmasi</span>
-                                                <?php elseif ($row['status'] == 'Diajukan'): ?>
-                                                    <span class="badge badge-primary"><i class="fas fa-spinner fa-spin"></i> Menunggu Verifikasi Admin</span>
-                                                <?php elseif ($row['status'] == 'Diterima'): ?>
-                                                    <span class="text-success"><i class="fa-solid fa-check-circle"></i> Diterima</span>
-                                                <?php elseif (strpos($row['status'], 'Ditolak oleh') !== false): ?>
-                                                    <span class="text-danger"><i class="fa-solid fa-times-circle"></i> <?= htmlspecialchars($row['status']); ?></span>
-                                                <?php elseif ($row['status'] == 'Diproses'): ?>
-                                                    <span class="badge badge-warning"><i class="fas fa-spinner fa-spin"></i> Verifikasi Kadis</span>
-                                                <?php else: ?>
-                                                    <span class="text-secondary"><i class="fa-solid fa-question-circle"></i> Tidak Diketahui</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                            <div class="btn-group" role="group">
-    <!-- Edit Button: Only visible if the status is not 'Diajukan' -->
-    <?php if ($row['status'] != 'Diajukan'): ?>
-        <a href="edit_pengajuan_surat.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
-            <i class="fas fa-edit"></i> Edit
-        </a>
-    <?php endif; ?>
-
-    <!-- Delete Button -->
-    <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $row['id']; ?>)">
-        <i class="fas fa-trash-alt"></i> Hapus
-    </button>
-
-    <!-- Detail Button: Opens the modal with the details of the surat -->
-    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
-        <i class="fas fa-info-circle"></i> Detail
-    </button>
-
-    <!-- Submit Button: Only visible if the status is not 'Diajukan' -->
-    <?php if ($row['status'] != 'Diajukan'): ?>
-        <button class="btn btn-warning btn-sm" onclick="ajukanSurat(<?= $row['id']; ?>)">
-            <i class="fas fa-paper-plane"></i> Ajukan
-        </button>
-    <?php endif; ?>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <!-- Modal Detail -->
-                                        <div class="modal fade" id="detailModal<?= $row['surat_id']; ?>" tabindex="-1" role="dialog">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Detail Pengajuan Surat</h5>
-                                                        <button type="button" class="close" data-dismiss="modal">
-                                                            <span>&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p><strong>Nama Pengaju:</strong> <?= htmlspecialchars($row['nama_pengaju']); ?></p>
-                                                        <p><strong>Email:</strong> <?= htmlspecialchars($row['email_pengaju']); ?></p>
-                                                        <p><strong>Telepon:</strong> <?= htmlspecialchars($row['no_telepon']); ?></p>
-                                                        <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']); ?></p>
-                                                        <p><strong>KTP:</strong> <a href="uploads/<?= $row['foto_ktp']; ?>" target="_blank">Preview KTP</a></p>
-                                                        <p><strong>KK:</strong> <a href="uploads/<?= $row['foto_kk']; ?>" target="_blank">Preview KK</a></p>
-                                                        <p><strong>Formulir:</strong> <a href="uploads/<?= $row['foto_formulir']; ?>" target="_blank">Preview Formulir</a></p>
-                                                        <p><strong>Keterangan:</strong> <?= htmlspecialchars($row['keterangan']); ?></p>
-                                                        <p><strong>Status:</strong> <?= htmlspecialchars($row['status']); ?></p>
-                                                        <?php if (isset($row['alasan_penolakan'])): ?>
-                                                            <p><strong>Catatan Penolakan:</strong> <?= htmlspecialchars($row['alasan_penolakan']); ?></p>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End Modal -->
-                                    <?php
-                                    }
-                                } else {
-                                    echo '<tr><td colspan="14" class="text-center">Data pengajuan surat masih kosong.</td></tr>';
-                                }
-                                ?>
-                            </tbody>
+                <?php
+                }
+            } else {
+                echo '<tr><td colspan="14" class="text-center">Data pengajuan surat masih kosong.</td></tr>';
+            }
+            ?>
+        </tbody>
                           
                         </table>
                     </div> <!-- table-responsive -->
@@ -432,48 +454,49 @@ $result_surat = $koneksi->query($sql_surat);
             });
         }
 
-        function ajukanSurat(surat_id) {
-            // Menggunakan SweetAlert untuk konfirmasi
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Anda akan mengajukan surat ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, ajukan!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Menggunakan AJAX untuk mengubah status menjadi "Diajukan"
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "update_status_cuti.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            var response = JSON.parse(xhr.responseText);
-                            if (response.success) {
-                                // Jika berhasil, tampilkan SweetAlert untuk berhasil dan reload halaman
-                                Swal.fire(
-                                    'Berhasil!',
-                                    'surat berhasil diajukan.',
-                                    'success'
-                                ).then(() => {
-                                    location.reload(); // Reload halaman untuk memperbarui status
-                                });
-                            } else {
-                                // Jika gagal, tampilkan SweetAlert error
-                                Swal.fire(
-                                    'Gagal!',
-                                    'Terjadi kesalahan. surat gagal diajukan.',
-                                    'error'
-                                );
-                            }
-                        }
-                    };
-                    xhr.send("surat_id=" + surat_id + "&status=Diajukan");
+        function ajukanSurat(id) {
+    // Menggunakan SweetAlert untuk konfirmasi
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Anda akan mengajukan surat ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, ajukan!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Menggunakan AJAX untuk mengubah status menjadi "Diajukan"
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "update_status_surat.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        // Jika berhasil, tampilkan SweetAlert untuk berhasil dan reload halaman
+                        Swal.fire(
+                            'Berhasil!',
+                            'Surat berhasil diajukan.',
+                            'success'
+                        ).then(() => {
+                            location.reload(); // Reload halaman untuk memperbarui status
+                        });
+                    } else {
+                        // Jika gagal, tampilkan SweetAlert error
+                        Swal.fire(
+                            'Gagal!',
+                            'Terjadi kesalahan. Surat gagal diajukan.',
+                            'error'
+                        );
+                    }
                 }
-            });
+            };
+            xhr.send("id=" + id + "&status=Diajukan");
         }
+    });
+}
+
 
 
     </script>

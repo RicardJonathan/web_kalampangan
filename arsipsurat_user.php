@@ -405,10 +405,6 @@ if ($result->num_rows > 0) {
         });
     });
 </script>
-
-
-
-
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>
     <script src="js/settings.js"></script>
@@ -420,8 +416,6 @@ if ($result->num_rows > 0) {
     <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
 </body>
 
 </html>
