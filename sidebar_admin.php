@@ -45,7 +45,7 @@ $koneksi->close();
                     </li>
                     <li>
                         <a href="data_lurah.php" aria-expanded="false">
-                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Dinas</span>
+                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Kelurahan</span>
                         </a>
                     </li>
                     <li>

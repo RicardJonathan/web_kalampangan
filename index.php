@@ -40,7 +40,7 @@
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="../web_kalampangan/images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
+                <img src="../web_pengajuansurat/images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
                 Kelurahan Kalampangan
             </a>
 

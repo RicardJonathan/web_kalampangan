@@ -23,7 +23,7 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
     <a class="navbar-brand" href="index.php">
-                <img src="../web_kalampangan/images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
+                <img src="../web_pengajuansurat/images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
                 Kelurahan Kalampangan
             </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
           <div class="row">
             <div class="col-md-5">
               <div class="about_img">
-                <img src="../web_kalampangan/images/logo/logo.png" class="img-fluid" alt="">
+                <img src="../web_pengajuansurat/images/logo/logo.png" class="img-fluid" alt="">
               </div>
             </div>
 
