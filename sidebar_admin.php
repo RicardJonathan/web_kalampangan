@@ -15,6 +15,21 @@ $koneksi->close();
 
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .nk-sidebar {
+    height: 100vh; /* Pastikan tinggi penuh layar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden; /* Cegah scroll di luar area scroll */
+}
+
+.nk-nav-scroll {
+    height: 100%;
+    overflow-y: auto; /* Inilah yang membuat sidebar bisa di-scroll */
+    padding-right: 10px; /* Agar scroll tidak terlalu mepet */
+}
+</style>
 
 <head>
     <meta charset="utf-8">
@@ -31,7 +46,10 @@ $koneksi->close();
     <link href="./css/style.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-        <!--**********************************
+   
+  
+
+    <!--**********************************
             Sidebar start
         ***********************************-->
         <div class="nk-sidebar">           
@@ -45,7 +63,7 @@ $koneksi->close();
                     </li>
                     <li>
                         <a href="data_lurah.php" aria-expanded="false">
-                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Kelurahan</span>
+                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Dinas</span>
                         </a>
                     </li>
                     <li>
@@ -74,6 +92,23 @@ $koneksi->close();
                         <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Laporan Surat</span>
                         </a>
                     </li>
+                    <li class="nav-label">Konten</li>
+
+                    <li>
+                        <a href="./pengumuman/pengumuman.php" aria-expanded="false">
+                        <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Pengumuman</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="kegiatan.php" aria-expanded="false">
+                        <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Kegiatan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="struktur.php" aria-expanded="false">
+                        <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Struktur</span>
+                        </a>
+                    </li>
                     <li class="nav-label">Lainnya</li>
                         <li>
                             <a href="logout.php" aria-expanded="false" class="<?php echo basename($_SERVER['PHP_SELF']) == 'logout.php' ? 'active' : ''; ?>">
@@ -84,6 +119,7 @@ $koneksi->close();
                 </ul>
             </div>
         </div>
+        
         <!--**********************************
             Sidebar end
         ***********************************-->
