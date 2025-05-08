@@ -2,22 +2,22 @@
 session_start();
 include '../config.php';
 
-// Validasi login
+// Cek login
 if (!isset($_SESSION['id'])) {
     header("Location: ../page-login.php");
     exit();
 }
 
-// Validasi ID dari parameter GET
+// Cek ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: pengumuman.php");
+    header("Location: struktur.php");
     exit();
 }
 
-$id = intval($_GET['id']);
+$id = $_GET['id'];
 
-// Ambil data pengumuman yang akan diedit
-$stmt = $koneksi->prepare("SELECT * FROM pengumuman WHERE id = ?");
+// Ambil data struktur
+$stmt = $koneksi->prepare("SELECT * FROM struktur WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -25,16 +25,15 @@ $data = $result->fetch_assoc();
 
 if (!$data) {
     $_SESSION['error'] = "Data tidak ditemukan.";
-    header("Location: pengumuman.php");
+    header("Location: struktur.php");
     exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $judul = $_POST['judul'];
-    $deskripsi = $_POST['deskripsi'];
+    $nama = $_POST['nama'];
+    $posisi = $_POST['posisi'];
     $foto_new_name = $data['foto'];
 
-    // Jika ada file foto baru diunggah
     if (!empty($_FILES['foto']['name'])) {
         $foto_name = $_FILES['foto']['name'];
         $foto_tmp = $_FILES['foto']['tmp_name'];
@@ -43,36 +42,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (in_array($foto_ext, $allowed_ext)) {
             $foto_new_name = uniqid('foto_', true) . '.' . $foto_ext;
-            $foto_path = '../images/fotopengumuman/' . $foto_new_name;
+            $foto_path = '../images/fotostruktur/' . $foto_new_name;
 
             if (move_uploaded_file($foto_tmp, $foto_path)) {
                 // Hapus foto lama jika ada
-                if (!empty($data['foto']) && file_exists("../images/fotopengumuman/" . $data['foto'])) {
-                    unlink("../images/fotopengumuman/" . $data['foto']);
+                $old_path = "../images/fotostruktur/" . $data['foto'];
+                if (!empty($data['foto']) && file_exists($old_path)) {
+                    unlink($old_path);
                 }
             } else {
                 $_SESSION['error'] = "Gagal mengunggah gambar.";
-                header("Location: edit_pengumuman.php?id=" . urlencode($id));
+                header("Location: edit_struktur.php?id=" . urlencode($id));
                 exit();
             }
         } else {
-            $_SESSION['error'] = "Format gambar tidak didukung (hanya JPG, JPEG, PNG).";
-            header("Location: edit_pengumuman.php?id=" . urlencode($id));
+            $_SESSION['error'] = "Format gambar tidak didukung (harus JPG, JPEG, PNG).";
+            header("Location: edit_struktur.php?id=" . urlencode($id));
             exit();
         }
     }
 
-    // Update data menggunakan prepared statement
-    $stmt_update = $koneksi->prepare("UPDATE pengumuman SET judul = ?, deskripsi = ?, foto = ? WHERE id = ?");
-    $stmt_update->bind_param("sssi", $judul, $deskripsi, $foto_new_name, $id);
+    // Gunakan prepared statement untuk update
+    $stmt_update = $koneksi->prepare("UPDATE struktur SET nama = ?, posisi = ?, foto = ? WHERE id = ?");
+    $stmt_update->bind_param("sssi", $nama, $posisi, $foto_new_name, $id);
 
     if ($stmt_update->execute()) {
-        $_SESSION['message'] = "Pengumuman berhasil diperbarui.";
+        $_SESSION['message'] = "struktur berhasil diperbarui.";
     } else {
         $_SESSION['error'] = "Gagal memperbarui data.";
     }
 
-    header("Location: pengumuman.php");
+    header("Location: struktur.php");
     exit();
 }
 ?>
@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Edit Pengumuman - DPKUKMP</title>
+    <title>Edit struktur - DPKUKMP</title>
     <link rel="icon" type="image/png" sizes="16x16" href="../images/logopky.png">
     <link href="../plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit Pengumuman</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit struktur</a></li>
                     </ol>
                 </div>
             </div>
@@ -156,26 +156,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Edit Pengumuman</h4>
+                                <h4 class="card-title">Edit struktur</h4>
                                 <form action="" method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <label for="judul">Judul Pengumuman:</label>
-                                        <input type="text" class="form-control" id="judul" name="judul" value="<?= htmlspecialchars($data['judul']) ?>" required>
+                                        <label for="nama">Nama:</label>
+                                        <input type="text" class="form-control" id="nama" name="nama" value="<?= htmlspecialchars($data['nama']) ?>" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="deskripsi">Deskripsi:</label>
-                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="5" required><?= htmlspecialchars($data['deskripsi']) ?></textarea>
+                                        <label for="posisi">Posisi:</label>
+                                        <input class="form-control" id="posisi" name="posisi" rows="5" value="<?= htmlspecialchars($data['posisi']) ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Foto Saat Ini:</label><br>
                                         <?php if (!empty($data['foto'])): ?>
-                                            <img src="../images/fotopengumuman/<?= $data['foto'] ?>" alt="Foto" width="200"><br><br>
+                                            <img src="../images/fotostruktur/<?= $data['foto'] ?>" alt="Foto" width="200"><br><br>
                                         <?php endif; ?>
                                         <label for="foto">Ganti Foto (Opsional - JPG, JPEG, PNG):</label>
                                         <input type="file" class="form-control-file" id="foto" name="foto" accept=".jpg,.jpeg,.png">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Update</button>
-                                    <a href="pengumuman.php" class="btn btn-secondary">Kembali</a>
+                                    <a href="struktur.php" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>

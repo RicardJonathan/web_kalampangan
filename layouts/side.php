@@ -94,12 +94,12 @@ $koneksi->close();
                 </a>
             </li>
             <li>
-                <a href="..//kegiatan.php" aria-expanded="false">
+                <a href="..//kegiatan/kegiatan.php" aria-expanded="false">
                 <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Kegiatan</span>
                 </a>
             </li>
             <li>
-                <a href="..//struktur.php" aria-expanded="false">
+                <a href="..//struktur/struktur.php" aria-expanded="false">
                 <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Struktur</span>
                 </a>
             </li>

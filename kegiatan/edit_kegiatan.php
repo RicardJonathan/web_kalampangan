@@ -2,7 +2,7 @@
 session_start();
 include '../config.php';
 
-// Validasi login
+// Cek login
 if (!isset($_SESSION['id'])) {
     header("Location: ../page-login.php");
     exit();
@@ -10,14 +10,14 @@ if (!isset($_SESSION['id'])) {
 
 // Validasi ID dari parameter GET
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: pengumuman.php");
+    header("Location: kegiatan.php");
     exit();
 }
 
 $id = intval($_GET['id']);
 
-// Ambil data pengumuman yang akan diedit
-$stmt = $koneksi->prepare("SELECT * FROM pengumuman WHERE id = ?");
+// Ambil data kegiatan berdasarkan ID
+$stmt = $koneksi->prepare("SELECT * FROM kegiatan WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -25,7 +25,7 @@ $data = $result->fetch_assoc();
 
 if (!$data) {
     $_SESSION['error'] = "Data tidak ditemukan.";
-    header("Location: pengumuman.php");
+    header("Location: kegiatan.php");
     exit();
 }
 
@@ -43,36 +43,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (in_array($foto_ext, $allowed_ext)) {
             $foto_new_name = uniqid('foto_', true) . '.' . $foto_ext;
-            $foto_path = '../images/fotopengumuman/' . $foto_new_name;
+            $foto_path = '../images/fotokegiatan/' . $foto_new_name;
 
             if (move_uploaded_file($foto_tmp, $foto_path)) {
                 // Hapus foto lama jika ada
-                if (!empty($data['foto']) && file_exists("../images/fotopengumuman/" . $data['foto'])) {
-                    unlink("../images/fotopengumuman/" . $data['foto']);
+                $old_path = "../images/fotokegiatan/" . $data['foto'];
+                if (!empty($data['foto']) && file_exists($old_path)) {
+                    unlink($old_path);
                 }
             } else {
                 $_SESSION['error'] = "Gagal mengunggah gambar.";
-                header("Location: edit_pengumuman.php?id=" . urlencode($id));
+                header("Location: edit_kegiatan.php?id=" . urlencode($id));
                 exit();
             }
         } else {
             $_SESSION['error'] = "Format gambar tidak didukung (hanya JPG, JPEG, PNG).";
-            header("Location: edit_pengumuman.php?id=" . urlencode($id));
+            header("Location: edit_kegiatan.php?id=" . urlencode($id));
             exit();
         }
     }
 
     // Update data menggunakan prepared statement
-    $stmt_update = $koneksi->prepare("UPDATE pengumuman SET judul = ?, deskripsi = ?, foto = ? WHERE id = ?");
+    $stmt_update = $koneksi->prepare("UPDATE kegiatan SET judul = ?, deskripsi = ?, foto = ? WHERE id = ?");
     $stmt_update->bind_param("sssi", $judul, $deskripsi, $foto_new_name, $id);
 
     if ($stmt_update->execute()) {
-        $_SESSION['message'] = "Pengumuman berhasil diperbarui.";
+        $_SESSION['message'] = "Kegiatan berhasil diperbarui.";
     } else {
         $_SESSION['error'] = "Gagal memperbarui data.";
     }
 
-    header("Location: pengumuman.php");
+    header("Location: kegiatan.php");
     exit();
 }
 ?>
@@ -81,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Edit Pengumuman - DPKUKMP</title>
+    <title>Edit kegiatan - DPKUKMP</title>
     <link rel="icon" type="image/png" sizes="16x16" href="../images/logopky.png">
     <link href="../plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
@@ -146,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit Pengumuman</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit kegiatan</a></li>
                     </ol>
                 </div>
             </div>
@@ -156,10 +157,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Edit Pengumuman</h4>
+                                <h4 class="card-title">Edit kegiatan</h4>
                                 <form action="" method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <label for="judul">Judul Pengumuman:</label>
+                                        <label for="judul">Judul kegiatan:</label>
                                         <input type="text" class="form-control" id="judul" name="judul" value="<?= htmlspecialchars($data['judul']) ?>" required>
                                     </div>
                                     <div class="form-group">
@@ -169,13 +170,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="form-group">
                                         <label>Foto Saat Ini:</label><br>
                                         <?php if (!empty($data['foto'])): ?>
-                                            <img src="../images/fotopengumuman/<?= $data['foto'] ?>" alt="Foto" width="200"><br><br>
+                                            <img src="../images/fotokegiatan/<?= $data['foto'] ?>" alt="Foto" width="200"><br><br>
                                         <?php endif; ?>
                                         <label for="foto">Ganti Foto (Opsional - JPG, JPEG, PNG):</label>
                                         <input type="file" class="form-control-file" id="foto" name="foto" accept=".jpg,.jpeg,.png">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Update</button>
-                                    <a href="pengumuman.php" class="btn btn-secondary">Kembali</a>
+                                    <a href="kegiatan.php" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>

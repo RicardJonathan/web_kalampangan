@@ -1,7 +1,18 @@
 <?php
 include 'config.php';
-$query = 'SELECT * FROM pengumuman ORDER BY created_at DESC LIMIT 3';
-$result = mysqli_query($koneksi, $query);
+
+// Query pengumuman
+$query_pengumuman = 'SELECT * FROM pengumuman ORDER BY created_at DESC LIMIT 3';
+$result_pengumuman = mysqli_query($koneksi, $query_pengumuman);
+
+// Query kegiatan
+$query_kegiatan = 'SELECT * FROM kegiatan ORDER BY created_at DESC LIMIT 3';
+$result_kegiatan = mysqli_query($koneksi, $query_kegiatan);
+
+// Query struktur
+$query_struktur = 'SELECT * FROM struktur ORDER BY created_at';
+$result_struktur = mysqli_query($koneksi, $query_struktur);
+
 ?>
 
 
@@ -29,6 +40,8 @@ $result = mysqli_query($koneksi, $query);
 </head>
 
 <style>
+
+    
     .credit-marquee {
         /* background-color: #222; */
         color: #fff;
@@ -57,6 +70,74 @@ $result = mysqli_query($koneksi, $query);
 
 .bh_img:hover img {
     transform: scale(1.1); /* Membesar saat hover */
+}
+
+.struktur_section {
+    padding: 60px 0;
+    background-color: #f0f4f8;
+}
+
+.struktur_heading .subheading {
+    font-size: 16px;
+    font-weight: 600;
+    color: #007BFF;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.struktur_heading h2 {
+    font-size: 30px;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.struktur_card {
+    background:rgb(242, 242, 242);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.struktur_card:hover {
+    transform: translateY(-5px);
+}
+.struktur_img {
+    width: 100%;
+    height: 450px; /* tinggi menyesuaikan */
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #007BFF;
+}
+
+.struktur_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.struktur_card:hover .struktur_img img {
+    transform: scale(1.05);
+}
+
+
+.struktur_nama h5 {
+    font-size: 18px;
+    color: #222;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.struktur_posisi p {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
 }
 
 </style>
@@ -156,7 +237,8 @@ $result = mysqli_query($koneksi, $query);
 
             <div class="bh_konten">
                 <div class="row">
-                    <?php while($data = mysqli_fetch_assoc($result)) { ?>
+                <?php while($data = mysqli_fetch_assoc($result_pengumuman)) { ?>
+
                     <div class="col-md-4">
                         <div class="bh_item">
                             <div class="bh_img">
@@ -207,199 +289,78 @@ $result = mysqli_query($koneksi, $query);
 
             <div class="bh_konten">
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="bh_item">
-                            <div class="bh_img">
-                                <img src="images/berita/image_1.jpg" class="img-fluid" alt="">
-                            </div>
-
-                            <div class="bh_kategori">
-                                <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
-                            </div>
-                            <div class="bh_judul">
-                                <a href="" title="">
-                                    <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elit</h5>
-                                </a>
-                            </div>
-                            <div class="bh_meta">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
-                                    <li class="list-inline-item">|</li>
-                                    <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
-                                        2020</li>
-                                    <li class="list-inline-item">|</li>
-                                    <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
-                                </ul>
-                            </div>
-                            <div class="bh_isi">
-                                <p class="text-justify">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat.
-                                </p>
-
-                                <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
-                            </div>
-
-                        </div>
-                    </div>
+                <?php while($data = mysqli_fetch_assoc($result_kegiatan)) { ?>
 
                     <div class="col-md-4">
                         <div class="bh_item">
                             <div class="bh_img">
-                                <img src="images/berita/image_2.jpg" class="img-fluid" alt="">
+                                <img src="images/fotokegiatan/<?php echo $data['foto']; ?>" class="img-fluid" alt="">
                             </div>
-                            <div class="bh_kategori">
-                                <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
-                            </div>
+                            <br>
                             <div class="bh_judul">
-                                <a href="" title="">
-                                    <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elit</h5>
+                                <a title="">
+                                    <h5 class="text-capitalize"><?php echo $data['judul']; ?></h5>
                                 </a>
                             </div>
                             <div class="bh_meta">
                                 <ul class="list-inline">
-                                    <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
+                                    <li class="list-inline-item"><i class="lnr lnr-user"></i> Admin</li>
                                     <li class="list-inline-item">|</li>
-                                    <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
-                                        2020</li>
+                                    <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i>
+                                        <?php echo date('d F, Y', strtotime($data['created_at'])); ?></li>
                                     <li class="list-inline-item">|</li>
-                                    <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
+                                    <li class="list-inline-item"><i class="lnr lnr-clock"></i> <?php echo date('H:i', strtotime($data['created_at'])); ?> WIB
+                                    </li>
                                 </ul>
                             </div>
                             <div class="bh_isi">
                                 <p class="text-justify">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat.
+                                    <?php echo substr(strip_tags($data['deskripsi']), 0, 200); ?>...
                                 </p>
 
-                                <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
+                                <a class="btn btn-primary" href="detail_kegiatan.php?id=<?php echo $data['id']; ?>">Baca
+                                    Selengkapnya</a>
                             </div>
-
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="bh_item">
-                            <div class="bh_img">
-                                <img src="images/berita/image_3.jpg" class="img-fluid" alt="">
-                            </div>
-
-                            <div class="bh_kategori">
-                                <i class="mdi mdi-tag-text-outline"></i> Kategori Berita
-                            </div>
-                            <div class="bh_judul">
-                                <a href="" title="">
-                                    <h5 class="text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                        elit</h5>
-                                </a>
-                            </div>
-                            <div class="bh_meta">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item"><i class="lnr lnr-user"></i> Nama Penulis</li>
-                                    <li class="list-inline-item">|</li>
-                                    <li class="list-inline-item"><i class="lnr lnr-calendar-full"></i> April, 22
-                                        2020</li>
-                                    <li class="list-inline-item">|</li>
-                                    <li class="list-inline-item"><i class="lnr lnr-clock"></i> 10.00 am</li>
-                                </ul>
-                            </div>
-                            <div class="bh_isi">
-                                <p class="text-justify">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat.
-                                </p>
-
-                                <a class="btn btn-primary" href="#">Baca Selengkapnya</a>
-                            </div>
-
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-    <div class="pendeta_home">
+    
+    <div class="berita_home">
         <div class="container">
             <div class="home_heading text-center">
                 <span class="subheading">Struktur</span>
-                <h2>Kelurahan Kelampangan</h2>
-            </div>
-
+            <h2>Kelurahan Kelampangan</h2>
+        </div>
+        <div class="struktur_content">
             <div class="row">
-                <div class="col-md-6 col-lg-3 ftco-animate">
-                    <div class="staff">
-                        <div class="img-wrap d-flex align-items-stretch">
-                            <div class="img align-self-stretch"
-                                style="background-image: url(images/staf/staff-1.jpg);"></div>
-                        </div>
-                        <div class="text d-flex align-items-center pt-3 text-center">
-                            <div>
-                                <h3 class="mb-2">Lloyd Wilson</h3>
-                                <span class="position mb-4">Lead Pastor</span>
+            <?php while($data = mysqli_fetch_assoc($result_struktur)) { ?>
 
-                            </div>
+                <div class="col-md-4 d-flex">
+                    <div class="struktur_card w-100">
+                        <div class="struktur_img">
+                            <img src="images/fotostruktur/<?php echo $data['foto']; ?>" class="img-fluid" alt="">
+                        </div>
+                        <br>
+                        <div class="struktur_nama">
+                            <h5 class="text-capitalize"><?php echo $data['nama']; ?></h5>
+                        </div>
+                        <div class="struktur_posisi">
+                            <p class="text-justify-center">
+                                <?php echo substr(strip_tags($data['posisi']), 0, 200); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 ftco-animate">
-                    <div class="staff">
-                        <div class="img-wrap d-flex align-items-stretch">
-                            <div class="img align-self-stretch"
-                                style="background-image: url(images/staf/staff-2.jpg);"></div>
-                        </div>
-                        <div class="text d-flex align-items-center pt-3 text-center">
-                            <div>
-                                <h3 class="mb-2">Rachel Parker</h3>
-                                <span class="position mb-4">Lead Pastor</span>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 ftco-animate">
-                    <div class="staff">
-                        <div class="img-wrap d-flex align-items-stretch">
-                            <div class="img align-self-stretch" style="background-image: url(img/staf/staff-3.jpg);">
-                            </div>
-                        </div>
-                        <div class="text d-flex align-items-center pt-3 text-center">
-                            <div>
-                                <h3 class="mb-2">Ian Smith</h3>
-                                <span class="position mb-4">Lead Pastor</span>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 ftco-animate">
-                    <div class="staff">
-                        <div class="img-wrap d-flex align-items-stretch">
-                            <div class="img align-self-stretch" style="background-image: url(img/staf/staff-4.jpg);">
-                            </div>
-                        </div>
-                        <div class="text d-flex align-items-center pt-3 text-center">
-                            <div>
-                                <h3 class="mb-2">Alicia Henderson</h3>
-                                <span class="position mb-4">Lead Pastor</span>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php } ?>
             </div>
         </div>
     </div>
+</div>
+
 
 
     <!-- Lokasi Google Maps -->
