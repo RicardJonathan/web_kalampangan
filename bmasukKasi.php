@@ -11,21 +11,20 @@ if (!isset($_SESSION['id'])) {
 // Cek apakah pengguna yang login ada di tabel admin
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
-$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
-$result_admin = $koneksi->query($sql_admin);
+$sql_kasi = "SELECT * FROM kasi WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
+$result_kadis = $koneksi->query($sql_kasi);
 
-if ($result_admin->num_rows == 0) {
+if ($result_kadis->num_rows == 0) {
     // Jika tidak ada di tabel admin, arahkan ke halaman error
     header("Location: page-error-400.php"); // Arahkan ke halaman error
     exit();
 }
 
 
-// Query untuk mengambil data surat dan data user (nik, nama) dengan JOIN dan status "diajukan"
 $query = "SELECT pengajuan_surat.*, user.nik, user.nama
           FROM pengajuan_surat
           INNER JOIN user ON pengajuan_surat.user_id = user.id
-          WHERE pengajuan_surat.status = 'diajukan' 
+          WHERE pengajuan_surat.status = 'Verifikasi Kasi' 
           ORDER BY pengajuan_surat.id DESC";
 $result = mysqli_query($koneksi, $query);
 
@@ -225,7 +224,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_admin.php'; ?>
+        <?php include 'sidebar_kasi.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -247,7 +246,7 @@ $koneksi->close();
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Berkas Masuk Pengajuan Surat</h4>
+                        <h4 class="card-title">Berkas Masuk Pengajuan </h4>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered zero-configuration">
                                 <thead>
@@ -264,7 +263,7 @@ $koneksi->close();
                                         <th>KK</th>
                                         <th>Formulir</th>
                                         <th>Keterangan</th>
-                                     
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -335,6 +334,7 @@ $koneksi->close();
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                     <?php
                                         }
                                     } else {
@@ -404,7 +404,7 @@ $koneksi->close();
             // Menggunakan SweetAlert untuk konfirmasi
             Swal.fire({
                 title: 'Apakah Anda yakin?',
-                text: "Anda akan mengajukan Surat ini Kasi!",
+                text: "Anda akan mengajukan Surat ini kepada kepala kelurahan!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, ajukan!',
@@ -438,7 +438,7 @@ $koneksi->close();
                             }
                         }
                     };
-                    xhr.send("id=" + id + "&status=Verifikasi Kasi");
+                    xhr.send("id=" + id + "&status=Diproses");
                 }
             });
         }

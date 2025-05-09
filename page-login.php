@@ -75,8 +75,26 @@ if ($result->num_rows == 1) {
 }
 $stmt->close();
 
+// 3. Cek di tabel kasi
+$stmt = $koneksi->prepare("SELECT * FROM kasi WHERE username = ? AND password = ?");
+$stmt->bind_param("ss", $username, $password);
+$stmt->execute();
+$result = $stmt->get_result();
 
-        // 3. Cek di tabel user
+if ($result->num_rows == 1) {
+
+    $row = $result->fetch_assoc();
+
+    // Password cocok
+    $_SESSION['id'] = $row['id']; // Simpan ID lurah
+    $_SESSION['username'] = $username; // Simpan username lurah
+
+    // Arahkan ke halaman lurah
+    header("Location: indexKasi.php");
+    exit();
+}
+$stmt->close();
+        // 4. Cek di tabel user
         $stmt = $koneksi->prepare("SELECT * FROM user WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();

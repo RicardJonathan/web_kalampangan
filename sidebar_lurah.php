@@ -39,28 +39,18 @@ $koneksi->close();
                 <ul class="metismenu" id="menu">
                     <li class="nav-label">Utama</li>
                     <li>
-                        <a href="index_admin.php" aria-expanded="false">
+                        <a href="indexLurah.php" aria-expanded="false">
                         <i class="fa-solid fa-gauge menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="data_lurah.php" aria-expanded="false">
-                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Kelurahan</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="berkas_masuk.php" aria-expanded="false">
+                        <a href="berkas_masuk_lurah.php" aria-expanded="false">
                         <i class="fa-solid fa-envelope-open-text menu-icon"></i><span class="nav-text">Berkas Masuk</span>
                         </a>
                     </li>
                     <li class="nav-label">Main Menu</li>
                     <li>
-                        <a href="pengguna.php" aria-expanded="false">
-                            <i class="fa fa-users menu-icon"></i><span class="nav-text">Pengguna</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="surat.php" aria-expanded="false">
+                        <a href="surat_lurah.php" aria-expanded="false">
                         <i class="fa-solid fa-pen-to-square menu-icon"></i><span class="nav-text">Pengajuan Surat</span>
                         </a>
                     </li>

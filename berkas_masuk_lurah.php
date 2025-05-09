@@ -11,11 +11,11 @@ if (!isset($_SESSION['id'])) {
 // Cek apakah pengguna yang login ada di tabel admin
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
-$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
+$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
-    // Jika tidak ada di tabel admin, arahkan ke halaman error
+    // Jika tidak ada di tabel lurah, arahkan ke halaman error
     header("Location: page-error-400.php"); // Arahkan ke halaman error
     exit();
 }
@@ -25,7 +25,7 @@ if ($result_admin->num_rows == 0) {
 $query = "SELECT pengajuan_surat.*, user.nik, user.nama
           FROM pengajuan_surat
           INNER JOIN user ON pengajuan_surat.user_id = user.id
-          WHERE pengajuan_surat.status = 'diajukan' 
+          WHERE pengajuan_surat.status = 'Diproses' 
           ORDER BY pengajuan_surat.id DESC";
 $result = mysqli_query($koneksi, $query);
 
@@ -225,7 +225,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_admin.php'; ?>
+        <?php include 'sidebar_lurah.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -295,7 +295,7 @@ $koneksi->close();
                                                 <td>
                                                     <div class="btn-group" role="group">
                                                         <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
-                                                            <i class="fas fa-paper-plane"></i> Ajukan
+                                                            <i class="fas fa-paper-plane"></i> Terima
                                                         </button>
                                                         <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
                                                             <i class="fas fa-times"></i> Tolak
@@ -438,7 +438,7 @@ $koneksi->close();
                             }
                         }
                     };
-                    xhr.send("id=" + id + "&status=Verifikasi Kasi");
+                    xhr.send("id=" + id + "&status=Diterima");
                 }
             });
         }
