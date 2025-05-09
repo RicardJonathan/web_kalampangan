@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2025 at 04:17 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Waktu pembuatan: 09 Bulan Mei 2025 pada 05.37
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Struktur dari tabel `admin`
 --
 
 CREATE TABLE `admin` (
@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admin`
+-- Dumping data untuk tabel `admin`
 --
 
 INSERT INTO `admin` (`id`, `nama`, `nip`, `jabatan`, `pangkat`, `golongan`, `username`, `password`) VALUES
@@ -48,20 +48,28 @@ INSERT INTO `admin` (`id`, `nama`, `nip`, `jabatan`, `pangkat`, `golongan`, `use
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kegiatan`
+-- Struktur dari tabel `kegiatan`
 --
 
 CREATE TABLE `kegiatan` (
   `id` int(11) NOT NULL,
+  `judul` varchar(255) DEFAULT NULL,
   `deskripsi` text DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
-  `datetime` datetime DEFAULT NULL
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `kegiatan`
+--
+
+INSERT INTO `kegiatan` (`id`, `judul`, `deskripsi`, `foto`, `created_at`) VALUES
+(1, 'HIDUP SEPERTI LARRY', 'aaaaa', 'foto_681ccc0259ef05.39487553.jpg', '2025-05-08 22:21:38');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lurah`
+-- Struktur dari tabel `lurah`
 --
 
 CREATE TABLE `lurah` (
@@ -76,7 +84,7 @@ CREATE TABLE `lurah` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `lurah`
+-- Dumping data untuk tabel `lurah`
 --
 
 INSERT INTO `lurah` (`id`, `nama`, `nip`, `pangkat`, `golongan`, `ttd`, `username`, `password`) VALUES
@@ -85,7 +93,7 @@ INSERT INTO `lurah` (`id`, `nama`, `nip`, `pangkat`, `golongan`, `ttd`, `usernam
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pengajuan_surat`
+-- Struktur dari tabel `pengajuan_surat`
 --
 
 CREATE TABLE `pengajuan_surat` (
@@ -105,7 +113,7 @@ CREATE TABLE `pengajuan_surat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pengajuan_surat`
+-- Dumping data untuk tabel `pengajuan_surat`
 --
 
 INSERT INTO `pengajuan_surat` (`id`, `jenis_surat`, `user_id`, `nama_pengaju`, `email_pengaju`, `no_telepon`, `alamat`, `tgl_pengajuan`, `status`, `keterangan`, `foto_ktp`, `foto_kk`, `foto_formulir`) VALUES
@@ -128,33 +136,50 @@ INSERT INTO `pengajuan_surat` (`id`, `jenis_surat`, `user_id`, `nama_pengaju`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pengumuman`
+-- Struktur dari tabel `pengumuman`
 --
 
 CREATE TABLE `pengumuman` (
   `id` int(11) NOT NULL,
+  `judul` varchar(255) DEFAULT NULL,
   `deskripsi` text DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
-  `datetime` datetime DEFAULT NULL
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pengumuman`
+--
+
+INSERT INTO `pengumuman` (`id`, `judul`, `deskripsi`, `foto`, `created_at`) VALUES
+(4, 'HIDUP SEPERTI LARRY', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'foto_681ca84ca2f210.90884078.jpg', '2025-05-08 19:49:16');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `struktur`
+-- Struktur dari tabel `struktur`
 --
 
 CREATE TABLE `struktur` (
   `id` int(11) NOT NULL,
   `foto` varchar(255) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL,
-  `posisi` varchar(100) DEFAULT NULL
+  `posisi` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `struktur`
+--
+
+INSERT INTO `struktur` (`id`, `foto`, `nama`, `posisi`, `created_at`) VALUES
+(1, 'foto_681cdecf3980b7.25987588.png', 'RAYYYYY', 'WAKIL KETUA GANGSTERR', '2025-05-08 23:07:37'),
+(2, 'foto_681cde82a5d4a1.45919865.png', 'BRIMAEL', 'KETUA GANGSTER', '2025-05-08 23:10:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
@@ -168,7 +193,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `user`
+-- Dumping data untuk tabel `user`
 --
 
 INSERT INTO `user` (`id`, `nama`, `nik`, `username`, `no_telepon`, `email`, `password`) VALUES
@@ -180,101 +205,101 @@ INSERT INTO `user` (`id`, `nama`, `nik`, `username`, `no_telepon`, `email`, `pas
 --
 
 --
--- Indexes for table `admin`
+-- Indeks untuk tabel `admin`
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `kegiatan`
+-- Indeks untuk tabel `kegiatan`
 --
 ALTER TABLE `kegiatan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `lurah`
+-- Indeks untuk tabel `lurah`
 --
 ALTER TABLE `lurah`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- Indexes for table `pengajuan_surat`
+-- Indeks untuk tabel `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `pengumuman`
+-- Indeks untuk tabel `pengumuman`
 --
 ALTER TABLE `pengumuman`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `struktur`
+-- Indeks untuk tabel `struktur`
 --
 ALTER TABLE `struktur`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT untuk tabel `admin`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `kegiatan`
+-- AUTO_INCREMENT untuk tabel `kegiatan`
 --
 ALTER TABLE `kegiatan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `lurah`
+-- AUTO_INCREMENT untuk tabel `lurah`
 --
 ALTER TABLE `lurah`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `pengajuan_surat`
+-- AUTO_INCREMENT untuk tabel `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
--- AUTO_INCREMENT for table `pengumuman`
+-- AUTO_INCREMENT untuk tabel `pengumuman`
 --
 ALTER TABLE `pengumuman`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `struktur`
+-- AUTO_INCREMENT untuk tabel `struktur`
 --
 ALTER TABLE `struktur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `pengajuan_surat`
+-- Ketidakleluasaan untuk tabel `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
   ADD CONSTRAINT `pengajuan_surat_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
