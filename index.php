@@ -34,6 +34,8 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
     <link rel="stylesheet" href="fonts/flaticon.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" type="text/css" href="css/baguetteBox.min.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+
 
     <title>Kelurahan Kalampangan</title>
 
@@ -162,6 +164,16 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
                     <li class="nav-item active">
                         <a class="nav-link" href="index.php">Beranda <span class="sr-only">(current)</span></a>
                     </li>
+                    <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle"  id="beritaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Berita
+  </a>
+  <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
+    <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
+    <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
+  </ul>
+</li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="tentang.php">Tentang</a>
                     </li>
@@ -440,6 +452,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/baguetteBox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         baguetteBox.run('.tz-gallery');
     </script>
@@ -458,6 +471,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
             }
         }
     </script>
+    
 </body>
 
 </html>
