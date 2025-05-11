@@ -12,17 +12,17 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="..//index.php">Beranda <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle" id="beritaDropdown" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         Berita
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
-                        <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
-                        <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
+                        <li><a class="dropdown-item" href="..//landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
+                        <li><a class="dropdown-item" href="..//landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
                     </ul>
                 </li>
 

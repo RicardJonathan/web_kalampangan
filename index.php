@@ -3,15 +3,21 @@ include 'config.php';
 
 // Query pengumuman
 $query_pengumuman = 'SELECT * FROM pengumuman ORDER BY created_at DESC LIMIT 3';
-$result_pengumuman = mysqli_query($koneksi, $query_pengumuman);
+$stmt_pengumuman = $koneksi->prepare($query_pengumuman);
+$stmt_pengumuman->execute();
+$result_pengumuman = $stmt_pengumuman->get_result();
 
 // Query kegiatan
 $query_kegiatan = 'SELECT * FROM kegiatan ORDER BY created_at DESC LIMIT 3';
-$result_kegiatan = mysqli_query($koneksi, $query_kegiatan);
+$stmt_kegiatan = $koneksi->prepare($query_kegiatan);
+$stmt_kegiatan->execute();
+$result_kegiatan = $stmt_kegiatan->get_result();
 
 // Query struktur
 $query_struktur = 'SELECT * FROM struktur ORDER BY created_at';
-$result_struktur = mysqli_query($koneksi, $query_struktur);
+$stmt_struktur = $koneksi->prepare($query_struktur);
+$stmt_struktur->execute();
+$result_struktur = $stmt_struktur->get_result();
 
 ?>
 
@@ -22,7 +28,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <link rel="icon shortcut" type="image/jpg" href="../web_kalampangan/images/logo/logo.png" style="width: 50px;">
+    <link rel="icon shortcut" type="image/jpg" href="./images/logo/logo.png" style="width: 50px;">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -149,7 +155,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="../web_pengajuansurat/images/logo/logo.png" alt="Logo"
+                <img src="./images/logo/logo.png" alt="Logo"
                     style="height: 30px; margin-right: 8px;">
                 Kelurahan Kalampangan
             </a>
@@ -165,14 +171,14 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
                         <a class="nav-link" href="index.php">Beranda <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle"  id="beritaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Berita
-  </a>
-  <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
-    <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
-    <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
-  </ul>
-</li>
+                        <a class="nav-link dropdown-toggle"  id="beritaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Berita
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
+                            <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
+                            <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
+                        </ul>
+                        </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="tentang.php">Tentang</a>
@@ -194,7 +200,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
     <div id="sliderHome" class="carousel slide" data-ride="carousel">
 
         <div class="carousel-inner">
-            <div class="carousel-item active" style="background-image:url(images/slider/gedung.jpeg);">
+            <div class="carousel-item active" style="background-image:url(images/slider/gedungg.jpeg);">
                 <div class="slider_item text-center">
                     <div class="text">
                         <div class="subheading">
@@ -278,7 +284,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
                                     <?php echo substr(strip_tags($data['deskripsi']), 0, 200); ?>...
                                 </p>
 
-                                <a class="btn btn-primary" href="detail_pengumuman.php?id=<?php echo $data['id']; ?>">Baca
+                                <a class="btn btn-primary" href="./landingberita/detail_pengumuman.php?id=<?php echo $data['id']; ?>">Baca
                                     Selengkapnya</a>
                             </div>
                         </div>
@@ -330,7 +336,7 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
                                     <?php echo substr(strip_tags($data['deskripsi']), 0, 200); ?>...
                                 </p>
 
-                                <a class="btn btn-primary" href="detail_kegiatan.php?id=<?php echo $data['id']; ?>">Baca
+                                <a class="btn btn-primary" href="./landingberita/detail_kegiatan.php?id=<?php echo $data['id']; ?>">Baca
                                     Selengkapnya</a>
                             </div>
                         </div>
@@ -410,6 +416,13 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
                             <li class="ftco-animate"><a
                                     href="https://www.instagram.com/kelurahankalampangan80?igsh=MXZ4dzE1djdybmN0OQ=="><span
                                         class="mdi mdi-instagram"></span></a></li>
+                                        <li class="ftco-animate">
+   
+<li class="ftco-animate">
+    <a href="#" target="_blank">
+        <span class="mdi mdi-youtube-play"></span>
+    </a>
+
                         </ul>
                     </div>
                 </div>

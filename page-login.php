@@ -160,7 +160,7 @@ $stmt->close();
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
-            background-image: url('images/slider/gedung.jpeg') !important; /* Ganti dengan URL gambar */
+            background-image: url('images/slider/gedungg.jpeg') !important; /* Ganti dengan URL gambar */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -248,6 +248,7 @@ $stmt->close();
                 </div>
                 <div class="g-recaptcha mt-3" data-sitekey="6LfBOoMqAAAAAIGFl4kVxHSVBKm874nbDW-lyh2q"></div>
                 <button type="submit" class="btn login-form__btn  w-100 mt-4">Masuk</button>
+                <a href="index.php" class="btn btn-outline-secondary w-100 mt-2">Kembali</a>
                 <div class="login-link text-center mt-3">
     Belum punya akun? <a href="register.php">Daftar di sini</a>
 </div>

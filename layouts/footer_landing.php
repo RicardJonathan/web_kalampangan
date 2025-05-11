@@ -13,6 +13,10 @@
                             <li class="ftco-animate"><a
                                     href="https://www.instagram.com/kelurahankalampangan80?igsh=MXZ4dzE1djdybmN0OQ=="><span
                                         class="mdi mdi-instagram"></span></a></li>
+                                        <li class="ftco-animate">
+    <a href="#" target="_blank">
+        <span class="mdi mdi-youtube-play"></span>
+    </a>
                         </ul>
                     </div>
                 </div>
@@ -20,11 +24,11 @@
                     <div class="ftco-footer-widget mb-4 ml-md-5">
                         <h2 class="ftco-heading-2">Quick Link</h2>
                         <ul class="list-unstyled">
-                            <li><a href="index.php" class="py-1 d-block"><span
+                            <li><a href="..//index.php" class="py-1 d-block"><span
                                         class="mdi mdi-view-dashboard mr-3"></span>Beranda</a></li>
-                            <li><a href="tentang.php" class="py-1 d-block"><span
+                            <li><a href="..//tentang.php" class="py-1 d-block"><span
                                         class="mdi mdi-church mr-3"></span>Tentang</a></li>
-                            <li><a href="pengajuan.php" class="py-1 d-block"><span
+                            <li><a href="..//pengajuan.php" class="py-1 d-block"><span
                                         class="mdi mdi-newspaper mr-3"></span>Pengajuan</a></li>
 
                         </ul>

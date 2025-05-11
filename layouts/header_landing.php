@@ -2,11 +2,11 @@
 include '..//config.php';
 
 // Query pengumuman
-$query_pengumuman = 'SELECT * FROM pengumuman ORDER BY created_at DESC LIMIT 3';
+$query_pengumuman = 'SELECT * FROM pengumuman ORDER BY created_at DESC';
 $result_pengumuman = mysqli_query($koneksi, $query_pengumuman);
 
 // Query kegiatan
-$query_kegiatan = 'SELECT * FROM kegiatan ORDER BY created_at DESC LIMIT 3';
+$query_kegiatan = 'SELECT * FROM kegiatan ORDER BY created_at DESC';
 $result_kegiatan = mysqli_query($koneksi, $query_kegiatan);
 
 // Query struktur
@@ -34,6 +34,8 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
     <link rel="stylesheet" href="..//fonts/flaticon.css">
     <link rel="stylesheet" href="..//css/animate.css">
     <link rel="stylesheet" type="text/css" href="..//css/baguetteBox.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     <title>Kelurahan Kalampangan</title>
 
 </head>
