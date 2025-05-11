@@ -23,7 +23,7 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
     <a class="navbar-brand" href="index.php">
-                <img src="../web_pengajuansurat/images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
+                <img src="..//images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
                 Kelurahan Kalampangan
             </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,15 @@
         <li class="nav-item">
           <a class="nav-link" href="index.php">Beranda</a>
         </li>
+         <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"  id="beritaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Berita
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
+                            <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
+                            <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
+                        </ul>
+                        </li>
         <li class="nav-item active">
           <a class="nav-link" href="tentang.php">Tentang <span class="sr-only">(current)</span></a>
         </li>
@@ -83,7 +92,7 @@
           <div class="row">
             <div class="col-md-5">
               <div class="about_img">
-                <img src="../web_pengajuansurat/images/logo/logo.png" class="img-fluid" alt="">
+                <img src="..//images/logo/logo.png" class="img-fluid" alt="">
               </div>
             </div>
 
@@ -142,6 +151,10 @@
                                 </li>
                                 <li class="ftco-animate"><a href="https://www.instagram.com/kelurahankalampangan80?igsh=MXZ4dzE1djdybmN0OQ=="><span
                                             class="mdi mdi-instagram"></span></a></li>
+                                            <li class="ftco-animate">
+    <a href="#" target="_blank">
+        <span class="mdi mdi-youtube-play"></span>
+    </a>
                             </ul>
                         </div>
                     </div>
@@ -179,6 +192,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/baguetteBox.min.js"></script>
     <script> baguetteBox.run('.tz-gallery'); </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
     // When the user scrolls down 20px from the top of the document, slide down the navbar

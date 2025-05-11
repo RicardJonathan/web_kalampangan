@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         
         body {
-    background-image: url('images/slider/gedung.jpeg') !important; /* Ganti dengan URL gambar */
+    background-image: url('images/slider/gedungg.jpeg') !important; /* Ganti dengan URL gambar */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -140,6 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Daftar</button>
+            
         </form>
         <div class="login-link">
             Sudah punya akun? <a href="page-login.php">Masuk di sini</a>
