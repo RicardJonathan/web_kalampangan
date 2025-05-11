@@ -61,11 +61,11 @@ if (isset($_GET['id'])) {
     $stmt_delete_surat->close();
     $koneksi->close();
 
-    header("Location: pengajuan_surat.php");
+    header("Location: surat.php");
     exit();
 } else {
     $_SESSION['error'] = "ID pengajuan surat tidak ditemukan.";
-    header("Location: pengajuan_surat.php");
+    header("Location: surat.php");
     exit();
 }
 ?>

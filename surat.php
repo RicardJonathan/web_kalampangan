@@ -251,11 +251,6 @@ $koneksi->close();
                 <h4 class="card-title">Data Pengajuan Surat</h4>
 
 <div class="d-flex justify-content-between mb-3">
-    <!-- Form Pencarian -->
-    <form method="GET" action="" class="form-inline">
-        <input type="text" name="cari" class="form-control mr-sm-2" placeholder="Cari berdasarkan nama atau jenis surat..." value="<?= isset($_GET['cari']) ? htmlspecialchars($_GET['cari']) : '' ?>">
-        <button type="submit" class="btn btn-outline-primary">Cari</button>
-    </form>
 
     <!-- Tombol Tambah Data -->
     <a href="tambah_pengajuan_surat.php" class="btn btn-primary d-flex align-items-center ml-auto" style="width: 140px;">
@@ -316,15 +311,17 @@ $koneksi->close();
     <span class="badge badge-primary"><i class="fas fa-spinner fa-spin"></i> Menunggu Verifikasi Admin</span>
 <?php elseif ($row['status'] == 'Verifikasi Kasi'): ?>
     <span class="badge badge-info"><i class="fas fa-spinner fa-spin"></i> Verifikasi Kasi</span>
-<?php elseif ($row['status'] == 'Diproses'): ?>
+    <?php elseif ($row['status'] == 'Verifikasi Lurah'): ?>
     <span class="badge badge-warning"><i class="fas fa-spinner fa-spin"></i> Verifikasi Lurah</span>
+
 <?php elseif ($row['status'] == 'Diterima'): ?>
     <span class="text-success"><i class="fa-solid fa-check-circle"></i> Diterima</span>
-<?php elseif (strpos($row['status'], 'Ditolak oleh') !== false): ?>
-    <span class="text-danger"><i class="fa-solid fa-times-circle"></i> <?= htmlspecialchars($row['status']); ?></span>
+<?php elseif ($row['status'] == 'Ditolak'): ?>
+    <span class="text-danger"><i class="fa-solid fa-times-circle"></i> Ditolak</span>
 <?php else: ?>
     <span class="text-secondary"><i class="fa-solid fa-question-circle"></i> Tidak Diketahui</span>
 <?php endif; ?>
+
 
                         </td>
                         <td>

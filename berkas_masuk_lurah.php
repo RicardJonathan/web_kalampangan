@@ -21,11 +21,11 @@ if ($result_admin->num_rows == 0) {
 }
 
 
-// Query untuk mengambil data surat dan data user (nik, nama) dengan JOIN dan status "diajukan"
+// Query untuk mengambil data surat dan data user (nik, nama) dengan JOIN dan status "Verifikasi Lurah"
 $query = "SELECT pengajuan_surat.*, user.nik, user.nama
           FROM pengajuan_surat
           INNER JOIN user ON pengajuan_surat.user_id = user.id
-          WHERE pengajuan_surat.status = 'Diproses' 
+          WHERE pengajuan_surat.status = 'Verifikasi Lurah' 
           ORDER BY pengajuan_surat.id DESC";
 $result = mysqli_query($koneksi, $query);
 

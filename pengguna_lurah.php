@@ -62,7 +62,7 @@ $koneksi->close();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Kelurahan Kalampangan</title>
+    <title>DPKUKMP</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- Custom Stylesheet -->
@@ -348,7 +348,15 @@ $koneksi->close();
                                 <?php } ?>
                             </tbody>
                             <tfoot>
-                             
+                                <tr>
+                                    <th>No.</th>
+                                    <th>NIK</th>
+                                    <th>Nama</th>
+                                    <th>Username</th>
+                                    <th>No Telepon</th>
+                                    <th>Email</th>
+                                    <th>Aksi</th>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>

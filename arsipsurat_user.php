@@ -337,19 +337,7 @@ if ($result->num_rows > 0) {
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th>No.</th>
-                                        <th>Jenis Surat</th>
-                                        <th>User ID</th>
-                                        <th>Nama Pengaju</th>
-                                        <th>Email Pengaju</th>
-                                        <th>No Telepon</th>
-                                        <th>Alamat</th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Keterangan</th>
-                                        <th>Foto KTP</th>
-                                        <th>Foto KK</th>
-                                        <th>Foto Formulir</th>
-                                        <th>Status</th>
+                                 
                                     </tr>
                                 </tfoot>
                             </table>

@@ -286,9 +286,9 @@ $koneksi->close();
                                                 <td><?= htmlspecialchars($row['no_telepon']); ?></td>
                                                 <td><?= htmlspecialchars($row['alamat']); ?></td>
                                                 <td><?= $tanggal_lengkap; ?></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
                                                 <td><?= htmlspecialchars($row['keterangan']); ?></td>
                                               
                                                 <td>
@@ -324,9 +324,9 @@ $koneksi->close();
                                                             <p><strong>Tanggal:</strong> <?= $tanggal_lengkap; ?></p>
                                                             <p><strong>Status:</strong> <?= htmlspecialchars($row['status']); ?></p>
                                                             <p><strong>Keterangan:</strong> <?= htmlspecialchars($row['keterangan']); ?></p>
-                                                            <p><strong>KTP:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                            <p><strong>KK:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                            <p><strong>Formulir:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                            <p><strong>KTP:</strong> <a href="preview_file _kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                            <p><strong>KK:</strong> <a href="preview_file _kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                            <p><strong>Formulir:</strong> <a href="preview_file _kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -438,7 +438,7 @@ $koneksi->close();
                             }
                         }
                     };
-                    xhr.send("id=" + id + "&status=Diproses");
+                    xhr.send("id=" + id + "&status=Verifikasi Lurah");
                 }
             });
         }

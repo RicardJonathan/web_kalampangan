@@ -23,17 +23,15 @@ if ($result_user->num_rows == 0) {
     exit();
 }
 
-// Ambil data pengajuan surat sesuai user yang login
-$cari = isset($_GET['cari']) ? $_GET['cari'] : ''; // Ambil nilai pencarian dari input
-
-// Menggunakan prepared statement untuk pencarian
-$sql_surat = "SELECT * FROM pengajuan_surat WHERE user_id = ? AND (nama_pengaju LIKE ? OR jenis_surat LIKE ?) ORDER BY tgl_pengajuan DESC";
+// Mengambil data pengajuan surat tanpa pencarian
+$sql_surat = "SELECT * FROM pengajuan_surat WHERE user_id = ? ORDER BY tgl_pengajuan DESC";
 $stmt_surat = $koneksi->prepare($sql_surat);
-$searchTerm = "%" . $cari . "%"; // Menambahkan tanda % untuk pencarian LIKE
-$stmt_surat->bind_param("iss", $user_id, $searchTerm, $searchTerm); // "i" untuk integer, "s" untuk string
+$stmt_surat->bind_param("i", $user_id); // "i" untuk integer
 $stmt_surat->execute();
 $result_surat = $stmt_surat->get_result();
+
 ?>
+
 
 
 <!DOCTYPE html>
@@ -250,11 +248,7 @@ $result_surat = $stmt_surat->get_result();
                 <h4 class="card-title">Data Pengajuan Surat</h4>
 
 <div class="d-flex justify-content-between mb-3">
-    <!-- Form Pencarian -->
-    <form method="GET" action="" class="form-inline">
-        <input type="text" name="cari" class="form-control mr-sm-2" placeholder="Cari berdasarkan nama atau jenis surat..." value="<?= isset($_GET['cari']) ? htmlspecialchars($_GET['cari']) : '' ?>">
-        <button type="submit" class="btn btn-outline-primary">Cari</button>
-    </form>
+
 
     <!-- Tombol Tambah Data -->
     <a href="tambah_pengajuan_surat.php" class="btn btn-primary d-flex align-items-center ml-auto" style="width: 140px;">

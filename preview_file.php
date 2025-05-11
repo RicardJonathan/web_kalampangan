@@ -31,8 +31,11 @@ if (!file_exists($filepath)) {
     <link rel="icon" type="image/png" href="images/logopky.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- Bootstrap CSS (untuk styling tombol) -->
+    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <style>
         body {
@@ -52,7 +55,7 @@ if (!file_exists($filepath)) {
             max-width: 100%;
             height: auto;
         }
-        .btn-back {
+        .btn-back, .btn-download {
             margin-top: 20px;
         }
     </style>
@@ -73,10 +76,19 @@ if (!file_exists($filepath)) {
         } else {
             echo "<p>Format file tidak dapat dipreview. <a href='$filepath' download>Unduh file</a>.</p>";
         }
+
+        // Tombol Unduh
+        echo "<div class='btn-download'>
+                <a href='$filepath' download class='btn btn-success'>
+                    <i class='fas fa-download'></i> Unduh Dokumen
+                </a>
+              </div>";
         ?>
 
         <div class="btn-back">
-            <a href="pengajuan_surat.php" class="btn btn-secondary">← Kembali ke Pengajuan Surat</a>
+            <a href="pengajuan_surat.php" class="btn btn-secondary">
+                ← Kembali
+            </a>
         </div>
     </div>
 </body>

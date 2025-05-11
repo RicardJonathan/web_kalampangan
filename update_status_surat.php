@@ -25,9 +25,9 @@ if (isset($_POST['id'], $_POST['status'])) {
     else if ($status === 'Verifikasi Kasi') {
         $query = "UPDATE pengajuan_surat SET status = 'Verifikasi Kasi' WHERE id = $id";
     }
-    // Menangani status "Diproses" (diajukan ke lurah)
-    else if ($status === 'Diproses') {
-        $query = "UPDATE pengajuan_surat SET status = 'Diproses' WHERE id = $id";
+    // Menangani status "'Verifikasi Lurah" (diajukan ke lurah)
+    else if ($status === 'Verifikasi Lurah') {
+        $query = "UPDATE pengajuan_surat SET status = 'Verifikasi Lurah' WHERE id = $id";
     }
     // Menangani status "Diterima" (disetujui lurah)
     else if ($status === 'Diterima') {

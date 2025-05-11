@@ -60,24 +60,122 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <title>Kelurahan Kelampangan</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Kelurahan Kalampangan</title>
+    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
+    <!-- Custom Stylesheet -->
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-    <style>
-        .card-title { padding-top: 20px; padding-left: 30px; }
-        .card-table { padding-left: 40px; padding-right: 40px; }
-    </style>
-</head>
-<body>
-    <div id="main-wrapper">
-        <!-- Header & Sidebar -->
-        <?php include 'sidebarUser.php'; ?>
 
-        <!-- Content -->
+    <style>
+        .card-title {
+            padding-top: 20px;
+            padding-left: 30px;
+        }
+        .card-table {
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                    <div class="logo-container">
+                        <div class="logo-pky">
+                            <img src="images/logopky.png" alt="">
+                        </div>
+                        <div class="brand-title">
+                            <h4>Kelurahan <br> PALANGKA RAYA</h4>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">    
+            <div class="header-content clearfix">
+                
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                        <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
+                                <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
+                            </div>
+                            <div class="drop-down dropdown-profile   dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="profileUser.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                        </li>
+                                    
+                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <?php include 'sidebarUser.php'; ?>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
         <div class="content-body">
             <div class="row page-titles mx-0">
                 <div class="col p-md-0">

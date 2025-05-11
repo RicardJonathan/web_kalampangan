@@ -446,53 +446,50 @@ $koneksi->close();
 
 
 
-        function tolakSurat(id, role) {
-            Swal.fire({
-                title: 'Masukkan Alasan Penolakan',
-                input: 'textarea',
-                inputPlaceholder: 'Tuliskan alasan penolakan di sini...',
-                showCancelButton: true,
-                confirmButtonText: 'Tolak',
-                cancelButtonText: 'Batal',
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'Alasan penolakan tidak boleh kosong!';
-                    }
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var alasan_penolakan = result.value;
 
-                    // AJAX untuk mengubah status surat menjadi "Ditolak"
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "update_status_surat.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            try {
-                                var response = JSON.parse(xhr.responseText);
-                                if (response.success) {
-                                    Swal.fire('Ditolak!', 'Pengajuan surat telah ditolak.', 'success')
-                                        .then(() => {
-                                            location.reload();
-                                        });
-                                } else {
-                                    Swal.fire('Gagal!', response.message || 'Terjadi kesalahan. surat gagal ditolak.', 'error');
-                                }
-                            } catch (e) {
-                                Swal.fire('Gagal!', 'Respon server tidak valid.', 'error');
+    function tolakSurat(id, role) {
+        Swal.fire({
+            title: 'Masukkan Alasan Penolakan',
+            input: 'textarea',
+            inputPlaceholder: 'Tuliskan alasan penolakan di sini...',
+            showCancelButton: true,
+            confirmButtonText: 'Tolak',
+            cancelButtonText: 'Batal',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Alasan penolakan tidak boleh kosong!';
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const alasan_penolakan = encodeURIComponent(result.value);
+                const data = `id=${encodeURIComponent(id)}&status=Ditolak&role=${encodeURIComponent(role)}&alasan_penolakan=${alasan_penolakan}`;
+
+                // AJAX untuk mengubah status surat menjadi "Ditolak"
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "update_status_surat.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (xhr.status === 200 && response.success) {
+                                Swal.fire('Ditolak!', 'Pengajuan surat telah ditolak.', 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Gagal!', response.message || 'Terjadi kesalahan saat menolak surat.', 'error');
                             }
+                        } catch (e) {
+                            Swal.fire('Gagal!', 'Respon server tidak valid.', 'error');
                         }
-                    };
+                    }
+                };
+                xhr.send(data);
+            }
+        });
+    }
+</script>
 
-                    // Kirimkan data dengan status "Ditolak" dan alasan penolakan
-                    xhr.send("id=" + id + "&status=Ditolak&role=" + encodeURIComponent(role) + "&alasan_penolakan=" + encodeURIComponent(alasan_penolakan));
-                }
-            });
-        }
-
-
-    </script>
 
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>
