@@ -12,14 +12,13 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
 $sql_kasi = "SELECT * FROM kasi WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
-$result_kadis = $koneksi->query($sql_kasi);
+$result_kasi = $koneksi->query($sql_kasi);
 
-if ($result_kadis->num_rows == 0) {
+if ($result_kasi->num_rows == 0) {
     // Jika tidak ada di tabel admin, arahkan ke halaman error
     header("Location: page-error-400.php"); // Arahkan ke halaman error
     exit();
 }
-
 
 $query = "SELECT pengajuan_surat.*, user.nik, user.nama
           FROM pengajuan_surat
@@ -36,116 +35,59 @@ if (!$result) {
 $koneksi->close();
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Kelurahan Kalampangan</title>
-    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
-    <!-- Custom Stylesheet -->
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-
     <style>
-        /* Menghilangkan border dari tabel */
-        .table,
-        .table th,
-        .table td {
+        /* Custom Styles */
+        .table, .table th, .table td {
             border: none !important;
-            /* Hapus border dari tabel, header, dan kolom */
         }
 
-        /* Menambahkan padding untuk kenyamanan tampilan */
-        .table th,
-        .table td {
+        .table th, .table td {
             padding: 12px 15px;
-            /* Memberikan jarak antar teks dan batas tabel */
             text-align: left;
-            /* Mengatur teks agar rata kiri */
         }
 
-        /* Menghilangkan garis bawah pada setiap baris */
-        .table tbody tr {
-            border-bottom: none;
-            /* Menghilangkan garis pemisah antar baris */
-        }
-
-        /* Jika ada hover effect, tetap pertahankan */
         .table tbody tr:hover {
             background-color: #f1f1f1;
-            /* Sedikit perubahan warna saat hover */
         }
 
-        /* Styling untuk tabel */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        /* Styling untuk baris header tabel */
         .table th {
             color: #F4F6FF;
-            /* Warna teks putih */
-            padding: 12px 15px;
-            text-align: left;
-            /* Teks di header rata kiri */
-            font-size: 16px;
             background-color: #7571F9 !important;
         }
 
-        /* Styling untuk baris tabel */
         .table td {
             color: #3C3D37;
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            /* Garis pemisah antar baris */
-            font-size: 14px;
             background-color: #f9f9f9;
-            /* Warna latar belakang yang konsisten untuk seluruh tabel */
         }
 
-        /* Hover effect untuk baris tabel */
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-            /* Sedikit perubahan warna saat hover */
+        .btn-info {
+            background-color: rgb(48, 160, 235);
+            border-color: rgb(29, 189, 213);
         }
 
-        /* Styling untuk footer tabel */
-        .table tfoot th {
-            background-color: white !important;
-            /* Warna latar belakang footer */
-            color: #333;
-            font-weight: bold;
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
         }
 
-        /* Menambahkan efek border pada tabel */
-        .table-bordered {
-            border: 1px solid #ddd;
-            /* Border untuk tabel */
-        }
-
-        /* Responsif - menyesuaikan tabel pada layar kecil */
-        .table-responsive {
-            overflow-x: auto;
-            /* Membuat tabel bisa digulir horizontal di layar kecil */
+        .modal-dialog {
+            max-width: 80%;
         }
     </style>
-
 </head>
 
 <body>
-
-    <!--*******************
-        Preloader start
-    ********************-->
     <div id="preloader">
         <div class="loader">
             <svg class="circular" viewBox="25 25 50 50">
@@ -153,19 +95,8 @@ $koneksi->close();
             </svg>
         </div>
     </div>
-    <!--*******************
-        Preloader end
-    ********************-->
 
-
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
     <div id="main-wrapper">
-
-        <!--**********************************
-            Nav header start
-        ***********************************-->
         <div class="nav-header">
             <div class="brand-logo">
                 <div class="logo-container">
@@ -178,16 +109,9 @@ $koneksi->close();
                 </div>
             </div>
         </div>
-        <!--**********************************
-            Nav header end
-        ***********************************-->
 
-        <!--**********************************
-            Header start
-        ***********************************-->
         <div class="header">
             <div class="header-content clearfix">
-
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -198,17 +122,13 @@ $koneksi->close();
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <img src="images/user-ikon.jpg" height="40" width="40" alt="">
-                                <span class="ml-1"
-                                    style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span>
+                                <span class="ml-1" style="font-size: 15px; color: #494949;"><?php echo $_SESSION['username']; ?></span>
                             </div>
-                            <div class="drop-down dropdown-profile   dropdown-menu">
+                            <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
-                                        <li>
-                                            <a href="profile_admin.php"><i class="icon-user"></i>
-                                                <span>Profile</span></a>
-                                        </li>
-                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="profile_admin.php"><i class="icon-user"></i> Profile</a></li>
+                                        <li><a href="logout.php"><i class="icon-key"></i> Logout</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -217,191 +137,133 @@ $koneksi->close();
                 </div>
             </div>
         </div>
-        <!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
 
-        <!--**********************************
-            Sidebar start
-        ***********************************-->
         <?php include 'sidebar_kasi.php'; ?>
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
-<!--**********************************
-    Content body start
-***********************************-->
-<div class="content-body">
-    <div class="row page-titles mx-0">
-        <div class="col p-md-0">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
-            </ol>
-        </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Berkas Masuk Pengajuan </h4>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered zero-configuration">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis Surat</th>
-                                        <th>User ID</th>
-                                        <th>Nama Pengaju</th>
-                                        <th>Email</th>
-                                        <th>No Telepon</th>
-                                        <th>Alamat</th>
-                                        <th>Tanggal</th>
-                                        <th>KTP</th>
-                                        <th>KK</th>
-                                        <th>Formulir</th>
-                                        <th>Keterangan</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $nomor = 1;
-                                    if (mysqli_num_rows($result) > 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            $tgl = strtotime($row['tgl_pengajuan']);
-                                            $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                                            $tanggal_lengkap = date('d', $tgl) . ' ' . $bulan[date('n', $tgl)] . ' ' . date('Y', $tgl);
-                                    ?>
+        <div class="content-body">
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Berkas Masuk Pengajuan</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered zero-configuration">
+                                        <thead>
                                             <tr>
-                                                <td><?= $nomor++ . '.'; ?></td>
-                                                <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
-                                                <td><?= htmlspecialchars($row['user_id']); ?></td>
-                                                <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
-                                                <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
-                                                <td><?= htmlspecialchars($row['no_telepon']); ?></td>
-                                                <td><?= htmlspecialchars($row['alamat']); ?></td>
-                                                <td><?= $tanggal_lengkap; ?></td>
-                                                <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><?= htmlspecialchars($row['keterangan']); ?></td>
-                                              
-                                                <td>
-                                                    <div class="btn-group" role="group">
-                                                        <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
-                                                            <i class="fas fa-paper-plane"></i> Ajukan
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
-                                                            <i class="fas fa-times"></i> Tolak
-                                                        </button>
-                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
-                                                            <i class="fas fa-info-circle"></i> Detail
-                                                        </button>
-                                                    </div>
-                                                </td>
+                                                <th>No</th>
+                                                <th>Jenis Surat</th>
+                                                <th>User ID</th>
+                                                <th>Nama Pengaju</th>
+                                                <th>Email</th>
+                                                <th>No Telepon</th>
+                                                <th>Alamat</th>
+                                                <th>Tanggal</th>
+                                                <th>KTP</th>
+                                                <th>KK</th>
+                                                <th>Formulir</th>
+                                                <th>Keterangan</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $nomor = 1;
+                                            if (mysqli_num_rows($result) > 0) {
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $tgl = strtotime($row['tgl_pengajuan']);
+                                                    $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                                    $tanggal_lengkap = date('d', $tgl) . ' ' . $bulan[date('n', $tgl)] . ' ' . date('Y', $tgl);
+                                            ?>
+                                                    <tr>
+                                                        <td><?= $nomor++ . '.'; ?></td>
+                                                        <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
+                                                        <td><?= htmlspecialchars($row['user_id']); ?></td>
+                                                        <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
+                                                        <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
+                                                        <td><?= htmlspecialchars($row['no_telepon']); ?></td>
+                                                        <td><?= htmlspecialchars($row['alamat']); ?></td>
+                                                        <td><?= $tanggal_lengkap; ?></td>
+                                                        <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><?= htmlspecialchars($row['keterangan']); ?></td>
+                                                        <td><?= htmlspecialchars($row['status']); ?></td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
+                                                                    <i class="fas fa-paper-plane"></i> Ajukan
+                                                                </button>
+                                                                <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
+                                                                    <i class="fas fa-times"></i> Tolak
+                                                                </button>
+                                                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
+                                                                    <i class="fas fa-info-circle"></i> Detail
+                                                                </button>
+                                                                <!-- Tombol Upload Surat -->
+                                                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#uploadModal<?= $row['id']; ?>">
+                                                                    <i class="fas fa-upload"></i> Upload Surat
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
 
-                                            <!-- Modal Detail -->
-                                            <div class="modal fade" id="detailModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel<?= $row['id']; ?>" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Detail Pengajuan</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p><strong>ID:</strong> <?= $row['id']; ?></p>
-                                                            <p><strong>Jenis Surat:</strong> <?= htmlspecialchars($row['jenis_surat']); ?></p>
-                                                            <p><strong>Nama:</strong> <?= htmlspecialchars($row['nama_pengaju']); ?></p>
-                                                            <p><strong>Email:</strong> <?= htmlspecialchars($row['email_pengaju']); ?></p>
-                                                            <p><strong>No Telepon:</strong> <?= htmlspecialchars($row['no_telepon']); ?></p>
-                                                            <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']); ?></p>
-                                                            <p><strong>Tanggal:</strong> <?= $tanggal_lengkap; ?></p>
-                                                            <p><strong>Status:</strong> <?= htmlspecialchars($row['status']); ?></p>
-                                                            <p><strong>Keterangan:</strong> <?= htmlspecialchars($row['keterangan']); ?></p>
-                                                            <p><strong>KTP:</strong> <a href="preview_file _kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                            <p><strong>KK:</strong> <a href="preview_file _kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                            <p><strong>Formulir:</strong> <a href="preview_file _kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                    <!-- Modal Upload Surat -->
+                                                    <div class="modal fade" id="uploadModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="uploadModalLabel">Upload Surat untuk Pengajuan ID <?= $row['id']; ?></h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="upload_surat.php" method="POST" enctype="multipart/form-data">
+                                                                        <div class="form-group">
+                                                                            <label for="file_surat">Pilih File Surat</label>
+                                                                            <input type="file" class="form-control" name="file_surat" id="file_surat" required>
+                                                                            <input type="hidden" name="pengajuan_id" value="<?= $row['id']; ?>">
+                                                                        </div>
+                                                                        <button type="submit" class="btn btn-primary">Upload Surat</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            
-                                    <?php
-                                        }
-                                    } else {
-                                        echo '<tr><td colspan="14" class="text-center">Data pengajuan masih kosong</td></tr>';
-                                    }
-                                    ?>
-                                </tbody>
-                                <tfoot><tr></tr></tfoot>
-                            </table>
+                                            <?php
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='13'>Tidak ada data pengajuan surat.</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--**********************************
-    Content body end
-***********************************-->
 
-<style>
-    .btn-info {
-        background-color:rgb(48, 160, 235);
-        border-color:rgb(29, 189, 213);
-    }
-
-    .btn-info:hover {
-        background-color: #138496;
-        border-color: #117a8b;
-    }
-
-    /* Modal Styling */
-    .modal-dialog {
-        max-width: 80%; /* Reduce modal size */
-    }
-</style>
-
-
-
-
-
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-                <p class="mb-0">© <span id="current-year"></span> Kelurahan Kalampangan Palangka Raya. All rights reserved.</p>
-            </div>
-        </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
-    </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
-
-    <!--**********************************
-        Scripts
-    ***********************************-->
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
-    <script>
 
+    <script>
         function prosesSurat(id) {
-            // Menggunakan SweetAlert untuk konfirmasi
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Anda akan mengajukan Surat ini kepada kepala kelurahan!",
@@ -412,7 +274,6 @@ $koneksi->close();
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Menggunakan AJAX untuk mengubah status menjadi "Diajukan"
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", "update_status_surat.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -420,21 +281,12 @@ $koneksi->close();
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             var response = JSON.parse(xhr.responseText);
                             if (response.success) {
-                                // Jika berhasil, tampilkan SweetAlert untuk berhasil dan reload halaman
-                                Swal.fire(
-                                    'Berhasil!',
-                                    'Surat berhasil diajukan.',
-                                    'success'
-                                ).then(() => {
-                                    location.reload(); // Reload halaman untuk memperbarui status
-                                });
+                                Swal.fire('Berhasil!', 'Surat berhasil diajukan.', 'success')
+                                    .then(() => {
+                                        location.reload();
+                                    });
                             } else {
-                                // Jika gagal, tampilkan SweetAlert error
-                                Swal.fire(
-                                    'Gagal!',
-                                    'Terjadi kesalahan. Surat gagal diajukan.',
-                                    'error'
-                                );
+                                Swal.fire('Gagal!', 'Terjadi kesalahan. Surat gagal diajukan.', 'error');
                             }
                         }
                     };
@@ -442,9 +294,6 @@ $koneksi->close();
                 }
             });
         }
-
-
-
 
         function tolakSurat(id, role) {
             Swal.fire({
@@ -462,8 +311,6 @@ $koneksi->close();
             }).then((result) => {
                 if (result.isConfirmed) {
                     var alasan_penolakan = result.value;
-
-                    // AJAX untuk mengubah status surat menjadi "Ditolak"
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", "update_status_surat.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -485,14 +332,13 @@ $koneksi->close();
                         }
                     };
 
-                    // Kirimkan data dengan status "Ditolak" dan alasan penolakan
                     xhr.send("id=" + id + "&status=Ditolak&role=" + encodeURIComponent(role) + "&alasan_penolakan=" + encodeURIComponent(alasan_penolakan));
                 }
             });
         }
-
-
     </script>
+
+
 
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>

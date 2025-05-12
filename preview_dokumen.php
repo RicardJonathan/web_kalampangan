@@ -52,7 +52,7 @@ if (!file_exists($filepath)) {
             max-width: 100%;
             height: auto;
         }
-        .btn-back {
+        .btn-back, .btn-download {
             margin-top: 20px;
         }
     </style>
@@ -67,16 +67,24 @@ if (!file_exists($filepath)) {
         $pdf_extensions = ['pdf'];
 
         if (in_array(strtolower($file_ext), $image_extensions)) {
-            echo "<img src='$filepath' alt='Dokumen'>";
+            echo "<img src='" . htmlspecialchars($filepath) . "' alt='Dokumen'>";
         } elseif (in_array(strtolower($file_ext), $pdf_extensions)) {
-            echo "<embed src='$filepath' type='application/pdf' width='100%' height='600px' />";
+            echo "<embed src='" . htmlspecialchars($filepath) . "' type='application/pdf' width='100%' height='600px' />";
         } else {
-            echo "<p>Format file tidak dapat dipreview. <a href='$filepath' download>Unduh file</a>.</p>";
+            echo "<p>Format file tidak dapat dipreview.</p>";
         }
         ?>
 
+        <!-- Tombol Unduh -->
+        <div class="btn-download">
+            <a href="<?= htmlspecialchars($filepath) ?>" class="btn btn-success" download>
+                ⬇️ Unduh Dokumen
+            </a>
+        </div>
+
+        <!-- Tombol Kembali -->
         <div class="btn-back">
-            <a href="berkas_masuk.php" class="btn btn-secondary">← Kembali </a>
+            <a href="berkas_masuk.php" class="btn btn-secondary">← Kembali</a>
         </div>
     </div>
 </body>

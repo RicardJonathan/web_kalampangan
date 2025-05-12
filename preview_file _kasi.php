@@ -13,7 +13,7 @@ if (!isset($_GET['file']) || empty($_GET['file'])) {
     exit();
 }
 
-$filename = basename($_GET['file']); // Hindari path traversal
+$filename = basename($_GET['file']); // Mencegah path traversal
 $filepath = "uploads/" . $filename;
 
 // Cek apakah file benar-benar ada
@@ -34,7 +34,7 @@ if (!file_exists($filepath)) {
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Font Awesome for icons -->
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <style>
@@ -65,26 +65,31 @@ if (!file_exists($filepath)) {
         <h4 class="mb-4">Preview Dokumen</h4>
 
         <?php
-        $file_ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $safe_filepath = htmlspecialchars($filepath);
+
         $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
         $pdf_extensions = ['pdf'];
 
-        if (in_array(strtolower($file_ext), $image_extensions)) {
-            echo "<img src='$filepath' alt='Dokumen'>";
-        } elseif (in_array(strtolower($file_ext), $pdf_extensions)) {
-            echo "<embed src='$filepath' type='application/pdf' width='100%' height='600px' />";
+        if (in_array($file_ext, $image_extensions)) {
+            echo "<img src='$safe_filepath' alt='Dokumen'>";
+        } elseif (in_array($file_ext, $pdf_extensions)) {
+            echo "<embed src='$safe_filepath' type='application/pdf' width='100%' height='600px' />";
         } else {
-            echo "<p>Format file tidak dapat dipreview. <a href='$filepath' download>Unduh file</a>.</p>";
+            echo "<p>Format file tidak dapat dipreview. 
+                    <a href='$safe_filepath' download>Unduh file</a>.
+                  </p>";
         }
-
-        // Tombol Unduh
-        echo "<div class='btn-download'>
-                <a href='$filepath' download class='btn btn-success'>
-                    <i class='fas fa-download'></i> Unduh Dokumen
-                </a>
-              </div>";
         ?>
 
+        <!-- Tombol Unduh -->
+        <div class="btn-download">
+            <a href="<?= $safe_filepath ?>" download class="btn btn-success">
+                <i class="fas fa-download"></i> Unduh Dokumen
+            </a>
+        </div>
+
+        <!-- Tombol Kembali -->
         <div class="btn-back">
             <a href="bmasukKasi.php" class="btn btn-secondary">
                 ← Kembali

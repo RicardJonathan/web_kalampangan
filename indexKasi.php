@@ -78,7 +78,7 @@ $koneksi->close();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
+    <title>Kelurahan Kalampangan</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <link href="./plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./plugins/chartist/css/chartist.min.css">
@@ -109,7 +109,7 @@ $koneksi->close();
                         <img src="images/logopky.png" alt="">
                     </div>
                     <div class="brand-title">
-                        <h4>DPKUKMP <br> PALANGKA RAYA</h4>
+                        <h4>Kelurahan Kalampangan<br> PALANGKA RAYA</h4>
                     </div>
                 </div>
             </div>
