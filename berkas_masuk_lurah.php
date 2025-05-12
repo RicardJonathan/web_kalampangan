@@ -263,6 +263,7 @@ $koneksi->close();
                                         <th>KTP</th>
                                         <th>KK</th>
                                         <th>Formulir</th>
+                                        <th>File surat</th>
                                         <th>Keterangan</th>
                                      
                                         <th>Aksi</th>
@@ -287,9 +288,10 @@ $koneksi->close();
                                                 <td><?= htmlspecialchars($row['no_telepon']); ?></td>
                                                 <td><?= htmlspecialchars($row['alamat']); ?></td>
                                                 <td><?= $tanggal_lengkap; ?></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _lurah.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _lurah.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _lurah.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file _lurah.php?file=<?= urlencode($row['file_surat']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
                                                 <td><?= htmlspecialchars($row['keterangan']); ?></td>
                                               
                                                 <td>

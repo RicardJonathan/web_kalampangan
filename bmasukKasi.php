@@ -162,7 +162,7 @@ $koneksi->close();
                                             <tr>
                                                 <th>No</th>
                                                 <th>Jenis Surat</th>
-                                                <th>User ID</th>
+                                                <th>ID</th>
                                                 <th>Nama Pengaju</th>
                                                 <th>Email</th>
                                                 <th>No Telepon</th>
@@ -188,15 +188,16 @@ $koneksi->close();
                                                     <tr>
                                                         <td><?= $nomor++ . '.'; ?></td>
                                                         <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
-                                                        <td><?= htmlspecialchars($row['user_id']); ?></td>
+                                                        <td><?= htmlspecialchars($row['id']); ?></td>
                                                         <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
                                                         <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
                                                         <td><?= htmlspecialchars($row['no_telepon']); ?></td>
                                                         <td><?= htmlspecialchars($row['alamat']); ?></td>
                                                         <td><?= $tanggal_lengkap; ?></td>
-                                                        <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+
                                                         <td><?= htmlspecialchars($row['keterangan']); ?></td>
                                                         <td><?= htmlspecialchars($row['status']); ?></td>
                                                         <td>
@@ -219,28 +220,30 @@ $koneksi->close();
                                                     </tr>
 
                                                     <!-- Modal Upload Surat -->
-                                                    <div class="modal fade" id="uploadModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="uploadModalLabel">Upload Surat untuk Pengajuan ID <?= $row['id']; ?></h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form action="upload_surat.php" method="POST" enctype="multipart/form-data">
-                                                                        <div class="form-group">
-                                                                            <label for="file_surat">Pilih File Surat</label>
-                                                                            <input type="file" class="form-control" name="file_surat" id="file_surat" required>
-                                                                            <input type="hidden" name="pengajuan_id" value="<?= $row['id']; ?>">
-                                                                        </div>
-                                                                        <button type="submit" class="btn btn-primary">Upload Surat</button>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <div class="modal fade" id="uploadModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel<?= $row['id']; ?>" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel<?= $row['id']; ?>">Upload Surat - ID <?= $row['id']; ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="upload_surat.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file_surat<?= $row['id']; ?>">Pilih File Surat</label>
+                        <input type="file" class="form-control" name="file_surat" id="file_surat<?= $row['id']; ?>" required>
+                        <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                    </div>
+                    <button type="submit" name="submit" class="btn btn-primary">Upload Surat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
                                             <?php
                                                 }
                                             } else {
