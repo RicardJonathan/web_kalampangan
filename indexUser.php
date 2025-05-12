@@ -69,6 +69,23 @@ $koneksi->close();
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
 </head>
+<style>
+.btn-biru-keren {
+  background-color: #007bff; /* Biru Bootstrap */
+  border-color: #007bff;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}
+
+.btn-biru-keren:hover {
+  background-color: #0056b3; /* Biru lebih gelap saat hover */
+  box-shadow: 0 6px 8px rgba(0, 86, 179, 0.4);
+  color: white;
+}
+</style>
+
 <body>
     <div id="preloader">
         <div class="loader">
@@ -167,9 +184,13 @@ $koneksi->close();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body pb-0">
-                                    <h4 class="card-title">Syarat Pengajuan Surat</h4>
-                                    <p class="card-text">Berikut adalah syarat yang harus dipenuhi untuk mengajukan surat:</p>
-        
+                                   <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4 class="card-title mb-0">Syarat Pengajuan Surat</h4>
+    <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+</div>
+
+<p class="card-text">Berikut adalah syarat yang harus dipenuhi untuk mengajukan surat:</p>
+
                         <!-- Surat Keterangan Usaha -->
                         <div class="card mb-3" style="border: 1px solid #ccc; border-radius: 10px;">
                             <div class="card-body">
@@ -339,5 +360,18 @@ $koneksi->close();
     <script src="./plugins/chartist/js/chartist.min.js"></script>
     <script src="./plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
     <script src="./js/dashboard/dashboard-1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'info',
+            iconColor: '#C51F1A',
+            title: 'Perhatian',
+            html: 'Jika sudah mendownload formulir dan mengisi formulir,<br>untuk pengajuan surat silahkan ke pengajuan surat.',
+            confirmButtonText: 'Mengerti',
+            confirmButtonColor: '#3085d6'
+        });
+    });
+</script>
 </body>
 </html>

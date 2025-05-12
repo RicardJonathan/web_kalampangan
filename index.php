@@ -347,37 +347,70 @@ $result_struktur = $stmt_struktur->get_result();
         </div>
     </div>
     
-    <div class="berita_home">
-        <div class="container">
-            <div class="home_heading text-center">
-                <span class="subheading">Struktur</span>
+   <div class="berita_home">
+    <div class="container">
+        <div class="home_heading text-center">
+            <span class="subheading">Struktur</span>
             <h2>Kelurahan Kelampangan</h2>
         </div>
         <div class="struktur_content">
             <div class="row">
-            <?php while($data = mysqli_fetch_assoc($result_struktur)) { ?>
+                <?php
+                // Tampilkan Lurah terlebih dahulu
+                mysqli_data_seek($result_struktur, 0); // Kembali ke awal result set
+                while ($data = mysqli_fetch_assoc($result_struktur)) {
+                    if (strtolower($data['posisi']) == 'lurah kalampangan') {
+                ?>
+                        <div class="col-md-4 d-flex">
+                            <div class="struktur_card w-100">
+                                <div class="struktur_img">
+                                    <img src="images/fotostruktur/<?php echo $data['foto']; ?>" class="img-fluid" alt="">
+                                </div>
+                                <br>
+                                <div class="struktur_nama">
+                                    <h5 class="text-capitalize"><?php echo $data['nama']; ?></h5>
+                                </div>
+                                <div class="struktur_posisi">
+                                    <p class="text-justify-center">
+                                        <?php echo substr(strip_tags($data['posisi']), 0, 200); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                <?php
+                    }
+                }
 
-                <div class="col-md-4 d-flex">
-                    <div class="struktur_card w-100">
-                        <div class="struktur_img">
-                            <img src="images/fotostruktur/<?php echo $data['foto']; ?>" class="img-fluid" alt="">
+                // Tampilkan yang lainnya
+                mysqli_data_seek($result_struktur, 0);
+                while ($data = mysqli_fetch_assoc($result_struktur)) {
+                    if (strtolower($data['posisi']) != 'lurah kalampangan') {
+                ?>
+                        <div class="col-md-4 d-flex">
+                            <div class="struktur_card w-100">
+                                <div class="struktur_img">
+                                    <img src="images/fotostruktur/<?php echo $data['foto']; ?>" class="img-fluid" alt="">
+                                </div>
+                                <br>
+                                <div class="struktur_nama">
+                                    <h5 class="text-capitalize"><?php echo $data['nama']; ?></h5>
+                                </div>
+                                <div class="struktur_posisi">
+                                    <p class="text-justify-center">
+                                        <?php echo substr(strip_tags($data['posisi']), 0, 200); ?>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <br>
-                        <div class="struktur_nama">
-                            <h5 class="text-capitalize"><?php echo $data['nama']; ?></h5>
-                        </div>
-                        <div class="struktur_posisi">
-                            <p class="text-justify-center">
-                                <?php echo substr(strip_tags($data['posisi']), 0, 200); ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <?php } ?>
+                <?php
+                    }
+                }
+                ?>
             </div>
         </div>
     </div>
 </div>
+
 
 
 

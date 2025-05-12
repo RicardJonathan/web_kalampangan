@@ -74,6 +74,22 @@ $koneksi->close();
                         <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Laporan Surat</span>
                         </a>
                     </li>
+                    <li class="nav-label">Konten</li>
+                    <li>
+                        <a href="./pengumuman/pengumuman.php" aria-expanded="false">
+                        <i class="fa-solid fa-pen-to-square menu-icon"></i><span class="nav-text">Pengumuman</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./kegiatan/kegiatan.php" aria-expanded="false">
+                        <i class="fa-solid fa-file-pdf menu-icon"></i><span class="nav-text">Kegiatan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./struktur/struktur.php" aria-expanded="false">
+                        <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Struktur</span>
+                        </a>
+                    </li>
                     <li class="nav-label">Lainnya</li>
                         <li>
                             <a href="logout.php" aria-expanded="false" class="<?php echo basename($_SERVER['PHP_SELF']) == 'logout.php' ? 'active' : ''; ?>">
