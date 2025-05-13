@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2025 at 05:24 PM
+-- Generation Time: May 13, 2025 at 11:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -112,7 +112,7 @@ CREATE TABLE `lurah` (
 --
 
 INSERT INTO `lurah` (`id`, `nama`, `nip`, `pangkat`, `golongan`, `ttd`, `username`, `password`) VALUES
-(1, 'ibu lurah', '1987654321', 'Pangkat Lurah', 'Golongan Lurah', 'ttd_image.jpg', 'lurah', 'lurah1234');
+(1, 'ibu lurah', '19876543213221', 'Pangkat Lurah', 'Golongan Lurah', 'ttd_image.jpg', 'lurah', 'lurah1234');
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ INSERT INTO `lurah` (`id`, `nama`, `nip`, `pangkat`, `golongan`, `ttd`, `usernam
 
 CREATE TABLE `pengajuan_surat` (
   `id` int(11) NOT NULL,
-  `jenis_surat` enum('Surat Keterangan Tidak Mampu','Surat Keterangan Kematian','Surat Keterangan Kelahiran','Surat Keterangan Pindah','Surat Keterangan Belum Menikah','Surat Keterangan Untuk Menikah','Pengajuan PBB Baru','Surat Keterangan Ahli Waris','Surat Keterangan Berkelakuan Baik','Surat Keterangan Domisili') NOT NULL,
+  `jenis_surat` enum('SURAT KETERANGAN USAHA (SKU)','SURAT KETERANGAN TIDAK MAMPU (SKTM)','SURAT KETERANGAN KEMATIAN','SURAT KETERANGAN KELAHIRAN','SURAT KETERANGAN PINDAH','SURAT KETERANGAN BELUM MENIKAH','SURAT KETERANGAN UNTUK MENIKAH','PENGAJUAN PBB BARU','SURAT KETERANGAN AHLI WARIS','SURAT KETERANGAN BERKELAKUAN BAIK','SURAT KETERANGAN DOMISILI') NOT NULL,
   `user_id` int(11) NOT NULL,
   `nama_pengaju` varchar(255) NOT NULL,
   `email_pengaju` varchar(100) NOT NULL,
@@ -134,26 +134,27 @@ CREATE TABLE `pengajuan_surat` (
   `keterangan` text DEFAULT NULL,
   `foto_ktp` varchar(255) DEFAULT NULL,
   `foto_kk` varchar(255) DEFAULT NULL,
-  `foto_formulir` varchar(255) DEFAULT NULL
+  `foto_formulir` varchar(255) DEFAULT NULL,
+  `file_surat` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pengajuan_surat`
 --
 
-INSERT INTO `pengajuan_surat` (`id`, `jenis_surat`, `user_id`, `nama_pengaju`, `email_pengaju`, `no_telepon`, `alamat`, `tgl_pengajuan`, `status`, `alasan_penolakan`, `keterangan`, `foto_ktp`, `foto_kk`, `foto_formulir`) VALUES
-(29, 'Surat Keterangan Domisili', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Diajukan', NULL, 'sfsaf', 'Image_1.jpg', 'Image_134.jpg', 'Image_131.png'),
-(32, 'Surat Keterangan Domisili', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Diajukan', NULL, 'sfsaf', 'Image_1.jpg', 'Image_134.jpg', 'Image_131.png'),
-(34, 'Surat Keterangan Berkelakuan Baik', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'zdffd', 'Image_2.jpg', 'Image_4.jpg', 'Image_7.jpg'),
-(35, 'Surat Keterangan Kelahiran', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'asaas', 'Image_2.jpg', 'Image_132.jpg', 'Image_6.jpg'),
-(36, 'Surat Keterangan Pindah', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'sss', 'Image_134.jpg', 'Image_5.jpg', 'Image_5.jpg'),
-(37, '', 1, 'user1', 'user1@example.com', '081234567890', 'Jln.baru', '2025-04-30', 'Menunggu', NULL, 'asa', 'Image_133.png', 'Image_136.jpg', 'Image_132.jpg'),
-(38, 'Surat Keterangan Kematian', 2, 'user2', 'user2@gmail.com', '082122', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'eeeea', 'Image_135.jpg', 'Image_135.jpg', 'Image_3.jpg'),
-(41, 'Pengajuan PBB Baru', 2, 'user2', 'user2@gmail.com', '082122', 'Jln.baru', '2025-05-01', 'Diajukan', NULL, 'ssss', 'Image_135.jpg', 'Image_134.jpg', 'Image_3.jpg'),
-(42, 'Surat Keterangan Untuk Menikah', 2, 'user2', 'user2@gmail.com', '082122', 'rta milono', '2025-05-01', 'Verifikasi Lurah', NULL, 'aa', 'Image_134.jpg', 'Image_134.jpg', 'Image_136.jpg'),
-(44, '', 2, 'user2', 'user2@gmail.com', '082122', 'ss', '2025-05-01', 'Diajukan', NULL, 'ss', 'Image_132.jpg', 'Image_133.png', 'Image_2.jpg'),
-(45, 'Surat Keterangan Kelahiran', 2, 'user2', 'user2@gmail.com', '082122', 'asdasd', '2025-05-01', 'Menunggu', NULL, 'sdsadsa', 'Image_3.jpg', 'Image_131.png', 'Image_3.jpg'),
-(46, 'Surat Keterangan Kematian', 2, 'user2', 'user2@gmail.com', '082122', 'aaaa', '2025-05-11', 'Menunggu', NULL, 'czczc', 'Image_136.jpg', 'Image_136.jpg', 'Image_135.jpg');
+INSERT INTO `pengajuan_surat` (`id`, `jenis_surat`, `user_id`, `nama_pengaju`, `email_pengaju`, `no_telepon`, `alamat`, `tgl_pengajuan`, `status`, `alasan_penolakan`, `keterangan`, `foto_ktp`, `foto_kk`, `foto_formulir`, `file_surat`) VALUES
+(29, 'SURAT KETERANGAN DOMISILI', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Diajukan', NULL, 'sfsaf', 'Image_1.jpg', 'Image_134.jpg', 'Image_131.png', NULL),
+(32, 'SURAT KETERANGAN BELUM MENIKAH', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Verifikasi Lurah', NULL, 'sfsaf', 'Image_1.jpg', 'Image_134.jpg', 'Image_131.png', '1747127959_Metodologi_Agile_dan_SCRUM_dalam_Pengemb.pdf'),
+(34, 'SURAT KETERANGAN BERKELAKUAN BAIK', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'zdffd', 'Image_2.jpg', 'Image_4.jpg', 'Image_7.jpg', NULL),
+(35, 'SURAT KETERANGAN KELAHIRAN', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'asaas', 'Image_2.jpg', 'Image_132.jpg', 'Image_6.jpg', NULL),
+(36, 'SURAT KETERANGAN PINDAH', 1, 'user1', 'user1@example.com', '081234567890', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'sss', 'Image_134.jpg', 'Image_5.jpg', 'Image_5.jpg', NULL),
+(37, 'SURAT KETERANGAN KEMATIAN', 1, 'user1', 'user1@example.com', '081234567890', 'Jln.baru', '2025-04-30', 'Menunggu', NULL, 'asa', 'Image_133.png', 'Image_136.jpg', 'Image_132.jpg', NULL),
+(38, 'SURAT KETERANGAN KEMATIAN', 2, 'user2', 'user2@gmail.com', '082122', 'rta milono', '2025-04-30', 'Menunggu', NULL, 'eeeea', 'Image_135.jpg', 'Image_135.jpg', 'Image_3.jpg', NULL),
+(41, 'SURAT KETERANGAN KEMATIAN', 2, 'user2', 'user2@gmail.com', '082122', 'Jln.baru', '2025-05-01', 'Verifikasi Lurah', NULL, 'ssss', 'Image_135.jpg', 'Image_134.jpg', 'Image_3.jpg', '1747127906_173-Article_Text-567-1-10-20211206.pdf'),
+(42, 'SURAT KETERANGAN UNTUK MENIKAH', 2, 'user2', 'user2@gmail.com', '082122', 'rta milono', '2025-05-01', '', 'ad', 'aa', 'Image_134.jpg', 'Image_134.jpg', 'Image_136.jpg', NULL),
+(44, 'SURAT KETERANGAN USAHA (SKU)', 2, 'user2', 'user2@gmail.com', '082122', 'ss', '2025-05-01', 'Diterima', NULL, 'ss', 'Image_132.jpg', 'Image_133.png', 'Image_2.jpg', '44_surat_1747057629.pdf'),
+(45, 'SURAT KETERANGAN KELAHIRAN', 2, 'user2', 'user2@gmail.com', '082122', 'asdasd', '2025-05-01', 'Menunggu', NULL, 'sdsadsa', 'Image_3.jpg', 'Image_131.png', 'Image_3.jpg', NULL),
+(46, 'SURAT KETERANGAN KEMATIAN', 2, 'user2', 'user2@gmail.com', '082122', 'aaaa', '2025-05-11', 'Menunggu', NULL, 'czczc', 'Image_136.jpg', 'Image_136.jpg', 'Image_135.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -220,7 +221,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `nama`, `nik`, `username`, `no_telepon`, `email`, `password`) VALUES
 (1, 'user1', '12345678', 'user11', '081234567890', 'user1@example.com', '1234'),
-(2, 'user2', '21212211', 'user2', '082122', 'user2@gmail.com', '$2y$10$9BBKyAWHoa5i5CLLsdUp/.hhXO5OAKPFLdZ0xgvtgAJBWEZC1TQOq'),
+(2, 'user2', '21212211', 'user2', '082122221', 'user2@gmail.com', '$2y$10$9BBKyAWHoa5i5CLLsdUp/.hhXO5OAKPFLdZ0xgvtgAJBWEZC1TQOq'),
 (4, 'user4', '112221', 'user4', '08124443', 'user4@gmail.com', '$2y$10$cp2mJM9zbOU2z2AO7C/pK.TDV/IaF.E6DcZrwps7ryh8VFVRAePpS');
 
 --
