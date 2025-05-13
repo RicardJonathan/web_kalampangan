@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-        <?php include 'sidebarUser.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
 
         <!-- Content -->
         <div class="content-body">
@@ -192,11 +192,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php if ($row['foto_formulir']): ?>
                                     <img src="uploads/<?php echo $row['foto_formulir']; ?>" width="100">
                                 <?php endif; ?>
+                                
+                                
+                                
                             <div class="form-group text-right">
                  <!-- Update Button -->
                 <button type="submit" class="btn btn-primary">Update</button>
                  <!-- Cancel Button -->
-                    <a href="pengajuan_surat.php" class="btn btn-secondary ml-2">Cancel</a>
+                    <a href="surat.php" class="btn btn-secondary ml-2">Cancel</a>
                      </div>
 
                         </form>

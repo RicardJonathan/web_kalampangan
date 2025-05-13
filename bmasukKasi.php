@@ -127,7 +127,7 @@ $koneksi->close();
                             <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
-                                        <li><a href="profile_admin.php"><i class="icon-user"></i> Profile</a></li>
+                                        <li><a href="profile_kasi.php"><i class="icon-user"></i> Profile</a></li>
                                         <li><a href="logout.php"><i class="icon-key"></i> Logout</a></li>
                                     </ul>
                                 </div>

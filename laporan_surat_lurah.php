@@ -1,55 +1,84 @@
 <?php
 session_start();
-include 'config.php';
+include 'config.php'; // Koneksi ke database
 
-// Cek login
+// Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
-    header("Location: page-login.php");
+    header("Location: page-login.php"); // Arahkan ke halaman login jika belum login
     exit();
 }
 
-// Cek admin
-$user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'";
+// Cek apakah pengguna yang login ada di tabel admin
+$user_id = $_SESSION['id']; // ID pengguna yang login
+
+$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
+    // Jika tidak ada di tabel lurah, arahkan ke halaman error
     header("Location: page-error-400.php");
     exit();
 }
 
-// Ambil data pengajuan_surat yang diterima
-$query = "SELECT pengajuan_surat.*, user.nik, user.nama
-          FROM pengajuan_surat
-          INNER JOIN user ON pengajuan_surat.user_id = user.id
-          WHERE pengajuan_surat.status = 'diterima' 
-          ORDER BY pengajuan_surat.id DESC";
-$result = mysqli_query($koneksi, $query);
+// Tangkap filter tahun dari URL jika ada
+$tahun_filter = isset($_GET['tahun']) ? $_GET['tahun'] : '';
 
-if (!$result) {
-    die("Query failed: " . mysqli_error($koneksi));
+// Query untuk mengambil daftar tahun dari kolom tgl_pengajuan
+$query_tahun = "SELECT DISTINCT YEAR(tgl_pengajuan) AS tahun FROM pengajuan_surat ORDER BY tahun DESC";
+$result_tahun = mysqli_query($koneksi, $query_tahun);
+
+// Query utama untuk data pengajuan_surat dengan filter tahun jika ada
+$query = "SELECT 
+            user.nik, 
+            user.nama, 
+            YEAR(pengajuan_surat.tgl_pengajuan) AS tahun,
+            COUNT(*) AS total_pengajuan_surat 
+          FROM pengajuan_surat 
+          INNER JOIN user ON pengajuan_surat.user_id = user.id";
+
+// Tambahkan filter tahun jika diterapkan
+if ($tahun_filter) {
+    $query .= " WHERE YEAR(pengajuan_surat.tgl_pengajuan) = '$tahun_filter'";
 }
 
-$koneksi->close();
+$query .= " GROUP BY user.id, YEAR(pengajuan_surat.tgl_pengajuan) 
+            ORDER BY tahun DESC, total_pengajuan_surat DESC";
+
+$result = mysqli_query($koneksi, $query);
+
+// Periksa jika query gagal
+if (!$result || !$result_tahun) {
+    die("Query gagal: " . mysqli_error($koneksi));
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>DPKUKMP</title>
+    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
+    <!-- Custom Stylesheet -->
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <style>
-        .table, .table th, .table td {
+        /* Menghilangkan border dari tabel */
+        .table,
+        .table th,
+        .table td {
             border: none !important;
         }
+        /* Padding dan text-align untuk header dan data tabel */
         .table th, .table td {
             padding: 12px 15px;
             text-align: left;
+        }
+        .table tbody tr {
+            border-bottom: none;
         }
         .table tbody tr:hover {
             background-color: #f1f1f1;
@@ -61,13 +90,13 @@ $koneksi->close();
         }
         .table th {
             color: #F4F6FF;
-            background-color: #7571F9 !important;
             font-size: 16px;
+            background-color: #7571F9 !important;
         }
         .table td {
             color: #3C3D37;
-            background-color: #f9f9f9;
             font-size: 14px;
+            background-color: #f9f9f9;
             border-bottom: 1px solid #ddd;
         }
         .table tfoot th {
@@ -75,22 +104,27 @@ $koneksi->close();
             color: #333;
             font-weight: bold;
         }
+        .table-bordered {
+            border: 1px solid #ddd;
+        }
         .table-responsive {
             overflow-x: auto;
         }
     </style>
 </head>
-
 <body>
+    <!-- Preloader -->
     <div id="preloader">
         <div class="loader">
             <svg class="circular" viewBox="25 25 50 50">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" />
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
             </svg>
         </div>
     </div>
 
+    <!-- Main Wrapper -->
     <div id="main-wrapper">
+        <!-- Nav Header -->
         <div class="nav-header">
             <div class="brand-logo">
                 <div class="logo-container">
@@ -98,13 +132,13 @@ $koneksi->close();
                         <img src="images/logopky.png" alt="">
                     </div>
                     <div class="brand-title">
-                        <h4>Kelurahan Kalampangan<br> PALANGKA RAYA</h4>
+                        <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="header">
+        <!-- Header -->
+        <div class="header">    
             <div class="header-content clearfix">
                 <div class="nav-control">
                     <div class="hamburger">
@@ -116,7 +150,9 @@ $koneksi->close();
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <img src="images/user-ikon.jpg" height="40" width="40" alt="">
-                                <span class="ml-1" style="font-size: 15px; color: #494949;"><?php echo $_SESSION['username']; ?></span> 
+                                <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;">
+                                    <?php echo $_SESSION['username']; ?>
+                                </span> 
                             </div>
                             <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
@@ -131,39 +167,56 @@ $koneksi->close();
                 </div>
             </div>
         </div>
+        <!-- Sidebar -->
+        <?php include 'sidebar_lurah.php'; ?>
 
-        <?php include 'sidebar_admin.php'; ?>
-
+        <!-- Content Body -->
         <div class="content-body">
             <div class="row page-titles mx-0">
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="#">Surat Cuti</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Laporan Pengajuan Surat</a></li>
                     </ol>
                 </div>
             </div>
-
+            <!-- Container -->
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Data Pengajuan Surat</h4>
+                                <h4 class="card-title">Data Laporan Pengajuan Surat</h4>
+                                <div class="d-flex justify-content-end">
+                                    <!-- Form Filter Tahun -->
+                                    <form action="" method="get" class="d-flex justify-content-end mb-3 mr-4">
+                                        <label for="tahun" class="mr-2">Filter Tahun:</label>
+                                        <select name="tahun" id="tahun" class="form-control w-auto" onchange="this.form.submit()">
+                                            <option value="">Semua Tahun</option>
+                                            <?php
+                                            while ($row_tahun = mysqli_fetch_assoc($result_tahun)) {
+                                                $selected = ($row_tahun['tahun'] == $tahun_filter) ? 'selected' : '';
+                                                echo "<option value='{$row_tahun['tahun']}' $selected>{$row_tahun['tahun']}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </form>
+                                    <!-- Tombol untuk cetak laporan -->
+                                    <div class="d-flex justify-content-center align-items-center mb-3">
+                                        <a href="cetak_laporan_surat.php?tahun=<?php echo $tahun_filter; ?>" class="btn btn-success">
+                                            <i class="fa fa-print"></i> Cetak Laporan
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered zero-configuration">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Jenis Surat</th>
-                                                <th>User ID</th>
-                                                <th>Nama Pengaju</th>
-                                                <th>Email</th>
-                                                <th>No Telepon</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal</th>
-                                                <th>Keterangan</th>
-                                                <th>Aksi</th>
+                                                <th>No.</th>
+                                                <th>NIK</th>
+                                                <th>Nama</th>
+                                                <th>Total Pengajuan</th>
+                                                <th>Tahun</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -171,73 +224,44 @@ $koneksi->close();
                                             $nomor = 1;
                                             if (mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_assoc($result)) {
-                                                    $filePath = 'uploads/surat/' . $row['file_surat'];
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $nomor++ . '.'; ?></td>
-                                                <td><?php echo $row['jenis_surat']; ?></td>
-                                                <td><?php echo $row['nik']; ?></td>
-                                                <td><?php echo $row['nama']; ?></td>
-                                                <td><?php echo $row['email_pengaju']; ?></td>
-                                                <td><?php echo $row['no_telepon']; ?></td>
-                                                <td><?php echo $row['alamat']; ?></td>
-                                                <td>
-                                                    <?php 
-                                                    $tanggal = strtotime($row['tgl_pengajuan']);
-                                                    $bulan = [
-                                                        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                                                    ];
-                                                    echo date('d', $tanggal) . ' ' . $bulan[date('n', $tanggal)] . ' ' . date('Y', $tanggal);
                                                     ?>
-                                                </td>
-                                                <td><?php echo $row['keterangan']; ?></td>
-                                                <td>
-                                                    <?php if (!empty($row['file_surat']) && file_exists($filePath)) { ?>
-                                                        <a href="<?php echo $filePath; ?>" target="_blank" class="btn btn-success btn-sm">
-                                                            <i class="fa fa-print"></i> Cetak Surat
-                                                        </a>
-                                                    <?php } else { ?>
-                                                        <button type="button" class="btn btn-danger btn-sm" onclick="alert('File surat tidak ditemukan!');">
-                                                            <i class="fa fa-exclamation-triangle"></i> File Hilang
-                                                        </button>
-                                                    <?php } ?>
-                                                </td>
-                                            </tr>
-                                            <?php
+                                                    <tr>
+                                                        <td><?php echo $nomor++ . '.'; ?></td>
+                                                        <td><?php echo $row['nik']; ?></td>
+                                                        <td><?php echo $row['nama']; ?></td>
+                                                        <td><?php echo $row['total_pengajuan_surat']; ?></td>
+                                                        <td><?php echo $row['tahun']; ?></td>
+                                                    </tr>
+                                                    <?php 
                                                 }
                                             } else {
-                                            ?>
-                                            <tr>
-                                                <td colspan="10" class="text-center">Data pengajuan surat masih kosong</td>
-                                            </tr>
+                                                ?>
+                                                <tr>
+                                                    <td colspan="5" class="text-center">Data pengajuan surat masih kosong</td>
+                                                </tr>
                                             <?php } ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Jenis Surat</th>
-                                                <th>User ID</th>
-                                                <th>Nama Pengaju</th>
-                                                <th>Email</th>
-                                                <th>No Telepon</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal</th>
-                                                <th>Keterangan</th>
-                                                <th>Aksi</th>
+                                                <th>No.</th>
+                                                <th>NIK</th>
+                                                <th>Nama</th>
+                                                <th>Total Pengajuan</th>
+                                                <th>Tahun</th>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            </div><!-- End Card Body -->
+                        </div><!-- End Card -->
+                    </div><!-- End Col -->
+                </div><!-- End Row -->
+            </div><!-- End Container -->
+        </div><!-- End Content Body -->
+    </div><!-- End Main Wrapper -->
+</body>
+</html>
 
-    </div>
-            <!-- #/ container -->
         </div>
         <!--**********************************
             Content body end
@@ -249,7 +273,7 @@ $koneksi->close();
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
+            <p class="mb-0">© <span id="current-year"></span> Kelurahan  Kalampangan Palangka Raya. All rights reserved.</p>
             </div>
         </div>
         <!--**********************************

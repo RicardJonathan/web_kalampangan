@@ -19,36 +19,29 @@ if ($result_user->num_rows == 0) {
     header("Location: page-error-403.php"); // Arahkan ke halaman error
     exit();
 }
+// Total pengajuan surat
+$stmt = $koneksi->prepare("SELECT COUNT(*) AS total_surat FROM pengajuan_surat");
+$stmt->execute();
+$result = $stmt->get_result();
+$totalPengajuanSurat = $result->fetch_assoc()['total_surat'] ?? 0;
 
-// Query untuk menghitung jumlah setiap jenis surat
-$surat_types = [
-    'Surat Keterangan Tidak Mampu' => 'SKTM',
-    'Surat Keterangan Kematian' => 'SKKM',
-    'Surat Keterangan Kelahiran' => 'SKKL',
-    'Surat Keterangan Pindah' => 'SKP',
-    'Surat Keterangan Belum Menikah' => 'SKBM',
-    'Surat Keterangan Untuk Menikah' => 'SKUM',
-    'Pengajuan PBB Baru' => 'PBB',
-    'Surat Keterangan Ahli Waris' => 'SKAW',
-    'Surat Keterangan Berkelakuan Baik' => 'SKBB',
-    'Surat Keterangan Domisili' => 'SKD'
-];
+// Surat menunggu
+$stmt = $koneksi->prepare("SELECT COUNT(*) AS total_menunggu FROM pengajuan_surat WHERE status = 'Diajukan'");
+$stmt->execute();
+$result = $stmt->get_result();
+$totalSuratMenunggu = $result->fetch_assoc()['total_menunggu'] ?? 0;
 
-$surat_counts = [];
+// Surat diterima
+$stmt = $koneksi->prepare("SELECT COUNT(*) AS total_diterima FROM pengajuan_surat WHERE status = 'Diterima'");
+$stmt->execute();
+$result = $stmt->get_result();
+$totalSuratDiterima = $result->fetch_assoc()['total_diterima'] ?? 0;
 
-foreach ($surat_types as $type_name => $type_code) {
-    // Menghitung jumlah pengajuan untuk jenis surat tertentu
-    $sql_count = "SELECT COUNT(*) AS jumlah FROM pengajuan_surat WHERE jenis_surat = '$type_code'";
-    $result_count = $koneksi->query($sql_count);
-    
-    if ($result_count->num_rows > 0) {
-        $row = $result_count->fetch_assoc();
-        $surat_counts[$type_name] = $row['jumlah'];
-    } else {
-        $surat_counts[$type_name] = 0;
-    }
-}
-
+// Surat ditolak
+$stmt = $koneksi->prepare("SELECT COUNT(*) AS total_ditolak FROM pengajuan_surat WHERE status = 'Ditolak'");
+$stmt->execute();
+$result = $stmt->get_result();
+$totalSuratDitolak = $result->fetch_assoc()['total_ditolak'] ?? 0;
 // Menutup koneksi
 $koneksi->close();
 ?>
@@ -122,44 +115,38 @@ $koneksi->close();
 
         <?php include 'sidebarUser.php'; ?>
 
-        <div class="content-body">
+       <!-- Content body -->
+       <div class="content-body">
             <div class="container-fluid mt-3">
                 <div class="row">
-                    <?php
-                    $dataSurat = [
-                        ['nama' => 'Surat Keterangan Tidak Mampu', 'jumlah' => $surat_counts['Surat Keterangan Tidak Mampu'], 'bg' => '#80DEEA', 'border' => '#26C6DA', 'text' => '#004D40', 'icon' => 'fa-file'],
-                        ['nama' => 'Surat Keterangan Kematian', 'jumlah' => $surat_counts['Surat Keterangan Kematian'], 'bg' => '#7E8EF1', 'border' => '#091057', 'text' => '#091057', 'icon' => 'fa-cross'],
-                        ['nama' => 'Surat Keterangan Kelahiran', 'jumlah' => $surat_counts['Surat Keterangan Kelahiran'], 'bg' => '#FFEB3B', 'border' => '#FBC02D', 'text' => '#F57F17', 'icon' => 'fa-baby'],
-                        ['nama' => 'Surat Keterangan Pindah', 'jumlah' => $surat_counts['Surat Keterangan Pindah'], 'bg' => '#FF7043', 'border' => '#E64A19', 'text' => '#BF360C', 'icon' => 'fa-exchange-alt'],
-                        ['nama' => 'Surat Keterangan Belum Menikah', 'jumlah' => $surat_counts['Surat Keterangan Belum Menikah'], 'bg' => '#8D6E63', 'border' => '#5D4037', 'text' => '#3E2723', 'icon' => 'fa-ring'],
-                        ['nama' => 'Surat Keterangan Untuk Menikah', 'jumlah' => $surat_counts['Surat Keterangan Untuk Menikah'], 'bg' => '#FF8A65', 'border' => '#D84315', 'text' => '#BF360C', 'icon' => 'fa-gift'],
-                        ['nama' => 'Pengajuan PBB Baru', 'jumlah' => $surat_counts['Pengajuan PBB Baru'], 'bg' => '#9CCC65', 'border' => '#7CB342', 'text' => '#33691E', 'icon' => 'fa-home'],
-                        ['nama' => 'Surat Keterangan Ahli Waris', 'jumlah' => $surat_counts['Surat Keterangan Ahli Waris'], 'bg' => '#FF9800', 'border' => '#F57C00', 'text' => '#E65100', 'icon' => 'fa-book'],
-                        ['nama' => 'Surat Keterangan Berkelakuan Baik', 'jumlah' => $surat_counts['Surat Keterangan Berkelakuan Baik'], 'bg' => '#81C784', 'border' => '#388E3C', 'text' => '#1B5E20', 'icon' => 'fa-shield-alt'],
-                        ['nama' => 'Surat Keterangan Domisili', 'jumlah' => $surat_counts['Surat Keterangan Domisili'], 'bg' => '#FFEB3B', 'border' => '#FBC02D', 'text' => '#F57F17', 'icon' => 'fa-map-marker-alt']
-                    ];
-
-                    foreach ($dataSurat as $surat) {
-                        echo "
-                        <div class='col-md-4'>
-                            <div class='card' style='background-color: {$surat['bg']}'>
-                                <div class='card-body'>
-                                    <div class='d-flex align-items-center'>
-                                        <i class='fa {$surat['icon']}' style='font-size: 30px; color: {$surat['text']}'></i>
-                                        <div class='ml-3'>
-                                            <h5 class='card-title' style='color: {$surat['border']}'>{$surat['nama']}</h5>
-                                            <p class='card-text' style='color: {$surat['text']}'>Jumlah: {$surat['jumlah']}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card" style="background-color: #7E8EF1; border: 1px solid #F44336; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                            <div class="card-body">
+                                <h3 class="card-title" style="color: #091057; font-weight: normal;">Menunggu Persetujuan</h3>
+                                <h2 style="color: #091057; font-weight: normal;"><?php echo $totalSuratMenunggu; ?> Pengajuan</h2>
+                                <span class="float-right display-5 opacity-5" style="color: #091057;"><i class="fa fa-clock"></i></span>
                             </div>
                         </div>
-                        ";
-                    }
-                    ?>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card" style="background-color: #C8E6C9; border: 1px solid #388E3C; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                            <div class="card-body">
+                                <h3 class="card-title" style="color: #1B5E20; font-weight: normal;">Pengajuan Diterima</h3>
+                                <h2 style="color: #1B5E20; font-weight: normal;"><?php echo $totalSuratDiterima; ?> Pengajuan</h2>
+                                <span class="float-right display-5 opacity-5" style="color: #388E3C;"><i class="fa fa-check-circle"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card" style="background-color: #FFEBEE; border: 1px solid #F44336; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                            <div class="card-body">
+                                <h3 class="card-title" style="color: #D32F2F; font-weight: normal;">Pengajuan Ditolak</h3>
+                                <h2 style="color: #D32F2F; font-weight: normal;"><?php echo $totalSuratDitolak; ?> Pengajuan</h2>
+                                <span class="float-right display-5 opacity-5" style="color: #F44336;"><i class="fa fa-times-circle"></i></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        
             <!-- Syarat Pengajuan Surat Section Below -->
             <div class="row mt-4">
                 <div class="col-lg-12">

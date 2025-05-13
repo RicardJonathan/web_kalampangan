@@ -1,7 +1,13 @@
 <?php
 session_start();
-include 'config.php'; // File koneksi database
+include 'config.php';
 include './profileUser/edit.php';
+
+// Pastikan pengguna telah login
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +17,8 @@ include './profileUser/edit.php';
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
-    <!-- Favicon icon -->
+    <title>Kelurahan Kalampangan</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
-    <!-- Custom Stylesheet -->
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
@@ -24,19 +28,17 @@ include './profileUser/edit.php';
             padding-top: 20px;
             padding-left: 30px;
         }
+
         .card-table {
             padding-left: 40px;
             padding-right: 40px;
         }
     </style>
-
 </head>
 
 <body>
 
-    <!--*******************
-        Preloader start
-    ********************-->
+    <!-- Preloader -->
     <div id="preloader">
         <div class="loader">
             <svg class="circular" viewBox="25 25 50 50">
@@ -44,41 +46,27 @@ include './profileUser/edit.php';
             </svg>
         </div>
     </div>
-    <!--*******************
-        Preloader end
-    ********************-->
 
-    
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
+    <!-- Main wrapper -->
     <div id="main-wrapper">
 
-        <!--**********************************
-            Nav header start
-        ***********************************-->
+        <!-- Nav Header -->
         <div class="nav-header">
             <div class="brand-logo">
-                    <div class="logo-container">
-                        <div class="logo-pky">
-                            <img src="images/logopky.png" alt="">
-                        </div>
-                        <div class="brand-title">
-                            <h4>KELURAHAN KELAMPANGAN <br> PALANGKA RAYA</h4>
-                        </div>
+                <div class="logo-container">
+                    <div class="logo-pky">
+                        <img src="images/logopky.png" alt="">
                     </div>
+                    <div class="brand-title">
+                        <h4>KELURAHAN KELAMPANGAN <br> PALANGKA RAYA</h4>
+                    </div>
+                </div>
             </div>
         </div>
-        <!--**********************************
-            Nav header end
-        ***********************************-->
 
-        <!--**********************************
-            Header start
-        ***********************************-->
-        <div class="header">    
+        <!-- Header -->
+        <div class="header">
             <div class="header-content clearfix">
-                
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -87,17 +75,14 @@ include './profileUser/edit.php';
                 <div class="header-right">
                     <ul class="clearfix">
                         <li class="icons dropdown">
-                        <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <img src="images/user-ikon.jpg" height="40" width="40" alt="">
-                                <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
+                                <span class="ml-1" style="font-size: 15px; color: #494949;"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
                             </div>
-                            <div class="drop-down dropdown-profile   dropdown-menu">
+                            <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
-                                        <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i> <span>Profile</span></a>
-                                        </li>
-                                    
+                                        <li><a href="#"><i class="icon-user"></i> <span>Profile</span></a></li>
                                         <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
@@ -107,132 +92,88 @@ include './profileUser/edit.php';
                 </div>
             </div>
         </div>
-        <!--**********************************
-            Header end ti-comment-alt
-        ***********************************-->
 
-        <!--**********************************
-            Sidebar start
-        ***********************************-->
+        <!-- Sidebar -->
         <?php include 'sidebarUser.php'; ?>
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
+        <!-- Content body -->
         <div class="content-body">
-
             <div class="row page-titles mx-0">
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile Akun</a></li>
+                        <li class="breadcrumb-item"><a href="indexUser.php">Main Menu</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Profile Akun</a></li>
                     </ol>
                 </div>
             </div>
-            <!-- row -->
-    <div class="container mt-0">
-        <h4 class="text-primary mb-4">Profil Akun</h4>
-        <div class="card">
-            <div class="card-body">
-                <form method="POST" action="">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id'] ?? ''); ?>"> <!-- Menyimpan ID admin -->
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Nama Lengkap</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="nama" value="<?php echo htmlspecialchars($row['nama'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>NIP</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="nip" value="<?php echo htmlspecialchars($row['nip'] ?? ''); ?>" class="form-control" required>
-                        </div>
+
+            <div class="container">
+                <h4 class="text-primary mb-4">Profil Akun</h4>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id'] ?? ''); ?>">
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Nama Lengkap <span class="text-danger">*</span></label>
+                                    <input type="text" name="nama" class="form-control" value="<?php echo htmlspecialchars($row['nama'] ?? ''); ?>" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>NIK <span class="text-danger">*</span></label>
+                                    <input type="text" name="nik" class="form-control" value="<?php echo htmlspecialchars($row['nik'] ?? ''); ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Username <span class="text-danger">*</span></label>
+                                    <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($row['username'] ?? ''); ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Nomor Telepon <span class="text-danger">*</span></label>
+                                    <input type="text" name="no_telepon" class="form-control" value="<?php echo htmlspecialchars($row['no_telepon'] ?? ''); ?>" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Email <span class="text-danger">*</span></label>
+                                    <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($row['email'] ?? ''); ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Password <span class="text-danger">*</span></label>
+                                    <input type="password" name="password" class="form-control" value="<?php echo htmlspecialchars($row['password'] ?? ''); ?>" required>
+                                </div>
+                            </div>
+
+                            <a href="indexUser.php" class="btn btn-secondary">Batal</a>
+                            <button type="submit" class="btn btn-primary">Edit Akun</button>
+                        </form>
+
+                        <?php if (isset($error_message)): ?>
+                            <div class="mt-3 alert alert-danger"><?php echo htmlspecialchars($error_message); ?></div>
+                        <?php endif; ?>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Jabatan</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="jabatan" value="<?php echo htmlspecialchars($row['jabatan'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Pangkat</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="pangkat" value="<?php echo htmlspecialchars($row['pangkat'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Nomor Telepon</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="no_telepon" value="<?php echo htmlspecialchars($row['no_telepon'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Email</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="email" value="<?php echo htmlspecialchars($row['email'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Golongan</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="golongan" value="<?php echo htmlspecialchars($row['golongan'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Username</label>
-                            <span class="text-danger">*</span>
-                            <input type="text" name="username" value="<?php echo htmlspecialchars($row['username'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Password</label>
-                            <span class="text-danger">*</span>
-                            <input type="password" name="password" value="<?php echo htmlspecialchars($row['password'] ?? ''); ?>" class="form-control" required>
-                        </div>
-                    </div>
-                    <a href="indexUser.php" class="btn btn-secondary">Batal</a>
-                    <button class="btn btn-primary" type="submit">Edit Akun</button>
-                </form>
-                <?php if (isset($error_message)): ?>
-                    <p class="text-red-500"><?php echo $error_message; ?></p>
-                <?php endif; ?>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-            <!-- #/ container -->
-        </div>
-        <!--**********************************
-            Content body end
-        ***********************************-->
-        
-        
-        <!--**********************************
-            Footer start
-        ***********************************-->
+
+        <!-- Footer -->
         <div class="footer">
             <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
+                <p class="mb-0">© <span id="current-year"></span> Kelurahan Kalampangan Palangka Raya. All rights reserved.</p>
             </div>
         </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
+
     </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
 
-    <!--**********************************
-        Scripts
-    ***********************************-->
-
+    <!-- Scripts -->
     <script>
-    document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 
     <script src="plugins/common/common.min.js"></script>
@@ -244,9 +185,7 @@ include './profileUser/edit.php';
     <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
     <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
     <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 </body>
 

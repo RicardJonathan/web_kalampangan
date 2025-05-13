@@ -328,7 +328,7 @@ $koneksi->close();
                             <div class="btn-group" role="group">
                                 <!-- Edit Button: Only visible if the status is not 'Diajukan' -->
                                 <?php if ($row['status'] != 'Diajukan'): ?>
-                                    <a href="edit_pengajuan_surat.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
+                                    <a href="edit_pengajuan_surat_lurah.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
                                 <?php endif; ?>

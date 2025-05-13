@@ -55,12 +55,12 @@ $koneksi->close();
                         </a>
                     </li>
                     <li>
-                        <a href="surat_cuti.php" aria-expanded="false">
+                        <a href="arsip_surat_lurah.php" aria-expanded="false">
                         <i class="fa-solid fa-file-pdf menu-icon"></i><span class="nav-text">Surat</span>
                         </a>
                     </li>
                     <li>
-                        <a href="laporan_cuti.php" aria-expanded="false">
+                        <a href="laporan_surat_lurah.php" aria-expanded="false">
                         <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Laporan Surat</span>
                         </a>
                     </li>

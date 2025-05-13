@@ -8,9 +8,9 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-// Cek admin
+// Cek lurah
 $user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'";
+$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
@@ -132,7 +132,7 @@ $koneksi->close();
             </div>
         </div>
 
-        <?php include 'sidebar_admin.php'; ?>
+        <?php include 'sidebar_lurah.php'; ?>
 
         <div class="content-body">
             <div class="row page-titles mx-0">
@@ -213,20 +213,7 @@ $koneksi->close();
                                             </tr>
                                             <?php } ?>
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Jenis Surat</th>
-                                                <th>User ID</th>
-                                                <th>Nama Pengaju</th>
-                                                <th>Email</th>
-                                                <th>No Telepon</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal</th>
-                                                <th>Keterangan</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </tfoot>
+                                        
                                     </table>
                                 </div>
                             </div>

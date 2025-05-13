@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'config.php'; // File koneksi database
-include './profile/edit.php';
+include './kasi/edit.php';
 ?>
 
 <!DOCTYPE html>
@@ -113,7 +113,7 @@ include './profile/edit.php';
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar.php'; ?>
+        <?php include 'sidebar_kasi.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
