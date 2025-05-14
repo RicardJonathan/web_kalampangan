@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '..//config.php';
+include 'config.php';
 
 // Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
@@ -97,13 +97,13 @@ $koneksi->close();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
+    <title>Kelurahan Kalampangan</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="..//images/logopky.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- Custom Stylesheet -->
-    <link href="..//plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="..//css/style.css" rel="stylesheet">
-    <link href="..//css/styles.css" rel="stylesheet">
+    <link href="plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
     <style>
         /* Menghilangkan border dari tabel */
@@ -224,7 +224,7 @@ $koneksi->close();
             <div class="brand-logo">
                 <div class="logo-container">
                     <div class="logo-pky">
-                        <img src="..//images/logopky.png" alt="">
+                        <img src="images/logopky.png" alt="">
                     </div>
                     <div class="brand-title">
                         <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
@@ -251,7 +251,7 @@ $koneksi->close();
                     <ul class="clearfix">
                         <li class="icons dropdown">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
-                                <img src="..//images/user-ikon.jpg" height="40" width="40" alt="">
+                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
                                 <span class="ml-1"
                                     style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span>
                             </div>
@@ -259,10 +259,10 @@ $koneksi->close();
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="..//profile_admin.php"><i class="icon-user"></i>
+                                            <a href="profile_admin.php"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
-                                        <li><a href="..//logout.php"><i class="icon-key"></i> <span>Logout</span></a>
+                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -279,7 +279,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include '..//layouts/side.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -307,7 +307,7 @@ $koneksi->close();
 
                                 <h4 class="card-title">Data struktur</h4>
                                 <div class="d-flex justify-content-end mb-3">
-                                    <a href="../struktur/tambah_struktur.php"
+                                    <a href="tambah_struktur.php"
                                         class="btn btn-primary d-flex align-items-center" style="width: 140px;">
                                         <i class="fas fa-plus mr-2"></i>
                                         <span>Tambah Data</span>
@@ -334,7 +334,7 @@ $koneksi->close();
                                             <tr>
                                                 <td><?php echo $nomor++ . '.'; ?></td>
                                                 <td>
-                                                    <img src="../images/fotostruktur/<?php echo $row['foto']; ?>"
+                                                    <img src="./images/fotostruktur/<?php echo $row['foto']; ?>"
                                                         alt="Foto struktur"
                                                         style="width: 80px; height: auto; border-radius: 4px;">
                                                 </td>
@@ -344,7 +344,7 @@ $koneksi->close();
                                                 <td><?php echo date('H:i:s d-m-Y', strtotime($row['created_at'])); ?></td>
                                                 <td class="actions-cell">
                                                     <div class="btn-group" role="group" aria-label="Aksi">
-                                                        <a href="../struktur/edit_struktur.php?id=<?php echo $row['id']; ?>"
+                                                        <a href="edit_struktur.php?id=<?php echo $row['id']; ?>"
                                                             class="btn btn-primary btn-sm">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>
@@ -379,7 +379,7 @@ $koneksi->close();
                                                         <div class="modal-body">
                                                             <div class="mb-3"><strong>Foto:</strong>
                                                                 <p class="mb-0"> <img
-                                                                        src="../images/fotostruktur/<?php echo $row['foto']; ?>"
+                                                                        src="./images/fotostruktur/<?php echo $row['foto']; ?>"
                                                                         alt="Foto struktur"
                                                                         style="width: 80px; height: auto; border-radius: 4px;">
                                                                     </td>
@@ -461,15 +461,15 @@ $koneksi->close();
         }
     </script>
 
-    <script src="..//plugins/common/common.min.js"></script>
-    <script src="..//js/custom.min.js"></script>
-    <script src="..//js/settings.js"></script>
-    <script src="..//js/gleek.js"></script>
-    <script src="..//js/styleSwitcher.js"></script>
+    <script src="plugins/common/common.min.js"></script>
+    <script src="js/custom.min.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/gleek.js"></script>
+    <script src="js/styleSwitcher.js"></script>
 
-    <script src="..//plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="..//plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="..//plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config.php';
+include '..//config.php';
 
 if (!isset($_SESSION['id'])) {
     header("Location: page-login.php");
@@ -8,9 +8,9 @@ if (!isset($_SESSION['id'])) {
 }
 
 $user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
-$result_admin = $koneksi->query($sql_admin);
-if ($result_admin->num_rows == 0) {
+$sql_lurah = "SELECT * FROM lurah WHERE id = '$user_id'";
+$result_lurah = $koneksi->query($sql_lurah);
+if ($result_lurah->num_rows == 0) {
     header("Location: page-error-400.php");
     exit();
 }
@@ -76,13 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Kelurahan Kalampangan</title>
+    <title>DPKUKMP</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="..//images/logopky.png">
     <!-- Custom Stylesheet -->
-    <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="..//plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="..//css/style.css" rel="stylesheet">
+    <link href="..//css/styles.css" rel="stylesheet">
 
     <style>
         .card-title {
@@ -124,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="brand-logo">
                 <div class="logo-container">
                     <div class="logo-pky">
-                        <img src="images/logopky.png" alt="">
+                        <img src="..//images/logopky.png" alt="">
                     </div>
                     <div class="brand-title">
                         <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="clearfix">
                         <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
+                                <img src="..//images/user-ikon.jpg" height="40" width="40" alt="">
                                 <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
                             </div>
                             <div class="drop-down dropdown-profile dropdown-menu">
@@ -176,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include '..//sidebar_lurah.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengguna</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">User</a></li>
                     </ol>
                 </div>
             </div>
@@ -200,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                                <h4 class="card-title">Edit Data Pengguna</h4>
+                                <h4 class="card-title">Edit Data User</h4>
                             <div class="card-table">
 
                             <div class="form-validation">
@@ -250,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Update</button>
-                                        <a href="pengguna.php" class="btn btn-secondary">Cancel</a>
+                                        <a href="..//tambahpengguna/user.php" class="btn btn-secondary">Cancel</a>
                                     </div>
                                 </form>
                             </div>
@@ -294,15 +294,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 });
 </script>
 
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+    <script src="..//plugins/common/common.min.js"></script>
+    <script src="..//js/custom.min.js"></script>
+    <script src="..//js/settings.js"></script>
+    <script src="..//js/gleek.js"></script>
+    <script src="..//js/styleSwitcher.js"></script>
 
-    <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="..//plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="..//plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="..//plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

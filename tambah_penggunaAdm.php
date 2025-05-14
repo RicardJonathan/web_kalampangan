@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 
 // Cek apakah pengguna yang login ada di tabel admin
 $user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
+$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'";
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->

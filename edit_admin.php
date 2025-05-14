@@ -21,7 +21,7 @@ $row = [];
 
 if (isset($_GET['id'])) {
     $id = $koneksi->real_escape_string($_GET['id']);
-    $query = "SELECT * FROM user WHERE id = '$id'";
+    $query = "SELECT * FROM admin WHERE id = '$id'";
     $result = mysqli_query($koneksi, $query);
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -33,39 +33,41 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $koneksi->real_escape_string($_POST['id']);
-    $nik = $koneksi->real_escape_string($_POST['nik']);
+    $nip = $koneksi->real_escape_string($_POST['nip']);
     $nama = $koneksi->real_escape_string($_POST['nama']);
-    $no_telepon = $koneksi->real_escape_string($_POST['no_telepon']);
-    $email = $koneksi->real_escape_string($_POST['email']);
+    $jabatan = $koneksi->real_escape_string($_POST['jabatan']);
+    $pangkat = $koneksi->real_escape_string($_POST['pangkat']);
+    $golongan = $koneksi->real_escape_string($_POST['golongan']);
     $username = $koneksi->real_escape_string($_POST['username']);
     $password = $_POST['password'];
 
-    $check_nik_query = "SELECT * FROM user WHERE nik = '$nik' AND id != '$id'";
-    $check_nik_result = mysqli_query($koneksi, $check_nik_query);
+    $check_nip_query = "SELECT * FROM admin WHERE nip = '$nip' AND id != '$id'";
+    $check_nip_result = mysqli_query($koneksi, $check_nip_query);
 
-    $check_username_query = "SELECT * FROM user WHERE username = '$username' AND id != '$id'";
+    $check_username_query = "SELECT * FROM admin WHERE username = '$username' AND id != '$id'";
     $check_username_result = mysqli_query($koneksi, $check_username_query);
 
-    if (mysqli_num_rows($check_nik_result) > 0) {
-        $nik_error = "NIK sudah terdaftar. Silakan gunakan NIK yang lain.";
+    if (mysqli_num_rows($check_nip_result) > 0) {
+        $nik_error = "NIP sudah terdaftar. Silakan gunakan NIP yang lain.";
     } elseif (mysqli_num_rows($check_username_result) > 0) {
         $username_error = "Username sudah terdaftar. Silakan gunakan username yang lain.";
     } else {
         if (!empty($password)) {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $update_query = "UPDATE user SET nama='$nama', nik='$nik', no_telepon='$no_telepon', email='$email', username='$username', password='$hashed_password' WHERE id='$id'";
+            $update_query = "UPDATE admin SET nama='$nama', nip='$nip', jabatan='$jabatan', pangkat='$pangkat', golongan='$golongan', username='$username', password='$hashed_password' WHERE id='$id'";
         } else {
-            $update_query = "UPDATE user SET nama='$nama', nik='$nik', no_telepon='$no_telepon', email='$email', username='$username' WHERE id='$id'";
+            $update_query = "UPDATE admin SET nama='$nama', nip='$nip', jabatan='$jabatan', pangkat='$pangkat', golongan='$golongan', username='$username' WHERE id='$id'";
         }
 
         if (mysqli_query($koneksi, $update_query)) {
-            header("Location: pengguna.php");
+            header("Location: admin.php");
             exit();
         } else {
             echo "Error: " . mysqli_error($koneksi);
         }
     }
 }
+
 ?>
 
 
@@ -204,55 +206,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="card-table">
 
                             <div class="form-validation">
-                                <form class="form-valide" action="edit_pengguna.php?id=<?php echo $id; ?>" method="post">
+                                <form class="form-valide" action="edit_admin.php?id=<?php echo $id; ?>" method="post">
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id'] ?? ''); ?>">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="nik">NIK 
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="nik" name="nik" value="<?php echo htmlspecialchars($row['nik'] ?? ''); ?>" required>
-                                                <span style="color: red;"><?php echo $nik_error; ?></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="nama">Nama Pengguna
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="nama" name="nama" value="<?php echo htmlspecialchars($row['nama'] ?? ''); ?>" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="no_telepon">Nomor Telepon 
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="no_telepon" name="no_telepon" value="<?php echo htmlspecialchars($row['no_telepon'] ?? ''); ?>" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="email">Email 
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($row['email'] ?? ''); ?>" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="username">Username
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($row['username'] ?? ''); ?>" required>
-                                                <span style="color: red;"><?php echo $username_error; ?></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="password">Password
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="password" class="form-control" id="password" name="password" value="">
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="nip">NIP <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nip" name="nip" value="<?php echo htmlspecialchars($row['nip'] ?? ''); ?>" required>
+                                        <span style="color: red;"><?php echo $nik_error; ?></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nama">Nama <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama" name="nama" value="<?php echo htmlspecialchars($row['nama'] ?? ''); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jabatan">Jabatan <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="jabatan" name="jabatan" value="<?php echo htmlspecialchars($row['jabatan'] ?? ''); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pangkat">Pangkat <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="pangkat" name="pangkat" value="<?php echo htmlspecialchars($row['pangkat'] ?? ''); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="golongan">Golongan <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="golongan" name="golongan" value="<?php echo htmlspecialchars($row['golongan'] ?? ''); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Username <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($row['username'] ?? ''); ?>" required>
+                                        <span style="color: red;"><?php echo $username_error; ?></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password (Kosongkan jika tidak diubah)</label>
+                                        <input type="password" class="form-control" id="password" name="password">
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Update</button>
-                                        <a href="pengguna.php" class="btn btn-secondary">Cancel</a>
+                                        <a href="admin.php" class="btn btn-secondary">Cancel</a>
                                     </div>
                                 </form>
+
                             </div>
 
                             </div>

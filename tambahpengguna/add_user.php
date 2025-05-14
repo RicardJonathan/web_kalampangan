@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config.php';
+include '..//config.php';
 
 // Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
@@ -8,12 +8,12 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
+// Cek apakah pengguna yang login ada di tabel lurah
 $user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
-$result_admin = $koneksi->query($sql_admin);
+$sql_lurah = "SELECT * FROM lurah WHERE id = '$user_id'";
+$result_lurah = $koneksi->query($sql_lurah);
 
-if ($result_admin->num_rows == 0) {
+if ($result_lurah->num_rows == 0) {
     header("Location: page-error-400.php");
     exit();
 }
@@ -65,11 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Kelurahan Kalampangan</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="..//images/logopky.png">
     <!-- Custom Stylesheet -->
-    <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="..//plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="..//css/style.css" rel="stylesheet">
+    <link href="..//css/styles.css" rel="stylesheet">
 
     <style>
         .card-title {
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="brand-logo">
                     <div class="logo-container">
                         <div class="logo-pky">
-                            <img src="images/logopky.png" alt="">
+                            <img src="..//images/logopky.png" alt="">
                         </div>
                         <div class="brand-title">
                             <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
@@ -140,14 +140,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="clearfix">
                         <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
+                                <img src="..//images/user-ikon.jpg" height="40" width="40" alt="">
                                 <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
                             </div>
                             <div class="drop-down dropdown-profile   dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="profile_lurah.php"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
                                     
                                         <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include '..//sidebar_lurah.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -195,7 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-validation">
                    <!-- Tambah Data Pengguna -->
-<form class="form-valide" action="tambah_pengguna.php" method="post">
+<form class="form-valide" action="..//tambahpengguna/user.php" method="post">
     <div class="form-group">
         <label for="nik">NIK <span class="text-danger">*</span></label>
         <input type="text" class="form-control" id="nik" name="nik" placeholder="Masukkan NIK" required>
@@ -223,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password.." required>
     </div>
     <div class="form-group text-right">
-        <a href="pengguna.php" class="btn btn-secondary">Batal</a>
+        <a href="..//tambahpengguna/user.php" class="btn btn-secondary">Batal</a>
         <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
                             </div>
@@ -266,15 +266,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+    <script src="..//plugins/common/common.min.js"></script>
+    <script src="..//js/custom.min.js"></script>
+    <script src="..//js/settings.js"></script>
+    <script src="..//js/gleek.js"></script>
+    <script src="..//js/styleSwitcher.js"></script>
 
-    <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="..//plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="..//plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="..//plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

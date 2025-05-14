@@ -22,7 +22,7 @@ if ($result_admin->num_rows == 0) {
 
 
  // Query untuk mengambil data pegawai jika admin sudah login
- $query = "SELECT * FROM user ORDER BY id DESC";
+ $query = "SELECT * FROM admin ORDER BY id DESC";
  $result = mysqli_query($koneksi, $query);
 
  // SweetAlert untuk pesan sukses
@@ -245,7 +245,7 @@ $koneksi->close();
     <div class="col p-md-0">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengguna</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Admin</a></li>
         </ol>
     </div>
 </div>
@@ -257,9 +257,9 @@ $koneksi->close();
             <div class="card">
                 <div class="card-body">
 
-                    <h4 class="card-title">Data Pengguna</h4>
+                    <h4 class="card-title">Data Admin</h4>
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="tambah_pengguna.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
+                        <a href="tambah_admin.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
                             <i class="fas fa-plus mr-2"></i>
                             <span>Tambah Data</span>
                         </a>
@@ -269,11 +269,12 @@ $koneksi->close();
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>NIK</th>
+                                    <th>NIP</th>
                                     <th>Nama</th>
                                     <th>Username</th>
-                                    <th>No Telepon</th>
-                                    <th>Email</th>
+                                    <th>Jabatan</th>
+                                    <th>Pangkat</th>
+                                    <th>Golongan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -285,14 +286,15 @@ $koneksi->close();
                                 ?>
                                         <tr>
                                             <td><?php echo $nomor++ . '.'; ?></td>
-                                            <td><?php echo $row['nik']; ?></td>
+                                            <td><?php echo $row['nip']; ?></td>
                                             <td><?php echo $row['nama']; ?></td>
                                             <td><?php echo $row['username']; ?></td>
-                                            <td><?php echo $row['no_telepon']; ?></td>
-                                            <td><?php echo $row['email']; ?></td>
+                                            <td><?php echo $row['jabatan']; ?></td>
+                                            <td><?php echo $row['pangkat']; ?></td>
+                                            <td><?php echo $row['golongan']; ?></td>
                                             <td class="actions-cell">
                                                 <div class="btn-group" role="group" aria-label="Aksi">
-                                                    <a href="edit_pengguna.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                    <a href="edit_admin.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">
@@ -316,8 +318,8 @@ $koneksi->close();
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div class="mb-3"><strong>NIK:</strong>
-                                                            <p class="mb-0"><?php echo $row['nik']; ?></p>
+                                                        <div class="mb-3"><strong>NIP:</strong>
+                                                            <p class="mb-0"><?php echo $row['nip']; ?></p>
                                                         </div>
                                                         <div class="mb-3"><strong>Nama:</strong>
                                                             <p class="mb-0"><?php echo $row['nama']; ?></p>
@@ -325,11 +327,14 @@ $koneksi->close();
                                                         <div class="mb-3"><strong>Username:</strong>
                                                             <p class="mb-0"><?php echo $row['username']; ?></p>
                                                         </div>
-                                                        <div class="mb-3"><strong>No Telepon:</strong>
-                                                            <p class="mb-0"><?php echo $row['no_telepon']; ?></p>
+                                                        <div class="mb-3"><strong>Jabatan:</strong>
+                                                            <p class="mb-0"><?php echo $row['jabatan']; ?></p>
                                                         </div>
-                                                        <div class="mb-3"><strong>Email:</strong>
-                                                            <p class="mb-0"><?php echo $row['email']; ?></p>
+                                                        <div class="mb-3"><strong>Pangkat:</strong>
+                                                            <p class="mb-0"><?php echo $row['pangkat']; ?></p>
+                                                        </div>
+                                                        <div class="mb-3"><strong>Golongan:</strong>
+                                                            <p class="mb-0"><?php echo $row['golongan']; ?></p>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -400,7 +405,7 @@ Content body end
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `hapus_pengguna.php?id=${id}`;
+            window.location.href = `hapus_admin.php?id=${id}`;
         }
     });
 }

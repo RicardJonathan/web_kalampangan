@@ -1,60 +1,95 @@
 <?php
 session_start();
-include 'config.php'; // Koneksi ke database
+include 'config.php';
 
 // Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
-    header("Location: page-login.php"); // Arahkan ke halaman login jika belum login
+    header("Location: page-login.php");
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
-$user_id = $_SESSION['id']; // ID pengguna yang login
-
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
-$result_admin = $koneksi->query($sql_admin);
+// Cek apakah pengguna yang login adalah admin
+$user_id = $_SESSION['id'];
+$stmt = $koneksi->prepare("SELECT * FROM admin WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result_admin = $stmt->get_result();
 
 if ($result_admin->num_rows == 0) {
-    // Jika tidak ada di tabel admin, arahkan ke halaman error
-    header("Location: page-error-400.php"); // Arahkan ke halaman error
+    header("Location: page-error-400.php");
     exit();
 }
 
+// Proses hapus jika ada parameter id
+if (isset($_GET['id'])) {
+    $id_pengumuman = intval($_GET['id']);
 
- // Query untuk mengambil data pegawai jika admin sudah login
- $query = "SELECT * FROM user ORDER BY id DESC";
- $result = mysqli_query($koneksi, $query);
+    // Ambil nama file foto untuk dihapus dari folder
+    $query_get_foto = "SELECT foto FROM pengumuman WHERE id = ?";
+    $stmt = $koneksi->prepare($query_get_foto);
+    $stmt->bind_param("i", $id_pengumuman);
+    $stmt->execute();
+    $result_foto = $stmt->get_result();
+    if ($result_foto->num_rows > 0) {
+        $row = $result_foto->fetch_assoc();
+        $foto = $row['foto'];
 
- // SweetAlert untuk pesan sukses
- if (isset($_SESSION['message'])) {
-    echo "<script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: '{$_SESSION['message']}',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        </script>";
-    unset($_SESSION['message']); // Hapus pesan dari session setelah ditampilkan
+        // Hapus file foto dari folder jika ada
+        $foto_path = "../images/fotopengumuman/$foto";
+        if (file_exists($foto_path)) {
+            unlink($foto_path);
+        }
+
+        // Hapus data dari database
+        $stmt = $koneksi->prepare("DELETE FROM pengumuman WHERE id = ?");
+        $stmt->bind_param("i", $id_pengumuman);
+        if ($stmt->execute()) {
+            $_SESSION['message'] = "Data berhasil dihapus!";
+        } else {
+            $_SESSION['error'] = "Gagal menghapus data!";
+        }
+    } else {
+        $_SESSION['error'] = "Data tidak ditemukan!";
+    }
+
+    header("Location: pengumuman.php");
+    exit();
 }
 
-// SweetAlert untuk pesan error
+// Query untuk menampilkan data pengumuman
+$query = "SELECT * FROM pengumuman ORDER BY id DESC";
+$result = mysqli_query($koneksi, $query);
+
+// SweetAlert untuk notifikasi
+if (isset($_SESSION['message'])) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: '{$_SESSION['message']}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>";
+    unset($_SESSION['message']);
+}
+
 if (isset($_SESSION['error'])) {
     echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: '{$_SESSION['error']}',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        </script>";
-    unset($_SESSION['error']); // Hapus pesan dari session setelah ditampilkan
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: '{$_SESSION['error']}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>";
+    unset($_SESSION['error']);
 }
 
 $koneksi->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +101,7 @@ $koneksi->close();
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- Custom Stylesheet -->
-    <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
 
@@ -231,7 +266,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -257,9 +292,9 @@ $koneksi->close();
             <div class="card">
                 <div class="card-body">
 
-                    <h4 class="card-title">Data Pengguna</h4>
+                    <h4 class="card-title">Data Pengumuman</h4>
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="tambah_pengguna.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
+                        <a href="tambah_pengumuman.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
                             <i class="fas fa-plus mr-2"></i>
                             <span>Tambah Data</span>
                         </a>
@@ -269,11 +304,10 @@ $koneksi->close();
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>NIK</th>
-                                    <th>Nama</th>
-                                    <th>Username</th>
-                                    <th>No Telepon</th>
-                                    <th>Email</th>
+                                    <th>Foto</th>
+                                    <th>Judul Pengumuman</th>
+                                    <th>Deskripsi</th>
+                                    <th>Dibuat</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -285,14 +319,16 @@ $koneksi->close();
                                 ?>
                                         <tr>
                                             <td><?php echo $nomor++ . '.'; ?></td>
-                                            <td><?php echo $row['nik']; ?></td>
-                                            <td><?php echo $row['nama']; ?></td>
-                                            <td><?php echo $row['username']; ?></td>
-                                            <td><?php echo $row['no_telepon']; ?></td>
-                                            <td><?php echo $row['email']; ?></td>
+                                            <td>
+    <img src="./images/fotopengumuman/<?php echo $row['foto']; ?>" alt="Foto Pengumuman" style="width: 80px; height: auto; border-radius: 4px;">
+</td>
+
+                                            <td><?php echo $row['judul']; ?></td>
+                                            <td><?php echo strlen($row['deskripsi']) > 100 ? substr($row['deskripsi'], 0, 100) . '...' : $row['deskripsi']; ?></td>
+                                            <td><?php echo date('H:i:s d-m-Y', strtotime($row['created_at'])); ?></td>
                                             <td class="actions-cell">
                                                 <div class="btn-group" role="group" aria-label="Aksi">
-                                                    <a href="edit_pengguna.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                    <a href="edit_pengumuman.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">
@@ -316,20 +352,18 @@ $koneksi->close();
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div class="mb-3"><strong>NIK:</strong>
-                                                            <p class="mb-0"><?php echo $row['nik']; ?></p>
+                                                        <div class="mb-3"><strong>Foto:</strong>
+                                                            <p class="mb-0">    <img src="./images/fotopengumuman/<?php echo $row['foto']; ?>" alt="Foto Pengumuman" style="width: 80px; height: auto; border-radius: 4px;">
+                                                            </td>
                                                         </div>
-                                                        <div class="mb-3"><strong>Nama:</strong>
-                                                            <p class="mb-0"><?php echo $row['nama']; ?></p>
+                                                        <div class="mb-3"><strong>Judul Pengumuman:</strong>
+                                                            <p class="mb-0"><?php echo $row['judul']; ?></p>
                                                         </div>
-                                                        <div class="mb-3"><strong>Username:</strong>
-                                                            <p class="mb-0"><?php echo $row['username']; ?></p>
+                                                        <div class="mb-3"><strong>Deskripsi:</strong>
+                                                            <p class="mb-0"><?php echo $row['deskripsi']; ?></p>
                                                         </div>
-                                                        <div class="mb-3"><strong>No Telepon:</strong>
-                                                            <p class="mb-0"><?php echo $row['no_telepon']; ?></p>
-                                                        </div>
-                                                        <div class="mb-3"><strong>Email:</strong>
-                                                            <p class="mb-0"><?php echo $row['email']; ?></p>
+                                                        <div class="mb-3"><strong>Dibuat:</strong>
+                                                            <p class="mb-0"><?php echo date('H:i:s d-m-Y', strtotime($row['created_at'])); ?></p>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -348,7 +382,14 @@ $koneksi->close();
                                 <?php } ?>
                             </tbody>
                             <tfoot>
-                             
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Foto</th>
+                                    <th>Judul Pengumuman</th>
+                                    <th>Deskripsi</th>
+                                    <th>Dibuat</th>
+                                    <th>Aksi</th>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>
@@ -359,31 +400,15 @@ $koneksi->close();
 </div>
 
 </div>
-<!--**********************************
-Content body end
-***********************************-->
 
-        
-        
-        <!--**********************************
-            Footer start
-        ***********************************-->
         <div class="footer">
             <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> @Kelurahan Kalampangan Palangka Raya. All rights reserved.</p>
+            <p class="mb-0">© <span id="current-year"></span> @kkn_mandiri_kalampangan | Website oleh Mahasiswa KKN-T Mandiri Kelompok 2 2025</p>
             </div>
         </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
+     
     </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
 
-    <!--**********************************
-        Scripts
-    ***********************************-->
     <script>
     document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
@@ -400,11 +425,10 @@ Content body end
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `hapus_pengguna.php?id=${id}`;
+            window.location.href = `pengumuman.php?id=${id}`;
         }
     });
 }
-
 </script>
 
     <script src="plugins/common/common.min.js"></script>
@@ -413,9 +437,9 @@ Content body end
     <script src="js/gleek.js"></script>
     <script src="js/styleSwitcher.js"></script>
 
-    <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

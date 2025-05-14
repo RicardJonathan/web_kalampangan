@@ -1,5 +1,5 @@
 <?php
-include '../config.php';
+include 'config.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "ID pengumuman tidak valid.";
@@ -22,8 +22,8 @@ if (!$result || $result->num_rows == 0) {
 $row = $result->fetch_assoc();
 ?>
 
-<?php include '../layouts/header_landing.php'; ?>
-<?php include '../layouts/navbar_landing.php'; ?>
+<?php include 'header_landing.php'; ?>
+<?php include 'navbar_landing.php'; ?>
 
 <style>
 .detail_pengumuman {
@@ -80,17 +80,17 @@ body {
             </div>
 
             <div class="detail_pengumuman">
-                <img src="../images/fotopengumuman/<?php echo $row['foto']; ?>" alt="<?php echo htmlspecialchars($row['judul']); ?>">
+                <img src="./images/fotopengumuman/<?php echo $row['foto']; ?>" alt="<?php echo htmlspecialchars($row['judul']); ?>">
                 <h2><?php echo htmlspecialchars($row['judul']); ?></h2>
                 <li class="list-inline-item"><i class="lnr lnr-user"></i> Admin</li>
                 <div class="tanggal"><?php echo date('d M Y', strtotime($row['created_at'])); ?></div>
                 <div class="isi">
                     <?php echo nl2br($row['deskripsi']); ?>
                 </div>
-                <a href="../landingberita/berita_pengumuman.php" class="btn btn-primary mt-4">Kembali ke Pengumuman</a>
+                <a href="berita_pengumuman.php" class="btn btn-primary mt-4">Kembali ke Pengumuman</a>
             </div>
         </div>
     </div>
 </div>
 
-<?php include '../layouts/footer_landing.php'; ?>
+<?php include 'footer_landing.php'; ?>
