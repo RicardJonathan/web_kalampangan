@@ -38,7 +38,7 @@ $koneksi->close();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
+    <title>Kelurahan Kalampangan</title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
