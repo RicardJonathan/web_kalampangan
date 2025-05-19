@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config.php'; // Koneksi ke database
+include '..//config.php'; // Koneksi ke database
 
 // Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
@@ -8,20 +8,20 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
+// Cek apakah pengguna yang login ada di tabel lurah
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
-$result_admin = $koneksi->query($sql_admin);
+$sql_lurah = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel lurah
+$result_lurah = $koneksi->query($sql_lurah);
 
-if ($result_admin->num_rows == 0) {
-    // Jika tidak ada di tabel admin, arahkan ke halaman error
+if ($result_lurah->num_rows == 0) {
+    // Jika tidak ada di tabel lurah, arahkan ke halaman error
     header("Location: page-error-400.php"); // Arahkan ke halaman error
     exit();
 }
 
 
- // Query untuk mengambil data pegawai jika admin sudah login
+ // Query untuk mengambil data pegawai jika lurah sudah login
  $query = "SELECT * FROM user ORDER BY id DESC";
  $result = mysqli_query($koneksi, $query);
 
@@ -64,11 +64,11 @@ $koneksi->close();
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Kelurahan Kalampangan</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="..//images/logopky.png">
     <!-- Custom Stylesheet -->
-    <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="..//plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="..//css/style.css" rel="stylesheet">
+    <link href="..//css/styles.css" rel="stylesheet">
 
     <style>
         
@@ -179,7 +179,7 @@ $koneksi->close();
             <div class="brand-logo">
                     <div class="logo-container">
                         <div class="logo-pky">
-                            <img src="images/logopky.png" alt="">
+                            <img src="..//images/logopky.png" alt="">
                         </div>
                         <div class="brand-title">
                             <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
@@ -206,14 +206,14 @@ $koneksi->close();
                     <ul class="clearfix">
                         <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
+                                <img src="..//images/user-ikon.jpg" height="40" width="40" alt="">
                                 <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
                             </div>
                             <div class="drop-down dropdown-profile   dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="profile_lurah.php"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
                                         <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
@@ -231,7 +231,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include '..//sidebar_lurah.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -257,12 +257,14 @@ $koneksi->close();
             <div class="card">
                 <div class="card-body">
 
-                    <h4 class="card-title">Data Pengguna</h4>
-                    <div class="d-flex justify-content-end mb-3">
-                        <a href="tambah_pengguna.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
+                    <h4 class="card-title">Data User</h4>
+                      <div class="d-flex justify-content-end mb-3">
+                        <a href="..//tambahpengguna/add_user.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
                             <i class="fas fa-plus mr-2"></i>
                             <span>Tambah Data</span>
                         </a>
+                    </div>
+
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered zero-configuration">
@@ -292,7 +294,7 @@ $koneksi->close();
                                             <td><?php echo $row['email']; ?></td>
                                             <td class="actions-cell">
                                                 <div class="btn-group" role="group" aria-label="Aksi">
-                                                    <a href="edit_pengguna.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                    <a href="..//tambahpengguna/edit_user.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">
@@ -370,7 +372,7 @@ Content body end
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-            <p class="mb-0">© <span id="current-year"></span> @Kelurahan Kalampangan Palangka Raya. All rights reserved.</p>
+            <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
             </div>
         </div>
         <!--**********************************
@@ -407,15 +409,15 @@ Content body end
 
 </script>
 
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+    <script src="..//plugins/common/common.min.js"></script>
+    <script src="..//js/custom.min.js"></script>
+    <script src="..//js/settings.js"></script>
+    <script src="..//js/gleek.js"></script>
+    <script src="..//js/styleSwitcher.js"></script>
 
-    <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="..//plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="..//plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="..//plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -1,5 +1,5 @@
 <?php
-include '..//config.php';
+include 'config.php';
 
 // Query pengumuman
 $query_pengumuman = 'SELECT * FROM pengumuman ORDER BY created_at DESC';
@@ -22,18 +22,18 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <link rel="icon shortcut" type="image/jpg" href="..//web_kalampangan/images/logo/logo.png" style="width: 50px;">
+    <link rel="icon shortcut" type="image/jpg" href="web_kalampangan/images/logo/logo.png" style="width: 50px;">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="..//css/bootstrap.min.css">
-    <link rel="stylesheet" href="..//css/main.css">
-    <link rel="stylesheet" href="..//fonts/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="..//fonts/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="..//fonts/linericon/style.css">
-    <link rel="stylesheet" href="..//fonts/flaticon.css">
-    <link rel="stylesheet" href="..//css/animate.css">
-    <link rel="stylesheet" type="text/css" href="..//css/baguetteBox.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="fonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="fonts/linericon/style.css">
+    <link rel="stylesheet" href="fonts/flaticon.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/baguetteBox.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     <title>Kelurahan Kalampangan</title>

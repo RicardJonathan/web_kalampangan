@@ -11,7 +11,7 @@ if (!isset($_SESSION['id'])) {
 // Cek apakah pengguna yang login ada di tabel admin
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
-$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
+$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
@@ -231,7 +231,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_admin.php'; ?>
+        <?php include 'sidebar_lurah.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->

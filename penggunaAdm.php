@@ -11,7 +11,7 @@ if (!isset($_SESSION['id'])) {
 // Cek apakah pengguna yang login ada di tabel admin
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
+$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
@@ -231,7 +231,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -292,7 +292,7 @@ $koneksi->close();
                                             <td><?php echo $row['email']; ?></td>
                                             <td class="actions-cell">
                                                 <div class="btn-group" role="group" aria-label="Aksi">
-                                                    <a href="edit_pengguna.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                    <a href="edit_penggunaAdm.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">
@@ -400,7 +400,7 @@ Content body end
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `hapus_pengguna.php?id=${id}`;
+            window.location.href = `hapus_penggunaAdm.php?id=${id}`;
         }
     });
 }

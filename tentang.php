@@ -40,8 +40,8 @@
                             Berita
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
-                            <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
-                            <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
+                            <li><a class="dropdown-item" href="berita_pengumuman.php">Berita Pengumuman</a></li>
+                            <li><a class="dropdown-item" href="berita_kegiatan.php">Berita Kegiatan</a></li>
                         </ul>
                         </li>
         <li class="nav-item active">

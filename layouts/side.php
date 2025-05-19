@@ -76,7 +76,7 @@ $koneksi->close();
                     </li>
                     <li class="nav-label">Konten</li>
                     <li>
-                        <a href="..//pengumuman/pengumuman.php" aria-expanded="false">
+                        <a href="pengumuman.php" aria-expanded="false">
                         <i class="fa-solid fa-pen-to-square menu-icon"></i><span class="nav-text">Pengumuman</span>
                         </a>
                     </li>

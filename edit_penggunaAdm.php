@@ -8,7 +8,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 $user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
+$sql_admin = "SELECT * FROM admin WHERE id = '$user_id'";
 $result_admin = $koneksi->query($sql_admin);
 if ($result_admin->num_rows == 0) {
     header("Location: page-error-400.php");
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if (mysqli_query($koneksi, $update_query)) {
-            header("Location: pengguna.php");
+            header("Location: penggunaAdm.php");
             exit();
         } else {
             echo "Error: " . mysqli_error($koneksi);
@@ -176,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar_lurah.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -204,7 +204,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="card-table">
 
                             <div class="form-validation">
-                                <form class="form-valide" action="edit_pengguna.php?id=<?php echo $id; ?>" method="post">
+                                <form class="form-valide" action="edit_penggunaAdm.php?id=<?php echo $id; ?>" method="post">
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id'] ?? ''); ?>">
                                     <div class="row">
                                         <div class="col-12">
@@ -250,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Update</button>
-                                        <a href="pengguna.php" class="btn btn-secondary">Cancel</a>
+                                        <a href="penggunaAdm.php" class="btn btn-secondary">Cancel</a>
                                     </div>
                                 </form>
                             </div>

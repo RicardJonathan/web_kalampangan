@@ -2,59 +2,70 @@
 session_start();
 include 'config.php';
 
-// Cek jika pengguna belum login
+// Validasi login & akses admin
 if (!isset($_SESSION['id'])) {
     header("Location: page-login.php");
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
 $user_id = $_SESSION['id'];
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'";
-$result_admin = $koneksi->query($sql_admin);
+$cek_admin = $koneksi->prepare("SELECT * FROM lurah WHERE id = ?");
+$cek_admin->bind_param("i", $user_id);
+$cek_admin->execute();
+$cek_admin_result = $cek_admin->get_result();
 
-if ($result_admin->num_rows == 0) {
+if ($cek_admin_result->num_rows === 0) {
     header("Location: page-error-400.php");
     exit();
 }
+$cek_admin->close();
 
-$nik_error = '';
-$username_error = '';
+$nip_error = $username_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nik = $_POST['nik'];
-    $nama = $_POST['nama'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $no_telepon = $_POST['no_telepon'];
-    $email = $_POST['email'];
+    $nama = htmlspecialchars(trim($_POST['nama']));
+    $nip = htmlspecialchars(trim($_POST['nip']));
+    $pangkat = htmlspecialchars(trim($_POST['pangkat']));
+    $golongan = htmlspecialchars(trim($_POST['golongan']));
+    $username = htmlspecialchars(trim($_POST['username']));
+    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
 
-    $check_nik_query = "SELECT * FROM user WHERE nik = '$nik'";
-    $check_nik_result = mysqli_query($koneksi, $check_nik_query);
+    // Validasi NIP
+    $cek_nip = $koneksi->prepare("SELECT id FROM kasi WHERE nip = ?");
+    $cek_nip->bind_param("s", $nip);
+    $cek_nip->execute();
+    $cek_nip->store_result();
 
-    $check_username_query = "SELECT * FROM user WHERE username = '$username'";
-    $check_username_result = mysqli_query($koneksi, $check_username_query);
+    // Validasi username
+    $cek_user = $koneksi->prepare("SELECT id FROM kasi WHERE username = ?");
+    $cek_user->bind_param("s", $username);
+    $cek_user->execute();
+    $cek_user->store_result();
 
-    if (mysqli_num_rows($check_nik_result) > 0) {
-        $nik_error = "NIK sudah terdaftar. Silakan gunakan NIK yang lain.";
-    } elseif (mysqli_num_rows($check_username_result) > 0) {
-        $username_error = "Username sudah terdaftar. Silakan gunakan username yang lain.";
+    if ($cek_nip->num_rows > 0) {
+        $nip_error = "NIP sudah terdaftar.";
+    } elseif ($cek_user->num_rows > 0) {
+        $username_error = "Username sudah digunakan.";
     } else {
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        // Insert data admin baru
+        $stmt = $koneksi->prepare("INSERT INTO kasi (nama, nip, pangkat, golongan, username, password) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $nama, $nip, $pangkat, $golongan, $username, $password);
 
-        $insert_query = "INSERT INTO user (nik, nama, username, password, no_telepon, email) 
-                         VALUES ('$nik', '$nama', '$username', '$hashed_password', '$no_telepon', '$email')";
-        
-        if (mysqli_query($koneksi, $insert_query)) {
-            header("Location: pengguna.php");
+        if ($stmt->execute()) {
+            $_SESSION['success'] = "Kasi berhasil ditambahkan.";
+            header("Location: kasi.php");
             exit();
         } else {
-            $nik_error = "Error: " . mysqli_error($koneksi);
+            $_SESSION['error'] = "Gagal menambahkan kasi.";
         }
+
+        $stmt->close();
     }
+
+    $cek_nip->close();
+    $cek_user->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -180,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengguna</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Kasi</a></li>
                     </ol>
                 </div>
             </div>
@@ -190,45 +201,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                                <h4 class="card-title">Tambah Data Pengguna</h4>
+                                <h4 class="card-title">Tambah Data Kasi</h4>
                             <div class="card-table">
 
                 <div class="form-validation">
                    <!-- Tambah Data Pengguna -->
-<form class="form-valide" action="tambah_pengguna.php" method="post">
-    <div class="form-group">
-        <label for="nik">NIK <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="nik" name="nik" placeholder="Masukkan NIK" required>
-        <span style="color: red;"><?php echo $nik_error; ?></span>
-    </div>
+<form class="form-valide" action="tambah_kasi.php" method="post">
     <div class="form-group">
         <label for="nama">Nama <span class="text-danger">*</span></label>
         <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama" required>
     </div>
     <div class="form-group">
-        <label for="no_telepon">Nomor Telepon <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="no_telepon" name="no_telepon" placeholder="Masukkan nomor telepon.." required>
+        <label for="nip">NIP <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="nip" name="nip" placeholder="Masukkan NIP" required>
+        <span style="color: red;"><?php echo $nip_error; ?></span>
     </div>
     <div class="form-group">
-        <label for="email">Email <span class="text-danger">*</span></label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email.." required>
+        <label for="pangkat">Pangkat <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="pangkat" name="pangkat" placeholder="Masukkan pangkat" required>
+    </div>
+    <div class="form-group">
+        <label for="golongan">Golongan <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="golongan" name="golongan" placeholder="Masukkan golongan" required>
     </div>
     <div class="form-group">
         <label for="username">Username <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username.." required>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username" required>
         <span style="color: red;"><?php echo $username_error; ?></span>
     </div>
     <div class="form-group">
         <label for="password">Password <span class="text-danger">*</span></label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password.." required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
     </div>
     <div class="form-group text-right">
-        <a href="pengguna.php" class="btn btn-secondary">Batal</a>
+        <a href="kasi.php" class="btn btn-secondary">Batal</a>
         <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+    </div>
+</form>
+
                                 </div>
                             </div>
                         </div>

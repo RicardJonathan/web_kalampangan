@@ -24,11 +24,11 @@
                     <div class="ftco-footer-widget mb-4 ml-md-5">
                         <h2 class="ftco-heading-2">Quick Link</h2>
                         <ul class="list-unstyled">
-                            <li><a href="..//index.php" class="py-1 d-block"><span
+                            <li><a href="index.php" class="py-1 d-block"><span
                                         class="mdi mdi-view-dashboard mr-3"></span>Beranda</a></li>
-                            <li><a href="..//tentang.php" class="py-1 d-block"><span
+                            <li><a href="tentang.php" class="py-1 d-block"><span
                                         class="mdi mdi-church mr-3"></span>Tentang</a></li>
-                            <li><a href="..//pengajuan.php" class="py-1 d-block"><span
+                            <li><a href="pengajuan.php" class="py-1 d-block"><span
                                         class="mdi mdi-newspaper mr-3"></span>Pengajuan</a></li>
 
                         </ul>
@@ -55,10 +55,10 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="..//js/jquery-3.4.1.slim.min.js"></script>
-    <script src="..//js/popper.min.js"></script>
-    <script src="..//js/bootstrap.min.js"></script>
-    <script src="..//js/baguetteBox.min.js"></script>
+    <script src="js/jquery-3.4.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/baguetteBox.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         baguetteBox.run('.tz-gallery');

@@ -43,11 +43,7 @@ $koneksi->close();
                         <i class="fa-solid fa-gauge menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="data_lurah.php" aria-expanded="false">
-                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Kelurahan</span>
-                        </a>
-                    </li>
+                    
                     <li>
                         <a href="berkas_masuk.php" aria-expanded="false">
                         <i class="fa-solid fa-envelope-open-text menu-icon"></i><span class="nav-text">Berkas Masuk</span>
@@ -55,7 +51,7 @@ $koneksi->close();
                     </li>
                     <li class="nav-label">Main Menu</li>
                     <li>
-                        <a href="pengguna.php" aria-expanded="false">
+                        <a href="penggunaAdm.php" aria-expanded="false">
                             <i class="fa fa-users menu-icon"></i><span class="nav-text">Pengguna</span>
                         </a>
                     </li>
@@ -76,17 +72,17 @@ $koneksi->close();
                     </li>
                     <li class="nav-label">Konten</li>
                     <li>
-                        <a href="./pengumuman/pengumuman.php" aria-expanded="false">
+                        <a href="pengumuman.php" aria-expanded="false">
                         <i class="fa-solid fa-pen-to-square menu-icon"></i><span class="nav-text">Pengumuman</span>
                         </a>
                     </li>
                     <li>
-                        <a href="./kegiatan/kegiatan.php" aria-expanded="false">
+                        <a href="kegiatan.php" aria-expanded="false">
                         <i class="fa-solid fa-file-pdf menu-icon"></i><span class="nav-text">Kegiatan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="./struktur/struktur.php" aria-expanded="false">
+                        <a href="struktur.php" aria-expanded="false">
                         <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Struktur</span>
                         </a>
                     </li>

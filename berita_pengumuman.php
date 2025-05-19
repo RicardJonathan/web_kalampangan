@@ -1,13 +1,13 @@
 <?php
-include '../config.php';
-$query_kegiatan = 'SELECT * FROM kegiatan ORDER BY created_at DESC LIMIT 3';
-$stmt_kegiatan = $koneksi->prepare($query_kegiatan);
-$stmt_kegiatan->execute();
-$result_kegiatan = $stmt_kegiatan->get_result();
+include 'config.php';
+$query_pengumuman = 'SELECT * FROM pengumuman ORDER BY created_at DESC LIMIT 3';
+$stmt_pengumuman = $koneksi->prepare($query_pengumuman);
+$stmt_pengumuman->execute();
+$result_pengumuman = $stmt_pengumuman->get_result();
 ?>
 
-<?php include '../layouts/header_landing.php'; ?>
-<?php include '../layouts/navbar_landing.php'; ?>
+<?php include 'header_landing.php'; ?>
+<?php include 'navbar_landing.php'; ?>
 
 <style>
 .bh_item {
@@ -54,7 +54,7 @@ $result_kegiatan = $stmt_kegiatan->get_result();
         <div class="breadcrumbs">
             <ul>
                 <li><a href="index.php">Beranda</a> | </li>
-                <li><span>Berita Kegiatan</span></li>
+                <li><span>Berita Pengumuman</span></li>
             </ul>
         </div>
     </div>
@@ -64,16 +64,16 @@ $result_kegiatan = $stmt_kegiatan->get_result();
     <div class="container">
         <div class="page_konten">
             <div class="home_heading text-center">
-                <span class="subheading">Kegiatan</span>
+                <span class="subheading">Pengumuman</span>
                 <h2>Kelurahan Kalampangan</h2>
-                <p>Kegiatan Kelurahan Kalampangan</p>
+                <p>Pengumuman Kegiatan Kelurahan Kalampangan</p>
             </div>
 <div class="row">
-    <?php while ($row = mysqli_fetch_assoc($result_kegiatan)) : ?>
+    <?php while ($row = mysqli_fetch_assoc($result_pengumuman)) : ?>
         <div class="col-md-4 mb-4">
             <div class="bh_item h-100">
                 <div class="bh_img">
-                    <img src="../images/fotokegiatan/<?php echo $row['foto']; ?>" class="img-fluid w-100" alt="<?php echo htmlspecialchars($row['judul']); ?>">
+                    <img src="./images/fotopengumuman/<?php echo $row['foto']; ?>" class="img-fluid w-100" alt="<?php echo htmlspecialchars($row['judul']); ?>">
                 </div>
                 <div class="bh_isi">
                     <h5 class="mt-3"><?php echo htmlspecialchars($row['judul']); ?></h5>
@@ -81,7 +81,7 @@ $result_kegiatan = $stmt_kegiatan->get_result();
 
                     <p class="text-muted mb-1"><?php echo date('d M Y', strtotime($row['created_at'])); ?></p>
                     <p><?php echo substr(strip_tags($row['deskripsi']), 0, 120); ?>...</p>
-                    <a href="../landingberita/detail_kegiatan.php?id=<?php echo $row['id']; ?>" class="btn btn-warning text-white">Baca Selengkapnya</a>
+                    <a href="detail_pengumuman.php?id=<?php echo $row['id']; ?>" class="btn btn-warning text-white">Baca Selengkapnya</a>
                 </div>
             </div>
         </div>
@@ -92,4 +92,4 @@ $result_kegiatan = $stmt_kegiatan->get_result();
     </div>
 </div>
 
-<?php include '../layouts/footer_landing.php'; ?>
+<?php include 'footer_landing.php'; ?>

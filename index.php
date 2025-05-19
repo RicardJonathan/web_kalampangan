@@ -175,8 +175,8 @@ $result_struktur = $stmt_struktur->get_result();
                             Berita
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="beritaDropdown">
-                            <li><a class="dropdown-item" href="./landingberita/berita_pengumuman.php">Berita Pengumuman</a></li>
-                            <li><a class="dropdown-item" href="./landingberita/berita_kegiatan.php">Berita Kegiatan</a></li>
+                            <li><a class="dropdown-item" href="berita_pengumuman.php">Berita Pengumuman</a></li>
+                            <li><a class="dropdown-item" href="berita_kegiatan.php">Berita Kegiatan</a></li>
                         </ul>
                         </li>
 
@@ -284,7 +284,7 @@ $result_struktur = $stmt_struktur->get_result();
                                     <?php echo substr(strip_tags($data['deskripsi']), 0, 200); ?>...
                                 </p>
 
-                                <a class="btn btn-primary" href="./landingberita/detail_pengumuman.php?id=<?php echo $data['id']; ?>">Baca
+                                <a class="btn btn-primary" href="detail_pengumuman.php?id=<?php echo $data['id']; ?>">Baca
                                     Selengkapnya</a>
                             </div>
                         </div>
@@ -336,7 +336,7 @@ $result_struktur = $stmt_struktur->get_result();
                                     <?php echo substr(strip_tags($data['deskripsi']), 0, 200); ?>...
                                 </p>
 
-                                <a class="btn btn-primary" href="./landingberita/detail_kegiatan.php?id=<?php echo $data['id']; ?>">Baca
+                                <a class="btn btn-primary" href="detail_kegiatan.php?id=<?php echo $data['id']; ?>">Baca
                                     Selengkapnya</a>
                             </div>
                         </div>

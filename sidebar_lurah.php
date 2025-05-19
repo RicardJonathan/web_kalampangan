@@ -20,7 +20,7 @@ $koneksi->close();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP Palangka Raya </title>
+    <title>Kelurahan Kalampangan </title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="./images/logokalteng.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -44,6 +44,11 @@ $koneksi->close();
                         </a>
                     </li>
                     <li>
+                        <a href="data_lurah.php" aria-expanded="false">
+                        <i class="fa-solid fa-user-tie menu-icon"></i><span class="nav-text">Kepala Kelurahan</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="berkas_masuk_lurah.php" aria-expanded="false">
                         <i class="fa-solid fa-envelope-open-text menu-icon"></i><span class="nav-text">Berkas Masuk</span>
                         </a>
@@ -62,6 +67,22 @@ $koneksi->close();
                     <li>
                         <a href="laporan_surat_lurah.php" aria-expanded="false">
                         <i class="fa-solid fa-paste menu-icon"></i><span class="nav-text">Laporan Surat</span>
+                        </a>
+                    </li>
+                     <li class="nav-label">Tambah User</li>
+                    <li>
+                        <a href="kasi.php" aria-expanded="false">
+                        <i class="fa-solid fa-user-plus"></i><span class="nav-text">Tambah Kasi</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a href="admin.php" aria-expanded="false">
+                        <i class="fa-solid fa-user-plus"></i><span class="nav-text">Tambah Admin</span>
+                        </a>
+                    </li>
+                     <li>
+                        <a href="pengguna.php" aria-expanded="false">
+                        <i class="fa-solid fa-user-plus"></i><span class="nav-text">Tambah User</span>
                         </a>
                     </li>
                     <li class="nav-label">Lainnya</li>

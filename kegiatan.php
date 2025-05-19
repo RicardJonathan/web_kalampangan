@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '..//config.php';
+include 'config.php';
 
 // Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
@@ -99,11 +99,11 @@ $koneksi->close();
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Kelurahan Kalampangan</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="..//images/logopky.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- Custom Stylesheet -->
-    <link href="..//plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="..//css/style.css" rel="stylesheet">
-    <link href="..//css/styles.css" rel="stylesheet">
+    <link href="plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
     <style>
         
@@ -214,7 +214,7 @@ $koneksi->close();
             <div class="brand-logo">
                     <div class="logo-container">
                         <div class="logo-pky">
-                            <img src="..//images/logopky.png" alt="">
+                            <img src="images/logopky.png" alt="">
                         </div>
                         <div class="brand-title">
                             <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
@@ -241,16 +241,16 @@ $koneksi->close();
                     <ul class="clearfix">
                         <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
-                                <img src="..//images/user-ikon.jpg" height="40" width="40" alt="">
+                                <img src="images/user-ikon.jpg" height="40" width="40" alt="">
                                 <span class="ml-1" style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span> 
                             </div>
                             <div class="drop-down dropdown-profile   dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="..//profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
-                                        <li><a href="..//logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -266,7 +266,7 @@ $koneksi->close();
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include '..//layouts/side.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -294,7 +294,7 @@ $koneksi->close();
 
                     <h4 class="card-title">Data kegiatan</h4>
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="../kegiatan/tambah_kegiatan.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
+                        <a href="tambah_kegiatan.php" class="btn btn-primary d-flex align-items-center" style="width: 140px;">
                             <i class="fas fa-plus mr-2"></i>
                             <span>Tambah Data</span>
                         </a>
@@ -320,7 +320,7 @@ $koneksi->close();
                                         <tr>
                                             <td><?php echo $nomor++ . '.'; ?></td>
                                             <td>
-    <img src="../images/fotokegiatan/<?php echo $row['foto']; ?>" alt="Foto kegiatan" style="width: 80px; height: auto; border-radius: 4px;">
+    <img src="./images/fotokegiatan/<?php echo $row['foto']; ?>" alt="Foto kegiatan" style="width: 80px; height: auto; border-radius: 4px;">
 </td>
 
                                             <td><?php echo $row['judul']; ?></td>
@@ -328,7 +328,7 @@ $koneksi->close();
                                             <td><?php echo date('H:i:s d-m-Y', strtotime($row['created_at'])); ?></td>
                                             <td class="actions-cell">
                                                 <div class="btn-group" role="group" aria-label="Aksi">
-                                                    <a href="../kegiatan/edit_kegiatan.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                    <a href="edit_kegiatan.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">
@@ -353,7 +353,7 @@ $koneksi->close();
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="mb-3"><strong>Foto:</strong>
-                                                            <p class="mb-0">    <img src="../images/fotokegiatan/<?php echo $row['foto']; ?>" alt="Foto kegiatan" style="width: 80px; height: auto; border-radius: 4px;">
+                                                            <p class="mb-0">    <img src="./images/fotokegiatan/<?php echo $row['foto']; ?>" alt="Foto kegiatan" style="width: 80px; height: auto; border-radius: 4px;">
                                                             </td>
                                                         </div>
                                                         <div class="mb-3"><strong>Judul kegiatan:</strong>
@@ -431,15 +431,15 @@ $koneksi->close();
 }
 </script>
 
-    <script src="..//plugins/common/common.min.js"></script>
-    <script src="..//js/custom.min.js"></script>
-    <script src="..//js/settings.js"></script>
-    <script src="..//js/gleek.js"></script>
-    <script src="..//js/styleSwitcher.js"></script>
+    <script src="plugins/common/common.min.js"></script>
+    <script src="js/custom.min.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/gleek.js"></script>
+    <script src="js/styleSwitcher.js"></script>
 
-    <script src="..//plugins/tables/js/jquery.dataTables.min.js"></script>
-    <script src="..//plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="..//plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
