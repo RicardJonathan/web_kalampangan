@@ -51,7 +51,7 @@ $koneksi->close();
                     <li class="nav-label">Main Menu</li>
                    
                     <li>
-                        <a href="surat_cuti.php" aria-expanded="false">
+                        <a href="arsip_surat_kasi.php" aria-expanded="false">
                         <i class="fa-solid fa-file-pdf menu-icon"></i><span class="nav-text">Surat</span>
                         </a>
                     </li>

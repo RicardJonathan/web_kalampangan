@@ -443,7 +443,7 @@ $result_surat = $stmt_surat->get_result();
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `hapus_pengajuan.php?id=${id}`;
+                    window.location.href = `hapus_pengajuan_surat.php?id=${id}`;
                 }
             });
         }

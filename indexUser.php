@@ -316,16 +316,14 @@ $koneksi->close();
             </div>
         </div>
     </div>
-</div>
-
-
+    </div>
         <div class="footer">
             <div class="copyright">
-                <p class="mb-0">© <span id="current-year"></span> DPKUKMP Palangka Raya. All rights reserved.</p>
+                <p class="mb-0">© <span id="current-year"></span> Kelurahan KELAMPANGAN Palangka Raya. All rights reserved.</p>
             </div>
         </div>
     </div>
-
+    </div>
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>

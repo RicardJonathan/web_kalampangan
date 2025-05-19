@@ -140,126 +140,127 @@ $koneksi->close();
 
         <?php include 'sidebar_kasi.php'; ?>
 
-        <div class="content-body">
-            <div class="row page-titles mx-0">
-                <div class="col p-md-0">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Berkas Masuk Pengajuan</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered zero-configuration">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Jenis Surat</th>
-                                                <th>ID</th>
-                                                <th>Nama Pengaju</th>
-                                                <th>Email</th>
-                                                <th>No Telepon</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal</th>
-                                                <th>KTP</th>
-                                                <th>KK</th>
-                                                <th>Formulir</th>
-                                                <th>Keterangan</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $nomor = 1;
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                    $tgl = strtotime($row['tgl_pengajuan']);
-                                                    $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                                                    $tanggal_lengkap = date('d', $tgl) . ' ' . $bulan[date('n', $tgl)] . ' ' . date('Y', $tgl);
-                                            ?>
-                                                    <tr>
-                                                        <td><?= $nomor++ . '.'; ?></td>
-                                                        <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
-                                                        <td><?= htmlspecialchars($row['id']); ?></td>
-                                                        <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
-                                                        <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
-                                                        <td><?= htmlspecialchars($row['no_telepon']); ?></td>
-                                                        <td><?= htmlspecialchars($row['alamat']); ?></td>
-                                                        <td><?= $tanggal_lengkap; ?></td>
-                                                        <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                        <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                        <td><a href="preview_file _kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-
-                                                        <td><?= htmlspecialchars($row['keterangan']); ?></td>
-                                                        <td><?= htmlspecialchars($row['status']); ?></td>
-                                                        <td>
-                                                            <div class="btn-group" role="group">
-                                                                <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
-                                                                    <i class="fas fa-paper-plane"></i> Ajukan
-                                                                </button>
-                                                                <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
-                                                                    <i class="fas fa-times"></i> Tolak
-                                                                </button>
-                                                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
-                                                                    <i class="fas fa-info-circle"></i> Detail
-                                                                </button>
-                                                                <!-- Tombol Upload Surat -->
-                                                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#uploadModal<?= $row['id']; ?>">
-                                                                    <i class="fas fa-upload"></i> Upload Surat
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <!-- Modal Upload Surat -->
-                                                    <div class="modal fade" id="uploadModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel<?= $row['id']; ?>" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadModalLabel<?= $row['id']; ?>">Upload Surat - ID <?= $row['id']; ?></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="upload_surat.php" method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="file_surat<?= $row['id']; ?>">Pilih File Surat</label>
-                        <input type="file" class="form-control" name="file_surat" id="file_surat<?= $row['id']; ?>" required>
-                        <input type="hidden" name="id" value="<?= $row['id']; ?>">
-                    </div>
-                    <button type="submit" name="submit" class="btn btn-primary">Upload Surat</button>
-                </form>
-            </div>
+       <div class="content-body">
+    <div class="row page-titles mx-0">
+        <div class="col p-md-0">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
+            </ol>
         </div>
     </div>
-</div>
 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Berkas Masuk Pengajuan</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered zero-configuration">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Jenis Surat</th>
+                                        <th>ID</th>
+                                        <th>Nama Pengaju</th>
+                                        <th>Email</th>
+                                        <th>No Telepon</th>
+                                        <th>Alamat</th>
+                                        <th>Tanggal</th>
+                                        <th>KTP</th>
+                                        <th>KK</th>
+                                        <th>Formulir</th>
+                                        <th>Keterangan</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $nomor = 1;
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            $tgl = strtotime($row['tgl_pengajuan']);
+                                            $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                            $tanggal_lengkap = date('d', $tgl) . ' ' . $bulan[date('n', $tgl)] . ' ' . date('Y', $tgl);
+                                    ?>
+                                            <tr>
+                                                <td><?= $nomor++ . '.'; ?></td>
+                                                <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
+                                                <td><?= htmlspecialchars($row['id']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
+                                                <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
+                                                <td><?= htmlspecialchars($row['no_telepon']); ?></td>
+                                                <td><?= htmlspecialchars($row['alamat']); ?></td>
+                                                <td><?= $tanggal_lengkap; ?></td>
+                                                <td><a href="preview_file_kasi.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file_kasi.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><a href="preview_file_kasi.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                <td><?= htmlspecialchars($row['keterangan']); ?></td>
+                                                <td><?= htmlspecialchars($row['status']); ?></td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
+                                                            <i class="fas fa-paper-plane"></i> Ajukan
+                                                        </button>
+                                                        <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
+                                                            <i class="fas fa-times"></i> Tolak
+                                                        </button>
+                                                        <a href="edit_pengajuan_surat_kasi.php.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
+                                                            <i class="fas fa-info-circle"></i> Detail
+                                                        </button>
+                                                        <!-- Tombol Upload Surat -->
+                                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#uploadModal<?= $row['id']; ?>">
+                                                            <i class="fas fa-upload"></i> Upload Surat
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                            <?php
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='13'>Tidak ada data pengajuan surat.</td></tr>";
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                            <!-- Modal Upload Surat -->
+                                            <div class="modal fade" id="uploadModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel<?= $row['id']; ?>" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="uploadModalLabel<?= $row['id']; ?>">Upload Surat - ID <?= $row['id']; ?></h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="upload_surat.php" method="POST" enctype="multipart/form-data">
+                                                                <div class="form-group">
+                                                                    <label for="file_surat<?= $row['id']; ?>">Pilih File Surat</label>
+                                                                    <input type="file" class="form-control" name="file_surat" id="file_surat<?= $row['id']; ?>" required>
+                                                                    <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                                                                </div>
+                                                                <button type="submit" name="submit" class="btn btn-primary">Upload Surat</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='14' class='text-center'>Tidak ada data pengajuan surat.</td></tr>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+           
 
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
