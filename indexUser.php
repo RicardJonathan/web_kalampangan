@@ -96,7 +96,7 @@ $koneksi->close();
                         <img src="images/logopky.png" alt="">
                     </div>
                     <div class="brand-title">
-                        <h4>KELURAHAN KELAMPANGAN <br> PALANGKA RAYA</h4>
+                        <h4>Kelurahan Kalampangan <br> PALANGKA RAYA</h4>
                     </div>
                 </div>
             </div>
@@ -173,7 +173,7 @@ $koneksi->close();
                                 <div class="card-body pb-0">
                                    <div class="d-flex justify-content-between align-items-center mb-2">
     <h4 class="card-title mb-0">Syarat Pengajuan Surat</h4>
-    <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+    <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
 </div>
 
 <p class="card-text">Berikut adalah syarat yang harus dipenuhi untuk mengajukan surat:</p>
@@ -184,9 +184,10 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Usaha (SKU)</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Akta yang sudah diisi (apabila ada)</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Foto diri UK 3x4 atau 4x6 2 lembar</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -197,9 +198,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Tidak Mampu (SKTM)</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -210,9 +211,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Kematian</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -223,9 +224,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Kelahiran</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -236,9 +237,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Belum Menikah</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -249,9 +250,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan untuk Menikah</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -262,9 +263,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Pengajuan PBB Baru</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy Sertifikat/IMB 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Sertifikat/IMB</li>
+                                    <li>Formulir yang sudah di isi</li>
                                 </ul>
                             </div>
                         </div>
@@ -275,9 +276,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Ahli Waris</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -288,9 +289,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Berkelakuan Baik</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>KTP</li>
+                                    <li>KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>
@@ -301,9 +302,9 @@ $koneksi->close();
                                 <h5 class="card-title" style="margin-bottom: 10px;">Surat Keterangan Domisili</h5>
                                 <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
                                 <ul class="card-text">
-                                    <li>Foto Copy KTP 1 Lembar</li>
-                                    <li>Foto Copy KK 1 Lembar</li>
-                                    <li>Foto Copy Formulir yang sudah diisi dan TTD RT 1 lembar</li>
+                                    <li>Foto KTP</li>
+                                    <li>Foto KK</li>
+                                    <li>Formulir yang sudah di TTD RT</li>
                                 </ul>
                             </div>
                         </div>

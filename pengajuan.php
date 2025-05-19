@@ -123,11 +123,11 @@
                                                 <h4>Surat Keterangan Usaha (SKU)</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Akta yang sudah diisi (apabila ada)
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto diri UK 3x4 atau 4x6 2 lembar <br>
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
 
                                             </div>
                                         </div>
@@ -140,11 +140,11 @@
                                                 <h4>Surat Keterangan Tidak Mampu (SKTM)</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -156,11 +156,11 @@
                                                 <h4>Surat Keterangan Kematian</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -172,11 +172,11 @@
                                                 <h4>Surat Keterangan Kelahiran</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -188,11 +188,11 @@
                                                 <h4>Surat Keterangan Belum Menikah</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -204,11 +204,11 @@
                                                 <h4>Surat Keterangan untuk Menikah</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -220,11 +220,11 @@
                                                 <h4>Pengajuan PBB Baru</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto Sertifikat/IMB 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto Sertifikat/IMB <br>
+                                                    - Foto Formulir yang sudah diisi
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -236,11 +236,11 @@
                                                 <h4>Surat Keterangan Ahli Waris</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -252,11 +252,11 @@
                                                 <h4>Surat Keterangan Berkelakuan Baik</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
@@ -268,11 +268,11 @@
                                                 <h4>Surat Keterangan Domisili</h4>
                                                 </a>
                                                 <p class="text-justify">
-                                                    - Foto KTP 1 Lembar <br>
-                                                    - Foto KK 1 Lembar <br>
-                                                    - Foto Formulir yang sudah diisi dan TTD RT 1 lembar
+                                                    - Foto KTP <br>
+                                                    - Foto KK <br>
+                                                    - Foto Formulir yang sudah diisi dan TTD RT
                                                 </p>
-                                                <a class="btn btn-biru-keren" href="baca_artikel.html">Download Formulir</a>
+                                                <a class="btn btn-biru-keren" href="https://drive.google.com/drive/folders/18F-x70xalPZt0n0kZDTVidNQHD3oQ_rd">Download Formulir</a>
                                             </div>
                                         </div>
                                     </div>
