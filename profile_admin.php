@@ -113,7 +113,7 @@ include './profile/edit.php';
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar.php'; ?>
+        <?php include 'sidebar_admin.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->

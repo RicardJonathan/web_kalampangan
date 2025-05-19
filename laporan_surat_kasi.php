@@ -58,7 +58,7 @@ if (!$result || !$result_tahun) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DPKUKMP</title>
+    <title>Kelurahan Kalampangan</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/logopky.png">
     <!-- Custom Stylesheet -->
@@ -157,7 +157,7 @@ if (!$result || !$result_tahun) {
                             <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
-                                        <li><a href="profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a></li>
+                                        <li><a href="profile_kasi.php"><i class="icon-user"></i> <span>Profile</span></a></li>
                                         <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>

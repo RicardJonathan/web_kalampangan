@@ -206,7 +206,7 @@ $koneksi->close();
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="profile_admin.php"><i class="icon-user"></i>
+                                            <a href="profile_lurah.php"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
                                         <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
@@ -447,6 +447,20 @@ $koneksi->close();
             });
         }
 
+        <!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+            title: 'Perhatian!',
+            text: 'Waktu pemrosesan surat adalah maksimal 3 hari kerja sejak tanggal pengajuan.',
+            icon: 'info',
+            confirmButtonText: 'Mengerti',
+            confirmButtonColor: '#7571F9'
+        });
+    });
+</script>
 
 
 
