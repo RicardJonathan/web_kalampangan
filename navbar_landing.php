@@ -1,9 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="index.php">
-            <img src="images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
-            Kelurahan Kalampangan
-        </a>
+       <a class="navbar-brand" href="index.php">
+                
+                <img src="./images/logo/logo.png" alt="Logo"
+                style="height: 35px; margin-right: 1px;">
+                <img src="./images/siklepon.png" alt="Logo"
+                    style="height: 35px; margin-right: 1px;">
+                    Sistem Informasi Kelurahan Lewat Pelayanan Online
+            </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

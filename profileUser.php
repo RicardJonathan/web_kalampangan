@@ -145,7 +145,7 @@ if (!isset($_SESSION['username'])) {
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label>Password <span class="text-danger">*</span></label>
+                                         <label>Password <span class="text-danger">*</span></label>
                                     <input type="password" name="password" class="form-control" value="<?php echo htmlspecialchars($row['password'] ?? ''); ?>" required>
                                 </div>
                             </div>

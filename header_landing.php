@@ -41,7 +41,9 @@ $result_struktur = mysqli_query($koneksi, $query_struktur);
 </head>
 
 <style>
-
+.navbar .navbar-brand {
+  font-size: 16px !important;
+}
     
     .credit-marquee {
         /* background-color: #222; */

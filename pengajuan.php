@@ -21,9 +21,9 @@
 </head>
 <style>
 .btn-biru-keren {
-  background-color: #007bff; /* Biru Bootstrap */
+  background-color:rgb(255, 255, 255); /* Biru Bootstrap */
   border-color: #007bff;
-  color: white;
+  color:rgb(34, 109, 190);
   font-weight: bold;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
@@ -34,15 +34,22 @@
   box-shadow: 0 6px 8px rgba(0, 86, 179, 0.4);
   color: white;
 }
+.navbar .navbar-brand {
+  font-size: 16px !important;
+}
 </style>
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="./images/logo/logo.png" alt="Logo" style="height: 30px; margin-right: 8px;">
-                Kelurahan Kalampangan
+           <a class="navbar-brand" href="index.php">
+                
+                <img src="./images/logo/logo.png" alt="Logo"
+                style="height: 35px; margin-right: 1px;">
+                <img src="./images/siklepon.png" alt="Logo"
+                    style="height: 35px; margin-right: 1px;">
+                    Sistem Informasi Kelurahan Lewat Pelayanan Online
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

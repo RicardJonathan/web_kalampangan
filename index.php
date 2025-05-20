@@ -48,8 +48,35 @@ $result_struktur = $stmt_struktur->get_result();
 </head>
 
 <style>
+.my-carousel {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
 
-    
+.my-slide {
+    height: 55vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+}
+
+/* Responsif tambahan untuk layar kecil */
+@media (max-width: 768px) {
+    .my-slide {
+        height: 40vh; /* Kurangi tinggi di layar kecil agar tidak terlalu tinggi */
+    }
+}
+
+@media (max-width: 480px) {
+    .my-slide {
+        height: 35vh; /* Lebih rendah lagi untuk ponsel kecil */
+    }
+}
+
+
+
     .credit-marquee {
         /* background-color: #222; */
         color: #fff;
@@ -148,16 +175,32 @@ $result_struktur = $stmt_struktur->get_result();
     margin-top: 10px;
 }
 
+    #particles-js {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+}
+.navbar .navbar-brand {
+  font-size: 16px !important;
+}
+
+
 </style>
 
 <body>
-
+    <div id="particles-js"></div>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="index.php">
+                
                 <img src="./images/logo/logo.png" alt="Logo"
-                    style="height: 30px; margin-right: 8px;">
-                Kelurahan Kalampangan
+                style="height: 35px; margin-right: 1px;">
+                <img src="./images/siklepon.png" alt="Logo"
+                    style="height: 35px; margin-right: 1px;">
+                    Sistem Informasi Kelurahan Lewat Pelayanan Online
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -213,6 +256,13 @@ $result_struktur = $stmt_struktur->get_result();
                 </div>
             </div </div>
         </div>
+
+        <div class="my-carousel">
+    <div class="my-slide" style="background-image: url('images/walkot.png');">
+        <!-- Konten opsional bisa ditambahkan di sini -->
+    </div>
+</div>
+
 
 
         <div class="welcome">
@@ -283,10 +333,11 @@ $result_struktur = $stmt_struktur->get_result();
                                 <p class="text-justify">
                                     <?php echo substr(strip_tags($data['deskripsi']), 0, 200); ?>...
                                 </p>
-
+                                
                                 <a class="btn btn-primary" href="detail_pengumuman.php?id=<?php echo $data['id']; ?>">Baca
                                     Selengkapnya</a>
                             </div>
+                            <br>
                         </div>
                     </div>
                     <?php } ?>
@@ -430,7 +481,7 @@ $result_struktur = $stmt_struktur->get_result();
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 
     <footer class="ftco-footer ftco-bg-dark ftco-section mt-3">
         <div class="container">
@@ -498,6 +549,8 @@ $result_struktur = $stmt_struktur->get_result();
     <script src="js/bootstrap.min.js"></script>
     <script src="js/baguetteBox.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="particles.js"></script>
+    <script src="app.js"></script>  
     <script>
         baguetteBox.run('.tz-gallery');
     </script>
