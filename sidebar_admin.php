@@ -62,7 +62,7 @@ $koneksi->close();
                     </li>
                     <li>
                         <a href="arsip_surat.php" aria-expanded="false">
-                        <i class="fa-solid fa-file-pdf menu-icon"></i><span class="nav-text">Surat</span>
+                        <i class="fa-solid fa-file-pdf menu-icon"></i><span class="nav-text">Arsip Surat</span>
                         </a>
                     </li>
                     <li>

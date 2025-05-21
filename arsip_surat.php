@@ -139,7 +139,7 @@ $koneksi->close();
                 <div class="col p-md-0">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">Main Menu</a></li>
-                        <li class="breadcrumb-item active"><a href="#">Surat Cuti</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Arsip Surat</a></li>
                     </ol>
                 </div>
             </div>
@@ -213,20 +213,7 @@ $koneksi->close();
                                             </tr>
                                             <?php } ?>
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Jenis Surat</th>
-                                                <th>User ID</th>
-                                                <th>Nama Pengaju</th>
-                                                <th>Email</th>
-                                                <th>No Telepon</th>
-                                                <th>Alamat</th>
-                                                <th>Tanggal</th>
-                                                <th>Keterangan</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </tfoot>
+                                     
                                     </table>
                                 </div>
                             </div>
@@ -267,22 +254,7 @@ $koneksi->close();
     document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
     <script>
-    function confirmDelete(id) {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Data ini akan dihapus secara permanen!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = `hapus_cuti.php?id=${id}`;
-        }
-    });
-}
+ 
 
 </script>
 

@@ -205,7 +205,7 @@ $koneksi->close();
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="profileUser.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="profile_admin.php"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
                                         <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>

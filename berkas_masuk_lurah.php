@@ -20,7 +20,6 @@ if ($result_admin->num_rows == 0) {
     exit();
 }
 
-
 // Query untuk mengambil data surat dan data user (nik, nama) dengan JOIN dan status "Verifikasi Lurah"
 $query = "SELECT pengajuan_surat.*, user.nik, user.nama
           FROM pengajuan_surat
@@ -36,7 +35,6 @@ if (!$result) {
 
 $koneksi->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,28 +57,23 @@ $koneksi->close();
         .table th,
         .table td {
             border: none !important;
-            /* Hapus border dari tabel, header, dan kolom */
         }
 
         /* Menambahkan padding untuk kenyamanan tampilan */
         .table th,
         .table td {
             padding: 12px 15px;
-            /* Memberikan jarak antar teks dan batas tabel */
             text-align: left;
-            /* Mengatur teks agar rata kiri */
         }
 
         /* Menghilangkan garis bawah pada setiap baris */
         .table tbody tr {
             border-bottom: none;
-            /* Menghilangkan garis pemisah antar baris */
         }
 
         /* Jika ada hover effect, tetap pertahankan */
         .table tbody tr:hover {
             background-color: #f1f1f1;
-            /* Sedikit perubahan warna saat hover */
         }
 
         /* Styling untuk tabel */
@@ -93,10 +86,8 @@ $koneksi->close();
         /* Styling untuk baris header tabel */
         .table th {
             color: #F4F6FF;
-            /* Warna teks putih */
             padding: 12px 15px;
             text-align: left;
-            /* Teks di header rata kiri */
             font-size: 16px;
             background-color: #7571F9 !important;
         }
@@ -107,22 +98,18 @@ $koneksi->close();
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
-            /* Garis pemisah antar baris */
             font-size: 14px;
             background-color: #f9f9f9;
-            /* Warna latar belakang yang konsisten untuk seluruh tabel */
         }
 
         /* Hover effect untuk baris tabel */
         .table tbody tr:hover {
             background-color: #f1f1f1;
-            /* Sedikit perubahan warna saat hover */
         }
 
         /* Styling untuk footer tabel */
         .table tfoot th {
             background-color: white !important;
-            /* Warna latar belakang footer */
             color: #333;
             font-weight: bold;
         }
@@ -130,13 +117,11 @@ $koneksi->close();
         /* Menambahkan efek border pada tabel */
         .table-bordered {
             border: 1px solid #ddd;
-            /* Border untuk tabel */
         }
 
         /* Responsif - menyesuaikan tabel pada layar kecil */
         .table-responsive {
             overflow-x: auto;
-            /* Membuat tabel bisa digulir horizontal di layar kecil */
         }
     </style>
 
@@ -157,7 +142,6 @@ $koneksi->close();
     <!--*******************
         Preloader end
     ********************-->
-
 
     <!--**********************************
         Main wrapper start
@@ -202,7 +186,7 @@ $koneksi->close();
                                 <span class="ml-1"
                                     style="font-size: 15px; color: #494949; cursor: pointer;"><?php echo $_SESSION['username']; ?></span>
                             </div>
-                            <div class="drop-down dropdown-profile   dropdown-menu">
+                            <div class="drop-down dropdown-profile dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
@@ -219,7 +203,7 @@ $koneksi->close();
             </div>
         </div>
         <!--**********************************
-            Header end ti-comment-alt
+            Header end
         ***********************************-->
 
         <!--**********************************
@@ -229,156 +213,166 @@ $koneksi->close();
         <!--**********************************
             Sidebar end
         ***********************************-->
-<!--**********************************
-    Content body start
-***********************************-->
-<div class="content-body">
-    <div class="row page-titles mx-0">
-        <div class="col p-md-0">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
-            </ol>
-        </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Berkas Masuk Pengajuan Surat</h4>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered zero-configuration">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis Surat</th>
-                                        <th>User ID</th>
-                                        <th>Nama Pengaju</th>
-                                        <th>Email</th>
-                                        <th>No Telepon</th>
-                                        <th>Alamat</th>
-                                        <th>Tanggal</th>
-                                        <th>KTP</th>
-                                        <th>KK</th>
-                                        <th>Formulir</th>
-                                        <th>File surat</th>
-                                        <th>Keterangan</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $nomor = 1;
-                                    if (mysqli_num_rows($result) > 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            $tgl = strtotime($row['tgl_pengajuan']);
-                                            $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                                            $tanggal_lengkap = date('d', $tgl) . ' ' . $bulan[date('n', $tgl)] . ' ' . date('Y', $tgl);
-                                    ?>
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Berkas Masuk Pengajuan Surat</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered zero-configuration">
+                                        <thead>
                                             <tr>
-                                                <td><?= $nomor++ . '.'; ?></td>
-                                                <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
-                                                <td><?= htmlspecialchars($row['user_id']); ?></td>
-                                                <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
-                                                <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
-                                                <td><?= htmlspecialchars($row['no_telepon']); ?></td>
-                                                <td><?= htmlspecialchars($row['alamat']); ?></td>
-                                                <td><?= $tanggal_lengkap; ?></td>
-                                                <td><a href="preview_file_lurah.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_file_lurah.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_file_lurah.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><a href="preview_file_lurah.php?file=<?= urlencode($row['file_surat']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
-                                                <td><?= htmlspecialchars($row['keterangan']); ?></td>
-                                                <td>
-                                                    <div class="btn-group" role="group">
-                                                        <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
-                                                            <i class="fas fa-paper-plane"></i> Terima
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
-                                                            <i class="fas fa-times"></i> Tolak
-                                                        </button>
-                                                        <a href="edit_pengajuan_surat_lurah_berkasmasuk.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
-                                                            <i class="fas fa-edit"></i> Edit
-                                                        </a>
-                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
-                                                            <i class="fas fa-info-circle"></i> Detail
-                                                        </button>
-                                                    </div>
-                                                </td>
+                                                <th>No</th>
+                                                <th>Jenis Surat</th>
+                                                <th>User ID</th>
+                                                <th>Nama Pengaju</th>
+                                                <th>Email</th>
+                                                <th>No Telepon</th>
+                                                <th>Alamat</th>
+                                                <th>Tanggal</th>
+                                                <th>KTP</th>
+                                                <th>KK</th>
+                                                <th>Formulir</th>
+                                                <th>File surat</th>
+                                                <th>Keterangan</th>
+                                                <th>Aksi</th>
                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $nomor = 1;
+                                            if (mysqli_num_rows($result) > 0) {
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $tgl = strtotime($row['tgl_pengajuan']);
+                                                    $batas_proses = strtotime("+3 days", $tgl); // Hitung batas proses
+                                                    $hari_ini = strtotime("now"); // Tanggal hari ini
+                                                    $selisih_hari = ($batas_proses - $hari_ini) / (60 * 60 * 24); // Hitung selisih hari
 
-                                            <!-- Modal Detail -->
-                                            <div class="modal fade" id="detailModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel<?= $row['id']; ?>" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Detail Pengajuan</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p><strong>ID:</strong> <?= $row['id']; ?></p>
-                                                            <p><strong>Jenis Surat:</strong> <?= htmlspecialchars($row['jenis_surat']); ?></p>
-                                                            <p><strong>Nama:</strong> <?= htmlspecialchars($row['nama_pengaju']); ?></p>
-                                                            <p><strong>Email:</strong> <?= htmlspecialchars($row['email_pengaju']); ?></p>
-                                                            <p><strong>No Telepon:</strong> <?= htmlspecialchars($row['no_telepon']); ?></p>
-                                                            <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']); ?></p>
-                                                            <p><strong>Tanggal:</strong> <?= $tanggal_lengkap; ?></p>
-                                                            <p><strong>Status:</strong> <?= htmlspecialchars($row['status']); ?></p>
-                                                            <p><strong>Keterangan:</strong> <?= htmlspecialchars($row['keterangan']); ?></p>
-                                                            <p><strong>KTP:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></p>
-                                                            <p><strong>KK:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></p>
-                                                            <p><strong>Formulir:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                    $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                                                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                                    $tanggal_lengkap = date('d', $tgl) . ' ' . $bulan[date('n', $tgl)] . ' ' . date('Y', $tgl);
+                                                    $pesan_pengingat = "";
+
+                                                    // Cek apakah selisih hari 2 atau 1
+                                                    if ($selisih_hari == 2) {
+                                                        $pesan_pengingat = "<span style='color:orange;'>Pengingat: Batas proses surat tinggal 2 hari lagi!</span>";
+                                                    } elseif ($selisih_hari == 1) {
+                                                        $pesan_pengingat = "<span style='color:red;'>Pengingat: Batas proses surat tinggal 1 hari lagi!</span>";
+                                                    }
+                                            ?>
+                                                    <tr>
+                                                        <td><?= $nomor++ . '.'; ?></td>
+                                                        <td><?= htmlspecialchars($row['jenis_surat']); ?></td>
+                                                        <td><?= htmlspecialchars($row['user_id']); ?></td>
+                                                        <td><?= htmlspecialchars($row['nama_pengaju']); ?></td>
+                                                        <td><?= htmlspecialchars($row['email_pengaju']); ?></td>
+                                                        <td><?= htmlspecialchars($row['no_telepon']); ?></td>
+                                                        <td><?= htmlspecialchars($row['alamat']); ?></td>
+                                                        <td><?= $tanggal_lengkap; ?> <?= $pesan_pengingat; ?></td>
+                                                        <td><a href="preview_file_lurah.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><a href="preview_file_lurah.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><a href="preview_file_lurah.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><a href="preview_file_lurah.php?file=<?= urlencode($row['file_surat']); ?>" class="btn btn-sm btn-info">Lihat</a></td>
+                                                        <td><?= htmlspecialchars($row['keterangan']); ?></td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button class="btn btn-warning btn-sm" onclick="prosesSurat(<?= $row['id']; ?>)">
+                                                                    <i class="fas fa-paper-plane"></i> Terima
+                                                                </button>
+                                                                <button class="btn btn-danger btn-sm" onclick="tolakSurat(<?= $row['id']; ?>, 'Admin')">
+                                                                    <i class="fas fa-times"></i> Tolak
+                                                                </button>
+                                                                <a href="edit_pengajuan_surat_lurah_berkasmasuk.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
+                                                                    <i class="fas fa-edit"></i> Edit
+                                                                </a>
+                                                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<?= $row['id']; ?>">
+                                                                    <i class="fas fa-info-circle"></i> Detail
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Modal Detail -->
+                                                    <div class="modal fade" id="detailModal<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel<?= $row['id']; ?>" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Detail Pengajuan</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p><strong>ID:</strong> <?= $row['id']; ?></p>
+                                                                    <p><strong>Jenis Surat:</strong> <?= htmlspecialchars($row['jenis_surat']); ?></p>
+                                                                    <p><strong>Nama:</strong> <?= htmlspecialchars($row['nama_pengaju']); ?></p>
+                                                                    <p><strong>Email:</strong> <?= htmlspecialchars($row['email_pengaju']); ?></p>
+                                                                    <p><strong>No Telepon:</strong> <?= htmlspecialchars($row['no_telepon']); ?></p>
+                                                                    <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']); ?></p>
+                                                                    <p><strong>Tanggal:</strong> <?= $tanggal_lengkap; ?></p>
+                                                                    <p><strong>Status:</strong> <?= htmlspecialchars($row['status']); ?></p>
+                                                                    <p><strong>Keterangan:</strong> <?= htmlspecialchars($row['keterangan']); ?></p>
+                                                                    <p><strong>KTP:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_ktp']); ?>" class="btn btn-sm btn-info">Lihat</a></p>
+                                                                    <p><strong>KK:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_kk']); ?>" class="btn btn-sm btn-info">Lihat</a></p>
+                                                                    <p><strong>Formulir:</strong> <a href="preview_dokumen.php?file=<?= urlencode($row['foto_formulir']); ?>" class="btn btn-sm btn-info">Lihat</a></p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                    <?php
-                                        }
-                                    } else {
-                                        echo '<tr><td colspan="14" class="text-center">Data pengajuan masih kosong</td></tr>';
-                                    }
-                                    ?>
-                                </tbody>
-                                <tfoot><tr></tr></tfoot>
-                            </table>
+                                            <?php
+                                                }
+                                            } else {
+                                                echo '<tr><td colspan="14" class="text-center">Data pengajuan masih kosong</td></tr>';
+                                            }
+                                            ?>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr></tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!--**********************************
-    Content body end
-***********************************-->
+        <!--**********************************
+            Content body end
+        ***********************************-->
 
+        <style>
+            .btn-info {
+                background-color: rgb(48, 160, 235);
+                border-color: rgb(29, 189, 213);
+            }
 
-<style>
-    .btn-info {
-        background-color:rgb(48, 160, 235);
-        border-color:rgb(29, 189, 213);
-    }
+            .btn-info:hover {
+                background-color: #138496;
+                border-color: #117a8b;
+            }
 
-    .btn-info:hover {
-        background-color: #138496;
-        border-color: #117a8b;
-    }
-
-    /* Modal Styling */
-    .modal-dialog {
-        max-width: 80%; /* Reduce modal size */
-    }
-</style>
-
-
-
-
+            /* Modal Styling */
+            .modal-dialog {
+                max-width: 80%;
+            }
+        </style>
 
         <!--**********************************
             Footer start
@@ -391,7 +385,7 @@ $koneksi->close();
         <!--**********************************
             Footer end
         ***********************************-->
-    </div>
+
     <!--**********************************
         Main wrapper end
     ***********************************-->
@@ -399,19 +393,21 @@ $koneksi->close();
     <!--**********************************
         Scripts
     ***********************************-->
+    
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
+    
     <script>
 
         function prosesSurat(id) {
             // Menggunakan SweetAlert untuk konfirmasi
             Swal.fire({
                 title: 'Apakah Anda yakin?',
-                text: "Anda akan mengajukan Surat ini Kasi!",
+                text: "Anda akan Menerima surat ini!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, ajukan!',
+                confirmButtonText: 'Ya, Terima!',
                 cancelButtonText: 'Batal',
                 reverseButtons: true
             }).then((result) => {
@@ -447,20 +443,6 @@ $koneksi->close();
             });
         }
 
-        <!-- SweetAlert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        Swal.fire({
-            title: 'Perhatian!',
-            text: 'Waktu pemrosesan surat adalah maksimal 3 hari kerja sejak tanggal pengajuan.',
-            icon: 'info',
-            confirmButtonText: 'Mengerti',
-            confirmButtonColor: '#7571F9'
-        });
-    });
-</script>
 
 
 

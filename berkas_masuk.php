@@ -237,7 +237,7 @@ $koneksi->close();
         <div class="col p-md-0">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Main Menu</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Pengajuan Surat</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Berkas Masuk</a></li>
             </ol>
         </div>
     </div>
