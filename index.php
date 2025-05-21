@@ -191,6 +191,7 @@ $result_struktur = $stmt_struktur->get_result();
 </style>
 
 <body>
+    <audio src="musikdayak.mp3" autoplay loop></audio>
     <div id="particles-js"></div>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">

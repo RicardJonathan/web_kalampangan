@@ -24,7 +24,7 @@
 }
   </style>
   <body>
-
+    <audio src="musikdayak.mp3" autoplay loop></audio>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
      <a class="navbar-brand" href="index.php">
@@ -202,6 +202,7 @@
     <script src="js/baguetteBox.min.js"></script>
     <script> baguetteBox.run('.tz-gallery'); </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      
 
     <script>
     // When the user scrolls down 20px from the top of the document, slide down the navbar
