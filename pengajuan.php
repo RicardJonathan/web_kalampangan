@@ -21,9 +21,9 @@
 </head>
 <style>
 .btn-biru-keren {
-  background-color:rgb(255, 255, 255); /* Biru Bootstrap */
+  background-color:rgb(7, 149, 137); /* Biru Bootstrap */
   border-color: #007bff;
-  color:rgb(34, 109, 190);
+  color:rgb(250, 250, 250);
   font-weight: bold;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
