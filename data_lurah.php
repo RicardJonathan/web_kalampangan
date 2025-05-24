@@ -8,32 +8,30 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
+// Cek apakah pengguna yang login ada di tabel admin (lurah)
 $user_id = $_SESSION['id']; // ID pengguna yang login
 
-$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
+$sql_admin = "SELECT * FROM lurah WHERE id = '$user_id'"; 
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
     // Jika tidak ada di tabel admin, arahkan ke halaman error
-    header("Location: page-error-400.php"); // Arahkan ke halaman error
+    header("Location: page-error-400.php");
     exit();
 }
 
 // Mengambil data lurah
-$query = "SELECT * FROM lurah LIMIT 1"; // Query untuk mengambil 1 data lurah
+$query = "SELECT * FROM lurah LIMIT 1";
 $result = mysqli_query($koneksi, $query);
 
-// Cek jika query berhasil dan ada hasilnya
 if ($result && mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
 } else {
-    // Jika tidak ada data yang ditemukan
     echo "Data Kepala Kelurahan tidak ditemukan.";
     exit();
 }
 
-// Proses ketika form disubmit untuk update data
+// Proses update data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
     $nama = $_POST['nama'];
@@ -43,43 +41,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Variabel uploadOk harus didefinisikan sebelum digunakan
-    $uploadOk = 1;  // Definisikan $uploadOk dengan nilai awal 1
+    $uploadOk = 1;
 
-    // Cek apakah ada file tanda tangan yang diupload
+    // Cek upload tanda tangan
     $ttd = $_FILES['ttd']['name'];
     if ($ttd) {
-        // Tentukan lokasi folder untuk menyimpan file
-        $target_dir = "ttd/"; // Folder tujuan
-        $target_file = $target_dir . basename($ttd); // Nama file lengkap dengan path
+        $target_dir = "ttd/";
+        $target_file = $target_dir . basename($ttd);
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Cek apakah file adalah gambar
         $check = getimagesize($_FILES['ttd']['tmp_name']);
         if ($check === false) {
             echo "File yang diupload bukan gambar.";
             $uploadOk = 0;
         }
 
-        // Cek apakah file sudah ada
         if (file_exists($target_file)) {
             echo "File sudah ada.";
             $uploadOk = 0;
         }
 
-        // Cek ukuran file (maksimum 2MB)
         if ($_FILES['ttd']['size'] > 2000000) {
             echo "Ukuran file terlalu besar.";
             $uploadOk = 0;
         }
 
-        // Cek format file
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+        if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
             echo "Hanya file JPG, JPEG, PNG, dan GIF yang diizinkan.";
             $uploadOk = 0;
         }
 
-        // Jika file lolos semua cek, maka upload
         if ($uploadOk == 1) {
             if (move_uploaded_file($_FILES['ttd']['tmp_name'], $target_file)) {
                 echo "File " . htmlspecialchars(basename($ttd)) . " berhasil diupload.";
@@ -89,24 +80,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } else {
-        // Jika tidak ada file ttd, gunakan nilai yang lama
         $ttd = $row['ttd'];
     }
 
-    // Update data lurah jika upload berhasil
     if ($uploadOk == 1) {
+        // Hash password hanya jika diisi (ubah hanya kalau ada input baru)
+        if (!empty($password)) {
+            $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+        } else {
+            // Jika password kosong, gunakan password lama di database
+            $password_hashed = $row['password'];
+        }
+
         $sql_update = "UPDATE lurah SET 
                         nama = '$nama', 
                         nip = '$nip', 
                         golongan = '$golongan', 
                         pangkat = '$pangkat', 
                         username = '$username', 
-                        password = '$password', 
+                        password = '$password_hashed', 
                         ttd = '$ttd' 
                         WHERE id = '$id'";
 
         if (mysqli_query($koneksi, $sql_update)) {
-            // Set session atau flag untuk notifikasi sukses
             $update_success = true;
         } else {
             echo "Gagal memperbarui data lurah: " . mysqli_error($koneksi);
@@ -114,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Tutup koneksi
 $koneksi->close();
 ?>
 

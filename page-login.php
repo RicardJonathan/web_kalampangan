@@ -1,146 +1,76 @@
 <?php
 include 'config.php';
-
-// Mulai session
 session_start();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
-    $recaptchaResponse = $_POST['g-recaptcha-response']; // Ambil respons reCAPTCHA dari form
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
 
-    // Verifikasi reCAPTCHA dengan mengirim request ke server Google
-    $secretKey = '6LfBOoMqAAAAAKlkb3HuWSrJFeHW07uZZhx-XhtA'; // Ganti dengan Secret Key Anda dari Google reCAPTCHA
+    // Verifikasi reCAPTCHA
+    $secretKey = '6LfBOoMqAAAAAKlkb3HuWSrJFeHW07uZZhx-XhtA'; // Ganti sesuai milik Anda
     $verifyURL = "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptchaResponse";
     $response = file_get_contents($verifyURL);
     $responseKeys = json_decode($response, true);
 
-    // Periksa apakah reCAPTCHA berhasil diverifikasi
     if (intval($responseKeys["success"]) !== 1) {
-        echo "<script> 
-                  window.onload = function() {
-                      Swal.fire({
-                          icon: 'error',
-                          title: 'Oops...',
-                          text: 'CAPTCHA tidak valid. Silakan coba lagi.',
-                      });
-                  };
+        echo "<script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'CAPTCHA tidak valid. Silakan coba lagi.',
+                    });
+                };
               </script>";
     } else {
-        // Fungsi untuk menghindari SQL Injection dan mengamankan input
+        // Bersihkan input
         function safe_input($data, $conn) {
             return htmlspecialchars(strip_tags($conn->real_escape_string($data)));
         }
 
-        // Mengamankan input
         $username = safe_input($username, $koneksi);
         $password = safe_input($password, $koneksi);
 
-        // 1. Cek di tabel admin
-        $stmt = $koneksi->prepare("SELECT * FROM admin WHERE username = ? AND password = ?");
-        $stmt->bind_param("ss", $username, $password);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 1) {
-            // Data admin ditemukan
-            $row = $result->fetch_assoc();
-            $_SESSION['id'] = $row['id']; // Simpan ID admin
-            $_SESSION['username'] = $username; // Simpan username admin
-
-            // Arahkan ke halaman admin
-            header("Location: index_admin.php");
-            exit();
-        }
-        $stmt->close();
-
-    // 2. Cek di tabel lurah
-$stmt = $koneksi->prepare("SELECT * FROM lurah WHERE username = ? AND password = ?");
-$stmt->bind_param("ss", $username, $password);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 1) {
-    // Data lurah ditemukan
-    $row = $result->fetch_assoc();
-
-    // Password cocok
-    $_SESSION['id'] = $row['id']; // Simpan ID lurah
-    $_SESSION['username'] = $username; // Simpan username lurah
-
-    // Arahkan ke halaman lurah
-    header("Location: indexLurah.php");
-    exit();
-}
-$stmt->close();
-
-// 3. Cek di tabel kasi
-$stmt = $koneksi->prepare("SELECT * FROM kasi WHERE username = ? AND password = ?");
-$stmt->bind_param("ss", $username, $password);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 1) {
-
-    $row = $result->fetch_assoc();
-
-    // Password cocok
-    $_SESSION['id'] = $row['id']; // Simpan ID lurah
-    $_SESSION['username'] = $username; // Simpan username lurah
-
-    // Arahkan ke halaman lurah
-    header("Location: indexKasi.php");
-    exit();
-}
-$stmt->close();
-        // 4. Cek di tabel user
-        $stmt = $koneksi->prepare("SELECT * FROM user WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        // Cek apakah ada hasil dari query
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
-
-            // Verifikasi password menggunakan password_verify
-            if (password_verify($password, $row['password'])) {
-                // Simpan data user dalam session
-                $_SESSION['id'] = $row['id']; // Simpan ID user
-                $_SESSION['username'] = $username; // Simpan username
-
-                // Arahkan ke halaman yang sesuai
-                header("Location: indexUser.php");
-                exit();
-            } else {
-                // Password tidak cocok
-                echo "<script> 
-                          window.onload = function() {
-                              Swal.fire({
-                                  icon: 'error',
-                                  title: 'Oops...',
-                                  text: 'Password salah!',
-                              });
-                          };
-                      </script>";
+        // Fungsi cek login role dengan password_verify
+        function loginWithRole($conn, $table, $username, $password, $redirectPage) {
+            $stmt = $conn->prepare("SELECT * FROM $table WHERE username = ?");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                if (password_verify($password, $row['password'])) {
+                    $_SESSION['id'] = $row['id'];
+                    $_SESSION['username'] = $username;
+                    header("Location: $redirectPage");
+                    exit();
+                }
             }
-        } else {
-            // Username tidak ditemukan
-            echo "<script> 
-                      window.onload = function() {
-                          Swal.fire({
-                              icon: 'error',
-                              title: 'Oops...',
-                              text: 'Username tidak ditemukan!',
-                          });
-                      };
-                  </script>";
+            $stmt->close();
         }
-        $stmt->close(); // Tutup prepared statement
+
+        // Coba login untuk setiap role
+        loginWithRole($koneksi, 'admin', $username, $password, 'index_admin.php');
+        loginWithRole($koneksi, 'lurah', $username, $password, 'indexLurah.php');
+        loginWithRole($koneksi, 'kasi', $username, $password, 'indexKasi.php');
+        loginWithRole($koneksi, 'user', $username, $password, 'indexUser.php');
+
+        // Jika semua gagal
+        echo "<script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Username atau password salah!',
+                    });
+                };
+              </script>";
     }
 }
 ?>
+
 
 
 

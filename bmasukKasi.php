@@ -1,39 +1,58 @@
 <?php
 session_start();
-include 'config.php'; // Koneksi ke database
+include 'config.php'; 
 
-// Cek jika pengguna belum login
 if (!isset($_SESSION['id'])) {
-    header("Location: page-login.php"); // Arahkan ke halaman login jika belum login
+    header("Location: page-login.php");
     exit();
 }
 
-// Cek apakah pengguna yang login ada di tabel admin
-$user_id = $_SESSION['id']; // ID pengguna yang login
+$user_id = $_SESSION['id'];
 
-$sql_kasi = "SELECT * FROM kasi WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
-$result_kasi = $koneksi->query($sql_kasi);
+$sql_kasi = "SELECT * FROM kasi WHERE id = ?";
+$stmt_kasi = $koneksi->prepare($sql_kasi);
+$stmt_kasi->bind_param("i", $user_id);
+$stmt_kasi->execute();
+$result_kasi = $stmt_kasi->get_result();
 
 if ($result_kasi->num_rows == 0) {
-    // Jika tidak ada di tabel admin, arahkan ke halaman error
-    header("Location: page-error-400.php"); // Arahkan ke halaman error
+    header("Location: page-error-400.php");
     exit();
 }
 
-$query = "SELECT pengajuan_surat.*, user.nik, user.nama
-          FROM pengajuan_surat
-          INNER JOIN user ON pengajuan_surat.user_id = user.id
-          WHERE pengajuan_surat.status = 'Verifikasi Kasi' 
-          ORDER BY pengajuan_surat.id DESC";
-$result = mysqli_query($koneksi, $query);
+$kasi_data = $result_kasi->fetch_assoc();
 
-// Cek jika query berhasil
-if (!$result) {
-    die("Query failed: " . mysqli_error($koneksi));
+$jenis_surat_dikelola = json_decode($kasi_data['jenis_surat_dikelola'], true);
+
+if (!$jenis_surat_dikelola || count($jenis_surat_dikelola) === 0) {
+    die("Anda belum memiliki jenis surat yang dikelola.");
 }
 
-$koneksi->close();
+$placeholders = implode(',', array_fill(0, count($jenis_surat_dikelola), '?'));
+
+$query = "
+    SELECT pengajuan_surat.*, user.nik, user.nama
+    FROM pengajuan_surat
+    INNER JOIN user ON pengajuan_surat.user_id = user.id
+    WHERE pengajuan_surat.status = 'Verifikasi Kasi'
+    AND pengajuan_surat.jenis_surat IN ($placeholders)
+    ORDER BY pengajuan_surat.id DESC
+";
+
+$stmt = $koneksi->prepare($query);
+if (!$stmt) {
+    die("Prepare failed: " . $koneksi->error);
+}
+
+$stmt->bind_param(str_repeat('s', count($jenis_surat_dikelola)), ...$jenis_surat_dikelola);
+
+if (!$stmt->execute()) {
+    die("Execute failed: " . $stmt->error);
+}
+
+$result = $stmt->get_result();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
