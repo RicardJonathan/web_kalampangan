@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balita Data Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <i class="fas fa-baby text-3xl mr-3"></i>
+                        <h1 class="text-2xl font-bold">Balita Data Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-blue-500 px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-file-excel mr-2"></i>
+                            <span>DATA BALITA.xlsx</span>
+                        </div>
+                        <button id="exportBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition">
+                            <i class="fas fa-download mr-2"></i>Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="text-center py-12">
+                <div class="inline-block p-6 bg-white rounded-lg shadow-md">
+                    <div class="flex items-center space-x-4">
+                        <div class="loading-spinner"></div>
+                        <span class="text-gray-700">Loading data from Excel file...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content that will be shown after data loads -->
+            <div id="contentContainer" class="hidden">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-md p-6 transition duration-300 card-hover">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-500">Total Data</p>
+                                <h3 id="totalData" class="text-3xl font-bold text-blue-600">0</h3>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-database text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 transition duration-300 card-hover">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-500">Female</p>
+                                <h3 id="femaleCount" class="text-3xl font-bold text-pink-600">0</h3>
+                            </div>
+                            <div class="bg-pink-100 p-3 rounded-full">
+                                <i class="fas fa-female text-pink-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 transition duration-300 card-hover">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-500">Male</p>
+                                <h3 id="maleCount" class="text-3xl font-bold text-green-600">0</h3>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-male text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 transition duration-300 card-hover">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-500">Avg Age (months)</p>
+                                <h3 id="avgAge" class="text-3xl font-bold text-purple-600">0</h3>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-birthday-cake text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800">Balita Data</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birth Info</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight (kg)</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Height (cm)</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age (months)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="dataTable">
+                                <!-- Data will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Weight vs Height Chart -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Weight vs Height Comparison</h2>
+                        <div class="chart-container">
+                            <canvas id="weightHeightChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Age Distribution Chart -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Age Distribution</h2>
+                        <div class="chart-container">
+                            <canvas id="ageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gender Distribution and Head Circumference Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Gender Distribution Chart -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Gender Distribution</h2>
+                        <div class="chart-container">
+                            <canvas id="genderChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Head Circumference Chart -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Head Circumference</h2>
+                        <div class="chart-container">
+                            <canvas id="headChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 border-t border-gray-200 py-6">
+            <div class="container mx-auto px-4 text-center text-gray-600">
+                <p>© 2023 Balita Data Dashboard. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Global variable to store the data
+        let balitaData = [];
+        let charts = {};
+
+        // Function to fetch Excel file
+        async function fetchExcelData() {
+            try {
+                // Change this path to your actual Excel file path
+                const response = await fetch('http://localhost/web_kalampangan/databalita/DATA BALITA.xlsx');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Get first sheet
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                
+                // Convert to JSON
+                return XLSX.utils.sheet_to_json(firstSheet);
+            } catch (error) {
+                console.error('Error loading Excel file:', error);
+                // Fallback to sample data if there's an error
+                return getSampleData();
+            }
+        }
+
+        // Sample data fallback
+        function getSampleData() {
+            return [
+                {
+                    "NAMA": "BALQIS QAIREEN AZZALEA",
+                    "GENDER": "P",
+                    "NIK": "1803095912190001",
+                    "TEMPAT LAHIR": "Madukoro",
+                    "TANGGAL LAHIR": "19-12-2019",
+                    "BERAT (KG)": 16.1,
+                    "TINGGI (CM)": 110,
+                    "LINGKAR KEPALA (CM)": 49,
+                    "LILA (CM)": 15.5,
+                    "UMUR (BULAN)": 58
+                },
+                {
+                    "NAMA": "DEVIANA KHAIRUNNISA PUTRI",
+                    "GENDER": "P",
+                    "NIK": "6271044511230001",
+                    "TEMPAT LAHIR": "Palangka Raya",
+                    "TANGGAL LAHIR": "05-11-2023",
+                    "BERAT (KG)": 7.7,
+                    "TINGGI (CM)": 70,
+                    "LINGKAR KEPALA (CM)": 44,
+                    "LILA (CM)": 14,
+                    "UMUR (BULAN)": 11
+                },
+                {
+                    "NAMA": "FITRIA AFIQA AZIRA",
+                    "GENDER": "P",
+                    "NIK": "6271044812190001",
+                    "TEMPAT LAHIR": "Kalampangan",
+                    "TANGGAL LAHIR": "08-12-2019",
+                    "BERAT (KG)": 16.3,
+                    "TINGGI (CM)": 98.6,
+                    "LINGKAR KEPALA (CM)": 50,
+                    "LILA (CM)": 14,
+                    "UMUR (BULAN)": 58
+                },
+                {
+                    "NAMA": "KHALID ZHAFIR RAFARDHAN",
+                    "GENDER": "L",
+                    "NIK": "6271041501240002",
+                    "TEMPAT LAHIR": "Palangka Raya",
+                    "TANGGAL LAHIR": "15-01-2024",
+                    "BERAT (KG)": 7.1,
+                    "TINGGI (CM)": 68.6,
+                    "LINGKAR KEPALA (CM)": 44,
+                    "LILA (CM)": 14,
+                    "UMUR (BULAN)": 9
+                }
+            ];
+        }
+
+        // Process the raw data into a more usable format
+        function processData(rawData) {
+            return rawData.map(item => {
+                // Convert Excel date to JavaScript date if needed
+                let birthDate = item['TANGGAL LAHIR'];
+                if (typeof birthDate === 'number') {
+                    // Excel dates are stored as numbers (days since 1900)
+                    const excelEpoch = new Date(1899, 11, 30);
+                    const jsDate = new Date(excelEpoch.getTime() + birthDate * 24 * 60 * 60 * 1000);
+                    birthDate = jsDate.toLocaleDateString('en-GB');
+                }
+
+                return {
+                    nama: item['NAMA'] || '',
+                    gender: item['GENDER'] || '',
+                    nik: item['NIK'] || '',
+                    birthPlace: item['TEMPAT LAHIR'] || '',
+                    birthDate: birthDate || '',
+                    weight: parseFloat(item['BERAT (KG)']) || 0,
+                    height: parseFloat(item['TINGGI (CM)']) || 0,
+                    headCircumference: parseFloat(item['LINGKAR KEPALA (CM)']) || 0,
+                    lila: parseFloat(item['LILA (CM)']) || 0,
+                    age: parseInt(item['UMUR (BULAN)']) || 0
+                };
+            });
+        }
+
+        // Calculate summary statistics
+        function calculateStats(data) {
+            const total = data.length;
+            const femaleCount = data.filter(d => d.gender === 'P').length;
+            const maleCount = data.filter(d => d.gender === 'L').length;
+            const avgAge = data.reduce((sum, d) => sum + d.age, 0) / total;
+            
+            return {
+                total,
+                femaleCount,
+                maleCount,
+                avgAge: Math.round(avgAge)
+            };
+        }
+
+        // Populate the data table
+        function populateDataTable(data) {
+            const dataTable = document.getElementById('dataTable');
+            dataTable.innerHTML = ''; // Clear existing data
+            
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i class="fas fa-baby text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${item.nama}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.gender === 'P' ? 'bg-pink-100 text-pink-800' : 'bg-green-100 text-green-800'}">
+                            ${item.gender === 'P' ? 'Female' : 'Male'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.nik}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div>${item.birthPlace}</div>
+                        <div class="text-gray-400">${item.birthDate}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${item.weight > 15 ? 'text-green-600' : 'text-yellow-600'}">
+                        ${item.weight} kg
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.height} cm</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.age}</td>
+                `;
+                dataTable.appendChild(row);
+            });
+        }
+
+        // Update summary cards
+        function updateSummaryCards(stats) {
+            document.getElementById('totalData').textContent = stats.total;
+            document.getElementById('femaleCount').textContent = stats.femaleCount;
+            document.getElementById('maleCount').textContent = stats.maleCount;
+            document.getElementById('avgAge').textContent = stats.avgAge;
+        }
+
+        // Initialize charts
+        function initializeCharts(data) {
+            // Weight vs Height Chart
+            const weightHeightCtx = document.getElementById('weightHeightChart').getContext('2d');
+            charts.weightHeight = new Chart(weightHeightCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Female',
+                            data: data.filter(d => d.gender === 'P').map(d => ({x: d.height, y: d.weight})),
+                            backgroundColor: 'rgba(236, 72, 153, 0.7)',
+                            borderColor: 'rgba(236, 72, 153, 1)',
+                            borderWidth: 1,
+                            pointRadius: 8
+                        },
+                        {
+                            label: 'Male',
+                            data: data.filter(d => d.gender === 'L').map(d => ({x: d.height, y: d.weight})),
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1,
+                            pointRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = data.find(d => 
+                                        d.height === context.parsed.x && 
+                                        d.weight === context.parsed.y
+                                    );
+                                    return `${item.nama.split(' ')[0]}: ${context.parsed.y}kg, ${context.parsed.x}cm`;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Height (cm)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Weight (kg)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Age Distribution Chart
+            const ageCtx = document.getElementById('ageChart').getContext('2d');
+            charts.age = new Chart(ageCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.nama.split(' ')[0]),
+                    datasets: [{
+                        label: 'Age (months)',
+                        data: data.map(d => d.age),
+                        backgroundColor: data.map((_, i) => 
+                            `hsl(${(i * 90) % 360}, 70%, 70%)`
+                        ),
+                        borderColor: data.map((_, i) => 
+                            `hsl(${(i * 90) % 360}, 70%, 50%)`
+                        ),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Age: ${context.parsed.y} months`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Age (months)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gender Distribution Chart
+            const genderCtx = document.getElementById('genderChart').getContext('2d');
+            charts.gender = new Chart(genderCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Female', 'Male'],
+                    datasets: [{
+                        data: [
+                            data.filter(d => d.gender === 'P').length,
+                            data.filter(d => d.gender === 'L').length
+                        ],
+                        backgroundColor: [
+                            'rgba(236, 72, 153, 0.7)',
+                            'rgba(16, 185, 129, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(236, 72, 153, 1)',
+                            'rgba(16, 185, 129, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const value = context.parsed;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${context.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Head Circumference Chart
+            const headCtx = document.getElementById('headChart').getContext('2d');
+            charts.head = new Chart(headCtx, {
+                type: 'radar',
+                data: {
+                    labels: data.map(d => d.nama.split(' ')[0]),
+                    datasets: [{
+                        label: 'Head Circumference (cm)',
+                        data: data.map(d => d.headCircumference),
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: Math.min(...data.map(d => d.headCircumference)) - 2,
+                            suggestedMax: Math.max(...data.map(d => d.headCircumference)) + 2
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Head Circumference: ${context.parsed.r} cm`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Export data to Excel
+        function setupExportButton(data) {
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                // Convert data back to worksheet
+                const ws = XLSX.utils.json_to_sheet(data);
+                
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Balita Data");
+                
+                // Export to Excel file
+                XLSX.writeFile(wb, "Balita_Data_Export.xlsx");
+            });
+        }
+
+        // Main initialization function
+        async function init() {
+            try {
+                // Show loading indicator
+                document.getElementById('loadingIndicator').classList.remove('hidden');
+                document.getElementById('contentContainer').classList.add('hidden');
+                
+                // Fetch and process data
+                const rawData = await fetchExcelData();
+                balitaData = processData(rawData);
+                
+                // Calculate statistics
+                const stats = calculateStats(balitaData);
+                
+                // Update UI
+                updateSummaryCards(stats);
+                populateDataTable(balitaData);
+                initializeCharts(balitaData);
+                setupExportButton(balitaData);
+                
+                // Hide loading indicator and show content
+                document.getElementById('loadingIndicator').classList.add('hidden');
+                document.getElementById('contentContainer').classList.remove('hidden');
+            } catch (error) {
+                console.error('Initialization error:', error);
+                document.getElementById('loadingIndicator').innerHTML = `
+                    <div class="inline-block p-6 bg-white rounded-lg shadow-md text-red-600">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        Error loading data. Using sample data instead.
+                    </div>
+                `;
+                
+                // Use sample data as fallback
+                balitaData = processData(getSampleData());
+                const stats = calculateStats(balitaData);
+                updateSummaryCards(stats);
+                populateDataTable(balitaData);
+                initializeCharts(balitaData);
+                setupExportButton(balitaData);
+                
+                document.getElementById('loadingIndicator').classList.add('hidden');
+                document.getElementById('contentContainer').classList.remove('hidden');
+            }
+        }
+
+        // Initialize the dashboard when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

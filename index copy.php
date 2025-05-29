@@ -94,7 +94,7 @@ $result_struktur = $stmt_struktur->get_result();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-  <style>
+    <style>
         /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
@@ -118,16 +118,14 @@ $result_struktur = $stmt_struktur->get_result();
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.18);
         }
-
-        nav {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        /* Pastikan navbar memiliki z-index yang cukup tinggi */
-        nav {
-            z-index: 1000;
-        }
-        
+         nav {
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    /* Pastikan navbar memiliki z-index yang cukup tinggi */
+    nav {
+        z-index: 1000;
+    }
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -168,27 +166,54 @@ $result_struktur = $stmt_struktur->get_result();
         .img-hover:hover {
             transform: scale(1.05);
         }
-
-        /* Portrait card styling */
-        .portrait-card {
-            aspect-ratio: 2/3;
-            max-width: 280px;
-            margin: 0 auto;
-        }
         
+        .w-full {
+    width: 100%!important;
+}
+
+.h-full {
+    height: 150%!important;
+}
+
+/* Pastikan card untuk Lurah memiliki rasio 9:16 */
+/* Card untuk Lurah (utama) */
+.card-story {
+    aspect-ratio: 9 / 16;
+    width: 100%;
+    max-width: 280px;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Gambar dalam card utama */
+.card-story img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Card untuk struktur lainnya */
+.card-story-small {
+    aspect-ratio: 9 / 16;
+    width: 100%;
+    max-width: 200px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin: 0 auto; /* Tengah di grid */
+}
+
+.card-story-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .hero {
                 min-height: 70vh;
-            }
-            
-            .logo-text {
-                font-size: 0.875rem;
-                line-height: 1.25rem;
-            }
-            
-            .portrait-card {
-                max-width: 220px;
             }
         }
     </style>
@@ -226,7 +251,6 @@ $result_struktur = $stmt_struktur->get_result();
                         <div class="absolute left-0 mt-2 w-48 glass rounded-lg shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                             <a href="berita_pengumuman.php" class="block px-4 py-2 text-primary-800 hover:bg-primary-100 transition">Berita Pengumuman</a>
                             <a href="berita_kegiatan.php" class="block px-4 py-2 text-primary-800 hover:bg-primary-100 transition">Berita Kegiatan</a>
-                            <a href="data_kependudukan.php" class="block px-4 py-2 text-primary-800 hover:bg-primary-100 transition">Data Balita</a>
                         </div>
                     </div>
                     
@@ -256,8 +280,6 @@ $result_struktur = $stmt_struktur->get_result();
                     <div class="hidden pl-4 mt-1" id="berita-mobile-dropdown">
                         <a href="berita_pengumuman.php" class="block py-2 px-4 rounded-lg hover:bg-primary-100 transition">Berita Pengumuman</a>
                         <a href="berita_kegiatan.php" class="block py-2 px-4 rounded-lg hover:bg-primary-100 transition">Berita Kegiatan</a>
-                            <a href="data_kependudukan.php" class="block px-4 py-2 text-primary-800 hover:bg-primary-100 transition">Data Balita</a>
-
                     </div>
                 </div>
                 
@@ -345,42 +367,40 @@ $result_struktur = $stmt_struktur->get_result();
                     <div class="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-users text-teal-600 text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-primary-900 mb-3">Kirim Pertanyaan</h3>
+                    <h3 class="text-xl font-bold text-primary-900 mb-3">Struktur Organisasi</h3>
                     <p class="text-primary-700">
-                        Kontak kami jika ada keluhan atau pertanyaan.
+                        Kenali tim pemerintahan kelurahan yang siap melayani masyarakat Kalampangan.
                     </p>
-                    <a href="#kontak" class="inline-block mt-4 text-teal-600 hover:text-teal-800 font-medium transition">
-                        Kontak Pertanyaan <i class="fas fa-arrow-right ml-1"></i>
+                    <a href="#struktur" class="inline-block mt-4 text-teal-600 hover:text-teal-800 font-medium transition">
+                        Lihat Struktur <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
             </div>
         </div>
     </section>
     
-  <!-- Walkot Section -->
-<section class="py-16 bg-gradient-to-r from-primary-50 to-white">
-    <div class="container mx-auto px-4">
-        <div class="glass rounded-2xl overflow-hidden shadow-xl max-w-4xl mx-auto">
-            <div class="flex flex-col">
-                <!-- Image container - now full width above content -->
-                <div class="w-full">
-                    <img src="images/walkot.png" alt="Walikota Palangka Raya" class="w-full h-auto object-contain max-h-96 mx-auto">
-                </div>
-                <!-- Content below image -->
-                <div class="w-full p-8">
-                    <h3 class="text-2xl font-bold text-primary-900 mb-2">Sambutan Walikota</h3>
-                    <p class="text-primary-700 mb-4">
-                        "Kami berkomitmen untuk terus meningkatkan pelayanan publik melalui inovasi digital, termasuk website Kelurahan Kalampangan ini."
-                    </p>
-                    <div class="border-t border-primary-100 pt-4">
-                        <p class="font-semibold text-primary-900">Fairid Naparin</p>
-                        <p class="text-primary-600">Walikota Palangka Raya</p>
+    <!-- Walkot Section -->
+    <section class="py-16 bg-gradient-to-r from-primary-50 to-white">
+        <div class="container mx-auto px-4">
+            <div class="glass rounded-2xl overflow-hidden shadow-xl max-w-4xl mx-auto">
+                <div class="md:flex">
+                    <div class="md:w-1/3">
+                        <img src="images/walkot.png" alt="Walikota Palangka Raya" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-2/3 p-8">
+                        <h3 class="text-2xl font-bold text-primary-900 mb-2">Sambutan Walikota</h3>
+                        <p class="text-primary-700 mb-4">
+                            "Kami berkomitmen untuk terus meningkatkan pelayanan publik melalui inovasi digital, termasuk website Kelurahan Kalampangan ini."
+                        </p>
+                        <div class="border-t border-primary-100 pt-4">
+                            <p class="font-semibold text-primary-900">Fairid Naparin</p>
+                            <p class="text-primary-600">Walikota Palangka Raya</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
     
     <!-- Pengumuman Section -->
     <section class="py-16 bg-white">
@@ -464,61 +484,62 @@ $result_struktur = $stmt_struktur->get_result();
         </div>
     </section>
     
-   <!-- Struktur Section -->
- <!-- Struktur Section -->
-   <section id="struktur" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <span class="text-primary-600 font-semibold tracking-wider">Struktur</span>
-            <h2 class="text-3xl md:text-4xl font-bold mt-2 text-primary-900">Tim Pemerintahan</h2>
-            <p class="text-primary-700 mt-2 max-w-2xl mx-auto">
-                Kenali tim yang bertanggung jawab dalam memberikan pelayanan terbaik untuk masyarakat Kalampangan.
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <?php
-            // Tampilkan Lurah terlebih dahulu
-            mysqli_data_seek($result_struktur, 0);
-            while ($data = mysqli_fetch_assoc($result_struktur)) {
-                if (strtolower($data['posisi']) == 'lurah kalampangan') {
-            ?>
-            <div class="col-span-1 md:col-span-3 lg:col-span-4 flex justify-center">
-                <div class="bg-gradient-to-br from-primary-50 to-white rounded-xl overflow-hidden shadow-lg w-full max-w-xs card-hover animate-fade-in portrait-card">
-                    <div class="relative h-full">
-                        <img class="w-full h-full object-cover" src="images/fotostruktur/<?php echo $data['foto']; ?>" alt="<?php echo $data['nama']; ?>">
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                            <h3 class="text-lg font-bold text-white"><?php echo $data['nama']; ?></h3>
-                            <p class="text-primary-100 text-sm"><?php echo $data['posisi']; ?></p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Struktur Section -->
+    <section id="struktur" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <span class="text-primary-600 font-semibold tracking-wider">Struktur</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 text-primary-900">Tim Pemerintahan</h2>
+                <p class="text-primary-700 mt-2 max-w-2xl mx-auto">
+                    Kenali tim yang bertanggung jawab dalam memberikan pelayanan terbaik untuk masyarakat Kalampangan.
+                </p>
             </div>
-            <?php
-                }
-            }
             
-            // Tampilkan yang lainnya dengan gaya yang sama seperti Lurah
-            mysqli_data_seek($result_struktur, 0);
-            while ($data = mysqli_fetch_assoc($result_struktur)) {
-                if (strtolower($data['posisi']) != 'lurah kalampangan') {
-            ?>
-            <div class="bg-gradient-to-br from-primary-50 to-white rounded-xl overflow-hidden shadow-lg card-hover animate-fade-in portrait-card">
-                <div class="relative h-full">
-                    <img class="w-full h-full object-cover" src="images/fotostruktur/<?php echo $data['foto']; ?>" alt="<?php echo $data['nama']; ?>">
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                        <h3 class="text-lg font-bold text-white"><?php echo $data['nama']; ?></h3>
-                        <p class="text-primary-100 text-sm"><?php echo $data['posisi']; ?></p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <?php
+                // Tampilkan Lurah terlebih dahulu
+                mysqli_data_seek($result_struktur, 0);
+                while ($data = mysqli_fetch_assoc($result_struktur)) {
+                    if (strtolower($data['posisi']) == 'lurah kalampangan') {
+                ?>
+                <div class="col-span-1 md:col-span-3 flex justify-center">
+                    <div class="bg-gradient-to-br from-primary-50 to-white rounded-xl overflow-hidden shadow-xl w-full max-w-md card-hover animate-fade-in">
+                       <div class="card-story relative">
+    <img src="images/fotostruktur/<?php echo $data['foto']; ?>" alt="<?php echo $data['nama']; ?>">
+    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+        <h3 class="text-xl font-bold text-white"><?php echo $data['nama']; ?></h3>
+        <p class="text-primary-100"><?php echo $data['posisi']; ?></p>
+    </div>
+</div>
+
                     </div>
                 </div>
-            </div>
-            <?php
+                <?php
+                    }
                 }
-            }
-            ?>
+                
+                // Tampilkan yang lainnya
+                mysqli_data_seek($result_struktur, 0);
+                while ($data = mysqli_fetch_assoc($result_struktur)) {
+                    if (strtolower($data['posisi']) != 'lurah kalampangan') {
+                ?>
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover animate-fade-in">
+                    <div class="card-story-small relative">
+    <img src="images/fotostruktur/<?php echo $data['foto']; ?>" alt="<?php echo $data['nama']; ?>">
+</div>
+
+                    <div class="p-6 text-center">
+                        <h3 class="text-lg font-bold text-primary-900"><?php echo $data['nama']; ?></h3>
+                        <p class="text-primary-700 mt-1"><?php echo $data['posisi']; ?></p>
+                    </div>
+                </div>
+                <?php
+                    }
+                }
+                ?>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
     
     <!-- Maps Section -->
     <section class="py-16 bg-gradient-to-b from-primary-50 to-white">
@@ -532,7 +553,7 @@ $result_struktur = $stmt_struktur->get_result();
                                 Jl. Kalampangan, Kec. Sabangau, Kota Palangka Raya, Kalimantan Tengah 73113
                             </p>
                             <div class="mt-4">
-                                <a href="https://maps.app.goo.gl/oeGCaiUfx1idGg6u5" target="_blank" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition">
+                                <a href="https://goo.gl/maps/example" target="_blank" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition">
                                     <i class="fas fa-map-marker-alt mr-2"></i> Buka di Google Maps
                                 </a>
                             </div>
@@ -608,28 +629,28 @@ $result_struktur = $stmt_struktur->get_result();
                         </div>
                     </div>
                     
-                    <div id="kontak" class="md:w-1/2 p-12">
-    <h3 class="text-2xl font-bold text-primary-900 mb-6">Kirim Pesan</h3>
-    <form id="whatsappForm">
-        <div class="mb-4">
-            <label for="name" class="block text-primary-700 mb-2">Nama Lengkap</label>
-            <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
-        </div>
-        
-        <div class="mb-4">
-            <label for="email" class="block text-primary-700 mb-2">Email</label>
-            <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
-        </div>
-        
-        <div class="mb-4">
-            <label for="message" class="block text-primary-700 mb-2">Pesan</label>
-            <textarea id="message" name="message" rows="4" required class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
-        </div>
-        
-        <button type="submit" class="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 rounded-full font-medium hover:opacity-90 transition shadow-md">
-            Kirim Pesan <i class="fas fa-paper-plane ml-2"></i>
-        </button>
-    </form>
+                    <div class="md:w-1/2 p-12">
+                        <h3 class="text-2xl font-bold text-primary-900 mb-6">Kirim Pesan</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-primary-700 mb-2">Nama Lengkap</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="block text-primary-700 mb-2">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="message" class="block text-primary-700 mb-2">Pesan</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 rounded-full font-medium hover:opacity-90 transition shadow-md">
+                                Kirim Pesan <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -669,6 +690,7 @@ $result_struktur = $stmt_struktur->get_result();
                         <li><a href="pengajuan.php" class="text-primary-200 hover:text-white transition">Pengajuan Online</a></li>
                     </ul>
                 </div>
+                
                
                 
                 <div>
@@ -887,28 +909,6 @@ $result_struktur = $stmt_struktur->get_result();
         }
     });
 
-    document.getElementById('whatsappForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-            
-            // Format pesan yang akan dikirim
-            const whatsappMessage = `Halo, saya ${name}${email ? ` (${email})` : ''}. Pesan saya: ${message}`;
-            
-            // Encode pesan untuk URL
-            const encodedMessage = encodeURIComponent(whatsappMessage);
-            
-            // Nomor WhatsApp tujuan
-            const phoneNumber = '087877602333';
-            
-            // Buat link WhatsApp
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            
-            // Buka link di tab baru
-            window.open(whatsappUrl, '_blank');
-        });
     // ... (kode lainnya yang sudah ada)
 </script>
 </body>
