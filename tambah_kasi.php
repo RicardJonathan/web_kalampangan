@@ -15,7 +15,7 @@ $cek_admin->execute();
 $cek_admin_result = $cek_admin->get_result();
 
 if ($cek_admin_result->num_rows === 0) {
-    header("Location: page-error-400.php");
+    header("Location: .php");
     exit();
 }
 $cek_admin->close();

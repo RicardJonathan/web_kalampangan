@@ -16,7 +16,7 @@ $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
     // Jika tidak ada di tabel kasi, arahkan ke halaman error
-    header("Location: page-error-400.php");
+    header("Location: .php");
     exit();
 }
 

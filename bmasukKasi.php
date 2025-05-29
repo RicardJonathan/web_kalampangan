@@ -16,7 +16,7 @@ $stmt_kasi->execute();
 $result_kasi = $stmt_kasi->get_result();
 
 if ($result_kasi->num_rows == 0) {
-    header("Location: page-error-400.php");
+    header("Location: .php");
     exit();
 }
 

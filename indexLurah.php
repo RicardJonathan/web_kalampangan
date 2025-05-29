@@ -14,11 +14,11 @@ $user_id = $_SESSION['id']; // ID pengguna yang login
 $sql_kasi= "SELECT * FROM kasi WHERE id = '$user_id'"; // Query untuk cek apakah pengguna ada di tabel admin
 $result_kadis = $koneksi->query($sql_kasi);
 
-if ($result_kadis->num_rows == 0) {
-    // Jika tidak ada di tabel admin, arahkan ke halaman error
-    header("Location: page-error-400.php"); // Arahkan ke halaman error
-    exit();
-}
+// if ($result_kadis->num_rows == 0) {
+//     // Jika tidak ada di tabel admin, arahkan ke halaman error
+//     header("Location: .php"); // Arahkan ke halaman error
+//     exit();
+// }
 
 // Ambil tahun yang dipilih
 $tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : date('Y');

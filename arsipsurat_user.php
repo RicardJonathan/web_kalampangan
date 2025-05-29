@@ -14,7 +14,7 @@ $sql_admin = "SELECT * FROM user WHERE id = '$user_id'";
 $result_admin = $koneksi->query($sql_admin);
 
 if ($result_admin->num_rows == 0) {
-    header("Location: page-error-400.php");
+    header("Location: .php");
     exit();
 }
 

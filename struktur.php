@@ -16,7 +16,7 @@ $stmt->execute();
 $result_admin = $stmt->get_result();
 
 if ($result_admin->num_rows == 0) {
-    header('Location: page-error-400.php');
+    header('Location: .php');
     exit();
 }
 

@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 };
               </script>";
     } else {
-        // Bersihkan input
+        // Fungsi keamanan input
         function safe_input($data, $conn) {
             return htmlspecialchars(strip_tags($conn->real_escape_string($data)));
         }
@@ -33,29 +33,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = safe_input($username, $koneksi);
         $password = safe_input($password, $koneksi);
 
-        // Fungsi cek login role dengan password_verify
+        // Fungsi login
         function loginWithRole($conn, $table, $username, $password, $redirectPage) {
             $stmt = $conn->prepare("SELECT * FROM $table WHERE username = ?");
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
+
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
                 if (password_verify($password, $row['password'])) {
                     $_SESSION['id'] = $row['id'];
-                    $_SESSION['username'] = $username;
+                    $_SESSION['username'] = htmlspecialchars($username); // Escape output
+                    $_SESSION['role'] = $table; // Simpan role (opsional)
                     header("Location: $redirectPage");
                     exit();
                 }
             }
+
             $stmt->close();
+            return false;
         }
 
-        // Coba login untuk setiap role
-        loginWithRole($koneksi, 'admin', $username, $password, 'index_admin.php');
-        loginWithRole($koneksi, 'lurah', $username, $password, 'indexLurah.php');
-        loginWithRole($koneksi, 'kasi', $username, $password, 'indexKasi.php');
-        loginWithRole($koneksi, 'user', $username, $password, 'indexUser.php');
+        // Cek role satu per satu, dan langsung redirect jika berhasil
+        if (loginWithRole($koneksi, 'admin', $username, $password, 'index_admin.php')) return;
+        if (loginWithRole($koneksi, 'lurah', $username, $password, 'indexLurah.php')) return;
+        if (loginWithRole($koneksi, 'kasi', $username, $password, 'indexKasi.php')) return;
+        if (loginWithRole($koneksi, 'user', $username, $password, 'indexUser.php')) return;
 
         // Jika semua gagal
         echo "<script>
@@ -70,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 

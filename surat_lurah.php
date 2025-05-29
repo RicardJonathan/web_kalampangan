@@ -16,7 +16,7 @@ $result_lurah = $koneksi->query($sql_lurah);
 
 if ($result_lurah->num_rows == 0) {
     // Jika tidak ada di tabel admin, arahkan ke halaman error
-    header("Location: page-error-400.php"); // Arahkan ke halaman error
+    header("Location: .php"); // Arahkan ke halaman error
     exit();
 }
 

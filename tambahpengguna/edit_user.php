@@ -11,7 +11,7 @@ $user_id = $_SESSION['id'];
 $sql_lurah = "SELECT * FROM lurah WHERE id = '$user_id'";
 $result_lurah = $koneksi->query($sql_lurah);
 if ($result_lurah->num_rows == 0) {
-    header("Location: page-error-400.php");
+    header("Location: .php");
     exit();
 }
 
