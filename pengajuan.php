@@ -719,7 +719,7 @@
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-3 text-primary-300"></i>
-                            <span class="text-primary-200">kelurahan.kalampangan@palangkaraya.go.id</span>
+                            <span class="text-primary-200">kelkalampangan@palangkaraya.go.id</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-clock mr-3 text-primary-300"></i>

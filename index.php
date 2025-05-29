@@ -31,6 +31,8 @@ $result_struktur = $stmt_struktur->get_result();
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -529,7 +531,7 @@ $result_struktur = $stmt_struktur->get_result();
                         <div class="md:w-1/2 mb-6 md:mb-0">
                             <h2 class="text-2xl font-bold text-primary-900 mb-2">Lokasi Kelurahan</h2>
                             <p class="text-primary-700">
-                                Jl. Kalampangan, Kec. Sabangau, Kota Palangka Raya, Kalimantan Tengah 73113
+                                Jl. Mahir Mahar, Kalampangan, Kec. Sebangau, Kota Palangka Raya, Kalimantan Tengah 
                             </p>
                             <div class="mt-4">
                                 <a href="https://maps.app.goo.gl/oeGCaiUfx1idGg6u5" target="_blank" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition">
@@ -602,7 +604,7 @@ $result_struktur = $stmt_struktur->get_result();
                                 </div>
                                 <div>
                                     <h4 class="font-semibold">Email</h4>
-                                    <p>kelurahan.kalampangan@palangkaraya.go.id</p>
+                                    <p>kelkalampangan@palangkaraya.go.id</p>
                                 </div>
                             </div>
                         </div>
@@ -626,9 +628,11 @@ $result_struktur = $stmt_struktur->get_result();
             <textarea id="message" name="message" rows="4" required class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
         </div>
         
-        <button type="submit" class="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 rounded-full font-medium hover:opacity-90 transition shadow-md">
-            Kirim Pesan <i class="fas fa-paper-plane ml-2"></i>
-        </button>
+       <button type="button" class="send w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 rounded-full font-medium hover:opacity-90 transition shadow-md">
+    Kirim Pesan <i class="fas fa-paper-plane ml-2"></i>
+</button>
+<div id="text-info" class="mt-4"></div>
+
     </form>
                     </div>
                 </div>
@@ -684,7 +688,7 @@ $result_struktur = $stmt_struktur->get_result();
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-3 text-primary-300"></i>
-                            <span class="text-primary-200">kelurahan.kalampangan@palangkaraya.go.id</span>
+                            <span class="text-primary-200">kelkalampangan@palangkaraya.go.id</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-clock mr-3 text-primary-300"></i>
@@ -887,28 +891,40 @@ $result_struktur = $stmt_struktur->get_result();
         }
     });
 
-    document.getElementById('whatsappForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-            
-            // Format pesan yang akan dikirim
-            const whatsappMessage = `Halo, saya ${name}${email ? ` (${email})` : ''}. Pesan saya: ${message}`;
-            
-            // Encode pesan untuk URL
-            const encodedMessage = encodeURIComponent(whatsappMessage);
-            
-            // Nomor WhatsApp tujuan
-            const phoneNumber = '087877602333';
-            
-            // Buat link WhatsApp
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            
-            // Buka link di tab baru
-            window.open(whatsappUrl, '_blank');
-        });
+  $(document).on('click', '.send', function () {
+    // Ambil data inputan
+    var input_name = $("#name").val(),
+        input_email = $("#email").val(),
+        input_message = $("#message").val();
+
+    // Pengaturan WhatsApp
+    var walink = 'https://web.whatsapp.com/send',
+        phone = '6289512477093', // gunakan format internasional tanpa +
+        text_yes = 'Pesan Anda berhasil dikirim.',
+        text_no = 'Silakan lengkapi semua form terlebih dahulu.';
+
+    // Deteksi perangkat (mobile / desktop)
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        walink = 'whatsapp://send';
+    }
+
+    // Cek kelengkapan input
+    if (input_name !== "" && input_message !== "") {
+        var text = 'Halo, saya ' + input_name +
+                   (input_email ? ' (' + input_email + ')' : '') +
+                   '. Pesan saya: ' + input_message;
+
+        var encodedText = encodeURIComponent(text);
+
+        var checkout_whatsapp = walink + '?phone=' + phone + '&text=' + encodedText;
+
+        window.open(checkout_whatsapp, '_blank');
+        $("#text-info").html('<div class="alert alert-success">' + text_yes + '</div>');
+    } else {
+        $("#text-info").html('<div class="alert alert-danger">' + text_no + '</div>');
+    }
+});
+
     // ... (kode lainnya yang sudah ada)
 </script>
 </body>

@@ -550,7 +550,7 @@ $result_struktur = $stmt_struktur->get_result();
                         <div class="md:w-1/2 mb-6 md:mb-0">
                             <h2 class="text-2xl font-bold text-primary-900 mb-2">Lokasi Kelurahan</h2>
                             <p class="text-primary-700">
-                                Jl. Kalampangan, Kec. Sabangau, Kota Palangka Raya, Kalimantan Tengah 73113
+                                Jl. Mahir Mahar, Kalampangan, Kec. Sebangau, Kota Palangka Raya, Kalimantan Tengah 
                             </p>
                             <div class="mt-4">
                                 <a href="https://goo.gl/maps/example" target="_blank" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium transition">
@@ -623,7 +623,7 @@ $result_struktur = $stmt_struktur->get_result();
                                 </div>
                                 <div>
                                     <h4 class="font-semibold">Email</h4>
-                                    <p>kelurahan.kalampangan@palangkaraya.go.id</p>
+                                    <p>kelkalampangan@palangkaraya.go.id</p>
                                 </div>
                             </div>
                         </div>
@@ -706,7 +706,7 @@ $result_struktur = $stmt_struktur->get_result();
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-3 text-primary-300"></i>
-                            <span class="text-primary-200">kelurahan.kalampangan@palangkaraya.go.id</span>
+                            <span class="text-primary-200">kelkalampangan@palangkaraya.go.id</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-clock mr-3 text-primary-300"></i>
